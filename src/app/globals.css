@@ -64,18 +64,25 @@
   --color-tertiary-container: #8864b2;
 }
 
-@layer utilities {
-  .animate-range-early-entry {
-    animation-range: 10% 60%;
-  }
-
-  .animate-range-flash-entry {
-    animation-range: 0% 30%;
-  }
+@utility animate-range-early-entry {
+  animation-range: 10% 60%;
 }
+
+@utility animate-range-flash-entry {
+  animation-range: 0% 30%;
+}
+
 @utility scroll-hiden {
   scrollbar-width: thin;
   scrollbar-color: var(--color-violet-900) var(--color-violet-50);
+}
+
+@utility not-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

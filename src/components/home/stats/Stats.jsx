@@ -1,14 +1,15 @@
 import { formatMoney } from "@/config/money";
+import { TOTAL_DISCOUNT } from "@/constans/totalDiscount";
 import { USER_CONTRIBUTION, WALLET } from "@/constans/user-contribution";
 import { LuBriefcaseMedical, LuUsersRound, LuWallet } from "react-icons/lu";
 
-const DiSCUOUNT = 150000;
+// const DiSCUOUNT = 150000;
 
 const STAT_CARD = [
   {
     iconName: <LuBriefcaseMedical />,
     title: "Próximo Medicamento",
-    more: "Pendiente",
+    more: "Metronidazol",
   },
   {
     iconName: <LuUsersRound />,
@@ -19,7 +20,7 @@ const STAT_CARD = [
   {
     iconName: <LuWallet />,
     title: "Fondo Disponible",
-    more: `${formatMoney(WALLET - DiSCUOUNT)}`,
+    more: `${formatMoney(WALLET - TOTAL_DISCOUNT)}`,
   },
 ];
 

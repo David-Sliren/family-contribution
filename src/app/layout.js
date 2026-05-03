@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${bodyFont.variable} h-full antialiased scroll-hiden`}
+      className={`${bodyFont.variable} h-full antialiased not-scrollbar lg:scroll-hiden `}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">{children}</body>

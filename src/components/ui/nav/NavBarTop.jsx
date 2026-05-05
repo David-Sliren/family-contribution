@@ -17,6 +17,11 @@ const navBarRoutes = [
     label: "Medicinas",
     href: "/medicine",
   },
+
+  {
+    label: "Costos adicionales",
+    href: "/additional-costs",
+  },
 ];
 
 const LinkRoute = ({ href, label }) => {

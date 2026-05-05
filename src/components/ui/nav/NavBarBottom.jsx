@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { LuHouse, LuPill } from "react-icons/lu";
+import { LuHandCoins, LuHeartPulse, LuHouse, LuPill } from "react-icons/lu";
 
 const navBarRoutes = [
   {
@@ -16,6 +16,11 @@ const navBarRoutes = [
     label: "Medicinas",
     href: "/medicine",
     icon: <LuPill className="text-lg" />,
+  },
+  {
+    label: "Costos",
+    href: "/additional-costs",
+    icon: <LuHandCoins className="text-lg" />,
   },
 ];
 

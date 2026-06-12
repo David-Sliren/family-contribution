@@ -1,0 +1,25 @@
+#
+POST  http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "David Sliren",
+    "relationship": "hijo",
+    "tel": "3044518133",
+    "email": "quemas@gmail.com",
+    "password": "Noseqponer12"
+}
+
+###
+
+POST http://localhost:3000/api/auth/login 
+Content-Type: application/json
+
+{
+    "email": "quemas@gmail.com",
+    "password": "Noseqponer12"
+}
+
+###
+POST http://localhost:3000/api/auth/logout 
+Content-Type: application/json

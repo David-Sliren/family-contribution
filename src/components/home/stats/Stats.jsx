@@ -1,6 +1,6 @@
 import { formatMoney } from "@/config/money";
-import { TOTAL_DISCOUNT } from "@/constans/totalDiscount";
-import { USER_CONTRIBUTION, WALLET } from "@/constans/user-contribution";
+import { TOTAL_DISCOUNT } from "@/constants/totalDiscount";
+import { USER_CONTRIBUTION, WALLET } from "@/constants/user-contribution";
 import { LuBriefcaseMedical, LuUsersRound, LuWallet } from "react-icons/lu";
 
 // const DiSCUOUNT = 150000;

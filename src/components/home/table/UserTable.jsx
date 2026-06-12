@@ -1,6 +1,6 @@
 import React from "react";
 import { UserRow } from "./UserRow";
-import { USER_CONTRIBUTION } from "@/constans/user-contribution";
+import { USER_CONTRIBUTION } from "@/constants/user-contribution";
 
 const HEAD_ROW = [
   {

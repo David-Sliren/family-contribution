@@ -1,4 +1,4 @@
-import { GOAL } from "@/constans/goal";
+import { GOAL } from "@/constants/goal";
 import React from "react";
 import { LuSquareChartGantt } from "react-icons/lu";
 

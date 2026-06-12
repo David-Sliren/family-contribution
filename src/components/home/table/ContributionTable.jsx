@@ -6,7 +6,7 @@ import { LuDownload, LuListFilter } from "react-icons/lu";
 import { UserTable } from "./UserTable";
 import { FooterButton } from "./FooterButton";
 import { usePagination } from "@/hooks/usePagination";
-import { USER_CONTRIBUTION } from "@/constans/user-contribution";
+import { USER_CONTRIBUTION } from "@/constants/user-contribution";
 
 export const ContributionTable = () => {
   const {

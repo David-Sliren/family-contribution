@@ -1,5 +1,5 @@
 "use client";
-import { ADDITIONAL_COST } from "@/constans/adidtionalCost";
+import { ADDITIONAL_COST } from "@/constants/adidtionalCost";
 import { CostCard } from "./CostCard";
 import { useMedicineStorage } from "@/store/medicineStore";
 

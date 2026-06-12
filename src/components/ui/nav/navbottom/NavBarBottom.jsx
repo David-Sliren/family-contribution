@@ -1,5 +1,6 @@
 "use client";
 
+import { useUserStore } from "@/components/provaider/AuthProvider";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,16 +12,19 @@ const navBarRoutes = [
     label: "Principal",
     href: "/",
     icon: <LuHouse className="text-lg" />,
+    auth: false,
   },
   {
     label: "Medicinas",
     href: "/medicine",
     icon: <LuPill className="text-lg" />,
+    auth: true,
   },
   {
     label: "Costos",
     href: "/additional-costs",
     icon: <LuHandCoins className="text-lg" />,
+    auth: true,
   },
 ];
 
@@ -44,8 +48,12 @@ const LinkRoute = ({ href, label, icon: Icon }) => {
 };
 
 export const NavBarBottom = () => {
+  const user = useUserStore((state) => state.user);
+
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-slate-50/20 backdrop-blur-2xl rounded-t-3xl shadow-[0px_-8px_24px_rgba(110,54,210,0.04)] border-t border-gray-500 md:hidden z-20">
+    <nav
+      className={`fixed bottom-0 left-0 w-full bg-slate-50/20 backdrop-blur-2xl rounded-t-3xl shadow-[0px_-8px_24px_rgba(110,54,210,0.04)] border-t border-gray-500/40 md:hidden z-20 ${!user && "hidden"}`}
+    >
       <div className="flex justify-around items-center px-4 py-2">
         {navBarRoutes.map((item) => (
           <LinkRoute key={item.label} {...item} />

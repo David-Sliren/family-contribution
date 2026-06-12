@@ -3,15 +3,18 @@
 import { LuShoppingCart } from "react-icons/lu";
 import { CartCard } from "./CartCard";
 import { useMedicineStorage } from "@/store/medicineStore";
-import clsx from "clsx";
 import Lottie from "lottie-react";
 import Medicine from "@/lottie-files/Medicine.json";
+import { useUserStore } from "@/components/provaider/AuthProvider";
 
 export const Cart = () => {
+  const user = useUserStore((state) => state.user);
   const { products, setIsOpenCart } = useMedicineStorage();
 
   return (
-    <section className="group text-white rounded-t-3xl xl:rounded-3xl border border-primary/20 bg-gradient-to-tr from-primary-fixed to-primary-fixed-dim shadow-2xl duration-700 relative backdrop-blur-xl hover:border-primary/40 overflow-hidden hover:shadow-primary/10 hover:shadow-3xl w-full max-h-4/5 xl:w-[350px] xl:h-fit animate-slide-in-bottom xl:animate-slide-in-right z-10">
+    <section
+      className={`group text-white rounded-t-3xl xl:rounded-3xl border border-primary/20 bg-gradient-to-tr from-primary-fixed to-primary-fixed-dim shadow-2xl duration-700 relative backdrop-blur-xl hover:border-primary/40 overflow-hidden hover:shadow-primary/10 hover:shadow-3xl w-full max-h-4/5 xl:w-[350px] xl:h-fit animate-slide-in-bottom xl:animate-slide-in-right z-10 ${user?.role !== "user" ? "block" : "hidden"}`}
+    >
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-primary/10 opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
 

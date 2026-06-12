@@ -1,5 +1,5 @@
 "use client";
-import { MEDICINES } from "@/constans/medicines";
+import { MEDICINES } from "@/constants/medicines";
 import { MedicationCard } from "./MedicationCard";
 import { useMedicineStorage } from "@/store/medicineStore";
 

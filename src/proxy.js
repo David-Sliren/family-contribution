@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { SECRET } from "./constants/env";
 import { TOKEN } from "./constants/config";
+import { cookies } from "next/headers";
 
 export const proxy = async (req) => {
   const token = req.cookies.get(TOKEN);
@@ -23,6 +24,8 @@ export const proxy = async (req) => {
   } catch (e) {
     if (e.code === "No_token") console.error(e.message);
     if (e.name === `JWSInvalid`) console.error(`token error: ${e.message}`);
+    if (e.name === `JWTExpired`) (await cookies()).delete(TOKEN);
+
     if (!isAuthRoute) return NextResponse.redirect(new URL("/", req.url));
   }
 

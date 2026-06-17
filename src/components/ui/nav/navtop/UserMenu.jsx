@@ -10,7 +10,7 @@ import { useUserStore } from "@/components/provaider/AuthProvider";
 export const UserMenu = () => {
   const user = useUserStore((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
-  const firstName = user?.name.split(" ")[0];
+  const firstName = user?.name?.split(" ")[0] || "default";
 
   function handleDropdown() {
     setIsOpen(!isOpen);

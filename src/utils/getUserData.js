@@ -15,7 +15,7 @@ export const getUserData = async () => {
 
     const user = await User.findById(payload.id);
 
-    return user ? user?.toJSON() : null;
+    return { ...user?.toJSON(), _exp: payload.exp };
   } catch {
     return null;
   }

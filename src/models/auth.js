@@ -55,7 +55,7 @@ export class AuthUser {
     const token = await signUser
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime("1m")
+      .setExpirationTime("2h")
       .sign(SECRET);
 
     return { token };

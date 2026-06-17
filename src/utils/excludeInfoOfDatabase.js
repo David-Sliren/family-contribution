@@ -5,4 +5,5 @@ export const excludeForUser = (user) => ({
   email: user.email,
   role: user.role,
   relationship: user.relationship,
+  _exp: user._exp,
 });

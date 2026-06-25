@@ -4,6 +4,11 @@ export const userBackendSchema = z.object({
   name: z
     .string("se requiere un nombre")
     .min(1, "Valor no valido, minimo debe tener 1 elemento"),
+  username: z
+    .string("escribe un nombre de usuario")
+    .regex(/^\S+$/, "El nombre de usuario no debe tener espacios")
+    .toLowerCase()
+    .trim(),
 
   relationship: z.enum(
     ["hijo", "sobrino", "esposo", "externo"],

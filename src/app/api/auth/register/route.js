@@ -21,8 +21,18 @@ export const POST = async (req) => {
     const data = await AuthUser.create(res.data);
     return Response.json(data);
   } catch (error) {
-    if (error.code === "DUPLICATED_EMAIL") {
+    if (
+      error.code === "DUPLICATED_EMAIL" ||
+      error.code === "DUPLICATED_EMAIL"
+    ) {
       return Response.json({ error: error.message }, { status: 409 });
+    }
+
+    if (error.code === 11000) {
+      return Response.json(
+        { message: "el nombre de usuario ya está registrado" },
+        { status: 400 },
+      );
     }
 
     console.error("error inesperado", error);

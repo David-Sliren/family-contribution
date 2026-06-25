@@ -48,7 +48,7 @@ export const UserMenu = () => {
       <AnimatePresence>
         {isOpen && (
           <DropDown
-            name={firstName}
+            username={user?.username}
             email={user?.email}
             handleDropdown={handleDropdown}
           />

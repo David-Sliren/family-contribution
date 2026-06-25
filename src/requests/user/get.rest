@@ -1,0 +1,15 @@
+
+@idUserFind=6a3b1b9bded29bbff377b7bb
+@idUserDelete=6a2ced4832ce6874459710cc
+
+### delete all users
+GET http://localhost:3000/api/delete
+
+### get all users
+GET http://localhost:3000/api/user
+
+### get user by id
+GET http://localhost:3000/api/user/{{idUserFind}}
+
+### delete user
+DELETE http://localhost:3000/api/user/{{idUserDelete}}

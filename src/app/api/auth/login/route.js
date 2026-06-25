@@ -34,9 +34,15 @@ export const POST = async (req) => {
     return Response.json({ message: "engoy your sesion" });
   } catch (error) {
     if (
-      error.code === "INVALIDATE_EMAIL" ||
+      error.code === "INVALIDATE_USERNAME" ||
       error.code === "INVALIDATE_PASSWORD"
     )
       return Response.json({ error: error.message }, { status: 409 });
   }
+
+  console.error("error inesperado", error);
+  return Response.json(
+    { error: "error interno del servidor" },
+    { status: 500 },
+  );
 };

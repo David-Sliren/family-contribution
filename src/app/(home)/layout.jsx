@@ -5,7 +5,7 @@ import React from "react";
 import { Cart } from "@/components/ui/cart/Cart";
 import { AuthProvider } from "@/components/provaider/AuthProvider";
 import { getUserData } from "@/utils/getUserData";
-import { excludeForUser } from "@/utils/excludeInfoOfDatabase";
+import { excludeForUser } from "@/utils/mongoose-helper/excludeInfoOfDatabase";
 
 export default async function layout({ children }) {
   const userData = await getUserData();

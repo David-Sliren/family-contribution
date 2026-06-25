@@ -6,20 +6,18 @@ import { FieldType } from "@/components/ui/form/inputs/FieldType";
 import { FormLayout } from "@/components/ui/form/layout/FormLayout";
 import { userFrontedSchema } from "@/schemas/user";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useHookForm } from "@/hooks/useHookForm";
 import { useRouter } from "next/navigation";
 import { Info } from "@/components/ui/form/info/Info";
 import { createUser } from "@/services/user/auth";
 
 const DEFAULVALUES = {
-  name: "Jhojan",
-  tel: "3044518133",
-  email: "correo@correo.com",
-  password: "Noseqponer12",
-  confirmPassword: "Noseqponer12",
+  // name: "Jhojan",
+  // username: "juanperez01",
+  // tel: "3044518133",
+  // email: "correo@correo.com",
+  // password: "Noseqponer12",
+  // confirmPassword: "Noseqponer12",
 };
 
 export const Index = () => {
@@ -50,6 +48,15 @@ export const Index = () => {
           name="Nombre"
           inputName="name"
           inputPlaceholder="Ej. Juan Pérez"
+          inputType="text"
+          registerHook={register}
+          error={errors}
+        />
+
+        <FieldType
+          name="Nombre de usuario"
+          inputName="username"
+          inputPlaceholder="Ej. juanperez01"
           inputType="text"
           registerHook={register}
           error={errors}

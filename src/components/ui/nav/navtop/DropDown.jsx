@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LuLogOut, LuUser } from "react-icons/lu";
 
-export const DropDown = ({ name = "", email = "", handleDropdown }) => {
+export const DropDown = ({ username = "", email = "", handleDropdown }) => {
   const router = useRouter();
   const logout = useUserStore((state) => state.logout);
 
@@ -30,7 +30,7 @@ export const DropDown = ({ name = "", email = "", handleDropdown }) => {
       className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden"
     >
       <div className="px-4 py-3 border-b border-gray-50 bg-gray-50/50">
-        <p className="text-sm font-semibold text-gray-900">{name}</p>
+        <p className="text-sm font-semibold text-gray-900">{username}</p>
         <p className="text-xs text-gray-500">{email}</p>
       </div>
 

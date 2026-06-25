@@ -5,5 +5,9 @@ export const excludeForUser = (user) => ({
   email: user.email,
   role: user.role,
   relationship: user.relationship,
+  contributions: user.contributions,
+  totalContributed: user.totalContributed,
+  monthMoreActive: user.monthMoreActive,
+  username: user.username,
   _exp: user._exp,
 });

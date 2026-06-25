@@ -1,25 +1,26 @@
-#
+### register user
 POST  http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
     "name": "David Sliren",
+    "username": "DavidSalaza", 
     "relationship": "hijo",
     "tel": "3044518133",
-    "email": "quemas@gmail.com",
+    "email": "quemas12@gmail.com",
     "password": "Noseqponer12"
 }
 
-###
+### login user
 
 POST http://localhost:3000/api/auth/login 
 Content-Type: application/json
 
 {
-    "email": "quemas@gmail.com",
+    "username": "davidsalaza",
     "password": "Noseqponer12"
 }
 
-###
+### logout user
 POST http://localhost:3000/api/auth/logout 
 Content-Type: application/json

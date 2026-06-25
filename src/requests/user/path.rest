@@ -1,0 +1,10 @@
+@idUser=12
+
+### update 
+PATCH http://localhost:3000/api/contribution
+Content-Type: application/json
+
+{
+    "example": "6a2b9f304fd5147599cf27c5",
+    "example": "4000000",
+}

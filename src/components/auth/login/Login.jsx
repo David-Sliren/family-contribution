@@ -8,16 +8,14 @@ import { useRouter } from "next/navigation";
 import { loginSchema } from "@/schemas/login";
 import { Info } from "@/components/ui/form/info/Info";
 import { loginUser } from "@/services/user/auth";
-import { useUserStore } from "@/components/provaider/AuthProvider";
 
 const DEFAULVALUES = {
-  email: "correo@correo.com",
-  password: "Noseqponer12",
+  // username: "juanperez01",
+  // password: "Noseqponer12",
 };
 
 export const Index = () => {
   const router = useRouter();
-  const setUser = useUserStore((state) => state.setUser);
   const [isError, setIsError] = useState("");
   const { handleSubmit, register, errors, isSubmitting, reset } = useHookForm({
     schema: loginSchema,
@@ -30,9 +28,7 @@ export const Index = () => {
       setIsError("");
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const data = await loginUser(backendData);
-      // setUser(data);
       router.refresh();
-      // router.replace("/");
       reset();
     } catch (error) {
       setIsError(error);
@@ -43,10 +39,10 @@ export const Index = () => {
     <FormLayout title="Iniciar sesion" errorNotification={isError}>
       <form onSubmit={handleSubmit(handleSubmitForm)} className="space-y-4">
         <FieldType
-          name="email"
-          inputName="email"
-          inputPlaceholder="Ej. correo@correo.com"
-          inputType="email"
+          name="Nombre de usuario"
+          inputName="username"
+          inputPlaceholder="Ej. juanperez01"
+          inputType="text"
           registerHook={register}
           error={errors}
         />

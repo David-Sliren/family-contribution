@@ -1,5 +1,8 @@
 export const cleanIdPlugin = (schema) => {
+  const existOptions = schema.get("toJSON") || {};
+
   const options = {
+    ...existOptions,
     versionKey: false,
     transform: (doc, ret) => {
       ret.id = ret._id.toString();
@@ -11,7 +14,10 @@ export const cleanIdPlugin = (schema) => {
 };
 
 export const cleanUser = (schema) => {
+  const existOptions = schema.get("toJSON") || {};
+
   const options = {
+    ...existOptions,
     versionKey: false,
     transform: (doc, ret) => {
       ret.id = ret._id.toString();
@@ -20,5 +26,6 @@ export const cleanUser = (schema) => {
       return ret;
     },
   };
+
   schema.set("toJSON", options);
 };

@@ -1,5 +1,0 @@
-# 
-GET http://localhost:3000/api/auth/register
-
-### 
-GET http://localhost:3000/api/users

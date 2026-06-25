@@ -1,6 +1,6 @@
 import { TOKEN } from "@/constants/config";
 import { SECRET } from "@/constants/env";
-import { User } from "@/database/user";
+import { Users } from "@/models/user";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
@@ -13,9 +13,11 @@ export const getUserData = async () => {
   try {
     const { payload } = await jwtVerify(token.value, SECRET);
 
-    const user = await User.findById(payload.id);
+    const user = await Users.getById(payload.id);
 
-    return user ? { ...user?.toJSON(), _exp: payload.exp } : null;
+    const userParse = JSON.parse(JSON.stringify(user));
+
+    return user ? { ...userParse, _exp: payload.exp } : null;
   } catch {
     return null;
   }

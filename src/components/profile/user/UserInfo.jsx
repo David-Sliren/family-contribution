@@ -15,7 +15,7 @@ export const UserInfo = () => {
       <h1 className=" md:order-0 text-5xl font-extrabold tracking-tight text-on-surface">
         {user?.name}
       </h1>
-      <p className=" md:order-first flex items-center justify-center md:justify-start gap-1 text-on-surface-variant  font-extralight text-lg">
+      <p className=" md:order-first flex items-center justify-center md:justify-start gap-1 text-on-surface-variant  font-extralight text-lg capitalize">
         <LuHeart className="text-primary fill-current" />
         {user?.relationship === "externo" ? "contribuidor" : user?.relationship}
       </p>

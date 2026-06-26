@@ -1,3 +1,6 @@
+"use client";
+
+import { useUserStore } from "@/components/provaider/AuthProvider";
 import { formatMoney } from "@/config/money";
 import clsx from "clsx";
 import React from "react";
@@ -6,27 +9,6 @@ import {
   LuChartColumnIncreasing,
   LuHandHeart,
 } from "react-icons/lu";
-
-const stats = [
-  {
-    icon: <LuHandHeart />,
-    label: "Total Contribuido",
-    more: formatMoney(124000),
-    variants: "",
-  },
-  {
-    icon: <LuChartColumnIncreasing />,
-    label: "Número de Aportes",
-    more: "10",
-    variants: "",
-  },
-  {
-    icon: <LuCalendarDays className="text-white" />,
-    label: "Mes más Activo",
-    more: "Noviembre",
-    variants: "heiglihg",
-  },
-];
 
 const styleVariants = {
   heiglihg: "bg-primary-container text-white",
@@ -46,13 +28,36 @@ const Stat = ({ icon: Icon, label, more, variants }) => {
         <h3 className=" font-medium text-sm uppercase tracking-wider mb-1">
           {label}
         </h3>
-        <p className=" text-3xl font-extrabold ">{more}</p>
+        <p className=" text-3xl font-extrabold capitalize">{more}</p>
       </div>
     </div>
   );
 };
 
 export const Impact = () => {
+  const user = useUserStore((state) => state.user);
+
+  const stats = [
+    {
+      icon: <LuHandHeart />,
+      label: "Total Contribuido",
+      more: formatMoney(user?.totalContributed),
+      variants: "",
+    },
+    {
+      icon: <LuChartColumnIncreasing />,
+      label: "Número de Aportes",
+      more: user?.contributions.length,
+      variants: "",
+    },
+    {
+      icon: <LuCalendarDays className="text-white" />,
+      label: "Mes más Activo",
+      more: user?.monthMoreActive || "",
+      variants: "heiglihg",
+    },
+  ];
+
   return (
     <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 animate-slide-in-bottom">
       {stats.map((item) => (

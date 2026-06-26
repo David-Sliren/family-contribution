@@ -4,6 +4,8 @@ import React from "react";
 import { DetailsRow } from "./DetailsRow";
 import { FooterButton } from "./FooterButton";
 import { usePagination } from "@/hooks/usePagination";
+import { useUserStore } from "@/components/provaider/AuthProvider";
+import { sortByDate } from "@/utils/sorts";
 
 const HEAD_ROW = [
   {
@@ -19,48 +21,6 @@ const HEAD_ROW = [
   },
 ];
 
-const DETAILS = [
-  {
-    id: 0,
-    date: "2026-05-12",
-    amount: "450000",
-    purpose: "Medicamentos Mensuales",
-  },
-
-  {
-    id: 1,
-    date: "2026-05-15",
-    amount: "750000",
-    purpose: "Paga de yasmin ",
-  },
-  {
-    id: 2,
-    date: "2026-05-12",
-    amount: "450000",
-    purpose: "Medicamentos Mensuales",
-  },
-
-  {
-    id: 3,
-    date: "2026-05-15",
-    amount: "750000",
-    purpose: "Paga de yasmin ",
-  },
-  {
-    id: 4,
-    date: "2026-05-12",
-    amount: "450000",
-    purpose: "Medicamentos Mensuales",
-  },
-
-  {
-    id: 5,
-    date: "2026-05-15",
-    amount: "750000",
-    purpose: "Paga de yasmin ",
-  },
-];
-
 const HeadRow = ({ label, className }) => {
   return (
     <th
@@ -72,6 +32,8 @@ const HeadRow = ({ label, className }) => {
 };
 
 export const TableContribuition = () => {
+  const userContributions = useUserStore((state) => state.user?.contributions);
+
   const {
     page,
     endIndex,
@@ -81,9 +43,10 @@ export const TableContribuition = () => {
     totalPages,
     prevPage,
     nextPage,
-  } = usePagination(DETAILS.length, 5);
+  } = usePagination(userContributions?.length || 1, 5);
 
-  const visibleDetails = DETAILS.slice(startIndex, endIndex);
+  const visibleDetails =
+    sortByDate(userContributions || [])?.slice(startIndex, endIndex) || [];
 
   return (
     <div className="overflow-x-auto rounded-xl">
@@ -105,6 +68,7 @@ export const TableContribuition = () => {
           ))}
         </tbody>
       </table>
+
       <FooterButton
         prev={prevPage}
         next={nextPage}

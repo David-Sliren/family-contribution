@@ -1,0 +1,14 @@
+
+@idUser=6a2ced4e32ce6874459710cd
+
+### set contribution
+POST  http://localhost:3000/api/contribution
+Content-Type: application/json
+
+{
+    "userId": "6a3c7455b2b2e666a8be9a2b",
+    "amount": 5000000000000,
+    "status": "confirmed",
+    "purpose": "medicine"
+    
+}

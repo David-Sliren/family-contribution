@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { LuLogOut, LuUser } from "react-icons/lu";
 
 export const DropDown = ({ username = "", email = "", handleDropdown }) => {
-  const router = useRouter();
   const logout = useUserStore((state) => state.logout);
 
   async function handleLogout() {
@@ -15,8 +14,7 @@ export const DropDown = ({ username = "", email = "", handleDropdown }) => {
       handleDropdown;
       await logoutUser();
       logout();
-      router.refresh();
-      router.replace("/");
+      window.location.href = "/";
     } catch (error) {
       console.log(error);
     }

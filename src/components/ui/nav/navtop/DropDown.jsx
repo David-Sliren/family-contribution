@@ -31,7 +31,9 @@ export const DropDown = ({ username = "", email = "", handleDropdown }) => {
     >
       <div className="px-4 py-3 border-b border-gray-50 bg-gray-50/50">
         <p className="text-sm font-semibold text-gray-900">{username}</p>
-        <p className="text-xs text-gray-500">{email}</p>
+        <p className="text-xs text-gray-500">
+          {email ? email : "Actualice su email"}
+        </p>
       </div>
 
       {/* Opciones */}

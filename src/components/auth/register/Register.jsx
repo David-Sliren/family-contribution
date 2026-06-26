@@ -11,21 +11,21 @@ import { useRouter } from "next/navigation";
 import { Info } from "@/components/ui/form/info/Info";
 import { createUser } from "@/services/user/auth";
 
-const DEFAULVALUES = {
-  // name: "Jhojan",
-  // username: "juanperez01",
-  // tel: "3044518133",
-  // email: "correo@correo.com",
-  // password: "Noseqponer12",
-  // confirmPassword: "Noseqponer12",
-};
+// const DEFAULVALUES = {
+// name: "Jhojan",
+// username: "juanperez01",
+// tel: "3044518133",
+// email: "correo@correo.com",
+// password: "Noseqponer12",
+// confirmPassword: "Noseqponer12",
+// };
 
 export const Index = () => {
   const router = useRouter();
   const [isError, setIsError] = useState("");
   const { handleSubmit, register, errors, isSubmitting, reset } = useHookForm({
     schema: userFrontedSchema,
-    defaultValues: DEFAULVALUES,
+    // defaultValues: DEFAULVALUES,
   });
 
   async function handleSubmitForm(data) {
@@ -69,14 +69,14 @@ export const Index = () => {
           <FieldSelect registerHook={register} />
         </div>
 
-        <FieldType
+        {/* <FieldType
           name="email"
           inputName="email"
           inputPlaceholder="Ej. correo@correo.com"
           inputType="email"
           registerHook={register}
           error={errors}
-        />
+        /> */}
 
         <FieldType
           name="Contraseña"

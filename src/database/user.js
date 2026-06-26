@@ -1,7 +1,4 @@
-import {
-  cleanIdPlugin,
-  cleanUser,
-} from "@/utils/mongoose-helper/cleanDatabase";
+import { cleanUser } from "@/utils/mongoose-helper/cleanDatabase";
 import { deleteContributionOfUser } from "@/utils/mongoose-hooks/pretUser";
 import {
   monthMoreActive,
@@ -21,12 +18,12 @@ const userSchema = new Schema(
     },
     relationship: {
       type: String,
-      enum: ["hijo", "sobrino", "esposo", "externo"],
+      enum: ["hijo", "sobrino", "esposo", "hermano", "externo"],
       required: true,
     },
     img: { type: String, default: "" },
     tel: { type: String, required: true },
-    email: { type: String },
+    email: { type: String, default: "" },
     password: { type: String, required: true },
     contributions: [{ type: Schema.ObjectId, ref: "Contribution" }],
     isDisabled: { type: Boolean, default: false },

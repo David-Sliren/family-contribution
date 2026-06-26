@@ -13,9 +13,10 @@ export const DropDown = ({ username = "", email = "", handleDropdown }) => {
   async function handleLogout() {
     try {
       handleDropdown;
-      const data = await logoutUser();
+      await logoutUser();
       logout();
       router.replace("/");
+      router.refresh();
     } catch (error) {
       console.log(error);
     }

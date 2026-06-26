@@ -19,6 +19,7 @@ import { createUser } from "@/services/user/auth";
 // password: "Noseqponer12",
 // confirmPassword: "Noseqponer12",
 // };
+const userOptions = ["externo", "hijo", "esposo", "sobrino", "hermano"];
 
 export const Index = () => {
   const router = useRouter();
@@ -66,7 +67,7 @@ export const Index = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <FieldTel registerHook={register} error={errors} />
-          <FieldSelect registerHook={register} />
+          <FieldSelect registerHook={register} fieldValues={userOptions} />
         </div>
 
         {/* <FieldType

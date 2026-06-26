@@ -1,4 +1,4 @@
-import { cleanIdPlugin } from "@/utils/cleanDatabase";
+import { cleanIdPlugin } from "@/utils/mongoose-helper/cleanDatabase";
 import { model, models, Schema } from "mongoose";
 
 const patientSchema = new Schema(

@@ -4,10 +4,10 @@ Content-Type: application/json
 
 {
     "name": "David Sliren",
-    "username": "DavidSalaza", 
+    "username": "DavidSalazares", 
     "relationship": "hijo",
     "tel": "3044518133",
-    "email": "quemas12@gmail.com",
+    
     "password": "Noseqponer12"
 }
 

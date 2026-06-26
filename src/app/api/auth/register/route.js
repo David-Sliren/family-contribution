@@ -30,7 +30,7 @@ export const POST = async (req) => {
 
     if (error.code === 11000) {
       return Response.json(
-        { message: "el nombre de usuario ya está registrado" },
+        { error: "el nombre de usuario ya está registrado" },
         { status: 400 },
       );
     }

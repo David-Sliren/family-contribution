@@ -3,7 +3,6 @@ import { logoutUser } from "@/services/user/auth";
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { LuLogOut, LuUser } from "react-icons/lu";
 
 export const DropDown = ({ username = "", email = "", handleDropdown }) => {

@@ -29,6 +29,9 @@ importers:
       lottie-react:
         specifier: ^2.4.1
         version: 2.4.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      mercadopago:
+        specifier: ^3.2.0
+        version: 3.2.0
       mongoose:
         specifier: ^9.6.3
         version: 9.6.3
@@ -1642,6 +1645,10 @@ packages:
 
   memory-pager@1.5.0:
     resolution: {integrity: sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==}
+
+  mercadopago@3.2.0:
+    resolution: {integrity: sha512-9keIOj21CpIvpLepeUp+VTUejiD7Dc2eCy2yqW21G4yBtj3Ey2E4AsnFrxRfGchtRc6L7qxA3YNkT4N7IcWj+g==}
+    engines: {node: '>=18'}
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -3849,6 +3856,8 @@ snapshots:
   math-intrinsics@1.1.0: {}
 
   memory-pager@1.5.0: {}
+
+  mercadopago@3.2.0: {}
 
   merge2@1.4.1: {}
 

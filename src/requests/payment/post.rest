@@ -1,0 +1,11 @@
+@accessToken= access-token=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjZhNTFkYTAxMmJjZjZlMGEzZWEyNmNiNCIsInVzZXJuYW1lIjoiamhvamFuMTIiLCJyb2xlIjoidXNlciIsImlhdCI6MTc4Mzc0OTEyNSwiZXhwIjoxNzgzNzU2MzI1fQ.Fs_faprpBJuPkwmOKblJaQdFKz0ZM9ntZ0C8vuG0LaQ
+
+### 
+POST http://localhost:3000/api/payment/preference
+Content-Type: application/json
+Cookie: {{accessToken}}
+
+{
+    "purpose": "medicinas",
+    "amount": 8000
+}

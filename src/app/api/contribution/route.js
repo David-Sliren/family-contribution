@@ -1,6 +1,6 @@
 import { Contribution } from "@/database/contribution";
 import { Contribute } from "@/models/contribution";
-import { contributionSchema } from "@/schemas/contribution";
+import { contributionSchemaBanckend } from "@/schemas/contribution";
 
 export const GET = async () => {
   try {
@@ -19,7 +19,7 @@ export const GET = async () => {
 export const POST = async (req) => {
   const body = await req.json();
 
-  const result = contributionSchema.safeParse(body);
+  const result = contributionSchemaBanckend.safeParse(body);
 
   if (!result.success)
     return Response.json(

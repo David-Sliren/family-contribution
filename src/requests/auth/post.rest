@@ -4,11 +4,11 @@ Content-Type: application/json
 
 {
     "name": "David Sliren",
-    "username": "DavidSalazares", 
+    "username": "jhojan12", 
     "relationship": "hijo",
     "tel": "3044518133",
     
-    "password": "Noseqponer12"
+    "password": "Jojojo12"
 }
 
 ### login user
@@ -17,8 +17,8 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "davidsalaza",
-    "password": "Noseqponer12"
+    "username": "jhojan12",
+    "password": "Jojojo12"
 }
 
 ### logout user

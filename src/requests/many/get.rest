@@ -1,0 +1,10 @@
+@idContribution=6a2cee3832ce6874459710cd
+
+
+
+### delete all contribution
+GET http://localhost:3000/api/many/delete/contribution
+
+
+### delete all users
+GET http://localhost:3000/api/many/delete/user

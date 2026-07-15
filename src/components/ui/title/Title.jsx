@@ -3,7 +3,7 @@ import React from "react";
 
 export const Title = ({ title, subtitle }) => {
   return (
-    <section className="mb-10 animate-slide-in-top">
+    <section className="mb-10 animate-fade-in-down">
       <h1
         className={` ${titleFont.className} text-4xl font-extrabold tracking-tight font-headline text-on-surface mb-2 uppercase`}
       >

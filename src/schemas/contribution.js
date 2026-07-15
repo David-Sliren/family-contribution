@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { z } from "zod";
 
 const status = z.enum(["confirmado", "pendiente"], {

@@ -7,6 +7,7 @@ export const FieldType = ({
   inputType = "text",
   inputPlaceholder = "Escribe aqui",
   isPassword = false,
+  more = {},
   registerHook = {},
   error = {},
 }) => {
@@ -27,6 +28,7 @@ export const FieldType = ({
           placeholder={inputPlaceholder}
           type={!isPassword ? inputType : isView ? "text" : "password"}
           {...registerHook(inputName)}
+          {...more}
         />
         {isPassword && (
           <button

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { z } from "zod";
 
 const status = z.enum(["confirmado", "pendiente"], {
@@ -24,11 +25,4 @@ export const contributionSchemaBanckend = z.object({
   status: status,
   purpose: purpose,
   date: z.iso.datetime("elija una fecha correcta").optional(),
-});
-
-export const contributionSchemaFrontend = contributionSchemaBanckend.omit({
-  status: true,
-  userId: true,
-  paymentId: true,
-  method: true,
 });

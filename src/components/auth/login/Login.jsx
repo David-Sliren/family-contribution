@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { loginSchema } from "@/schemas/login";
 import { Info } from "@/components/ui/form/info/Info";
 import { loginUser } from "@/services/user/auth";
+import { useNotification } from "@/store/ui/notifications";
 
 const DEFAULVALUES = {
   // username: "juanperez01",
@@ -16,8 +17,9 @@ const DEFAULVALUES = {
 
 export const Index = () => {
   const router = useRouter();
-  const [isError, setIsError] = useState("");
-  const { handleSubmit, register, errors, isSubmitting, reset } = useHookForm({
+  const setNotification = useNotification((state) => state.setNotification);
+  const [errorName, setErrorName] = useState("");
+  const { handleSubmit, register, errors, isSubmitting } = useHookForm({
     schema: loginSchema,
     defaultValues: DEFAULVALUES,
   });
@@ -25,18 +27,16 @@ export const Index = () => {
   async function handleSubmitForm(data) {
     const { confirmPassword, ...backendData } = data;
     try {
-      setIsError("");
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const data = await loginUser(backendData);
+      await loginUser(backendData);
+      setNotification({ message: "Disfrute su sesion" });
       router.refresh();
-      reset();
     } catch (error) {
-      setIsError(error);
+      setErrorName(error);
     }
   }
 
   return (
-    <FormLayout title="Iniciar sesion" errorNotification={isError}>
+    <FormLayout title="Iniciar sesion" errorNotification={errorName}>
       <form onSubmit={handleSubmit(handleSubmitForm)} className="space-y-4">
         <FieldType
           name="Nombre de usuario"

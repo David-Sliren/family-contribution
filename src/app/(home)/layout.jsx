@@ -1,11 +1,11 @@
 import { BottomSheet } from "@/components/ui/BottomSheet/BottomSheet";
 import { NavBarTop } from "@/components/ui/nav/navtop/NavBarTop";
 import { NavBarBottom } from "@/components/ui/nav/navbottom/NavBarBottom";
-import React from "react";
 import { Cart } from "@/components/ui/cart/Cart";
 import { AuthProvider } from "@/components/provaider/AuthProvider";
 import { getUserData } from "@/utils/getUserData";
 import { excludeForUser } from "@/utils/mongoose-helper/excludeInfoOfDatabase";
+import { Notification } from "@/components/ui/notifications/Notification";
 
 export default async function layout({ children }) {
   const userData = await getUserData();
@@ -24,6 +24,7 @@ export default async function layout({ children }) {
       <BottomSheet>
         <Cart />
       </BottomSheet>
+      <Notification />
     </AuthProvider>
   );
 }

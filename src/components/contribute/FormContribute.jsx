@@ -3,7 +3,7 @@ import { useHookForm } from "@/hooks/useHookForm";
 import { FormLayout } from "../ui/form/layout/FormLayout";
 import { FieldType } from "../ui/form/inputs/FieldType";
 import { ActionsButtons } from "../ui/form/buttons/ActionsButtons";
-import { contributionSchemaFrontend } from "@/schemas/contribution";
+import { contributionSchemaFrontend } from "@/schemas/contribution.frontend";
 import { FieldSelect } from "../ui/form/inputs/FieldSelect";
 import { createPreference } from "@/services/contribute/contribute";
 import { useEffect, useState } from "react";

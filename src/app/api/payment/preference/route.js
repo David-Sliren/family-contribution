@@ -1,7 +1,7 @@
 import { TOKEN } from "@/constants/config";
 import { SECRET } from "@/constants/env";
 import { PaymentCheckout } from "@/models/payments/mercadoPago";
-import { contributionSchemaFrontend } from "@/schemas/contribution";
+import { contributionSchemaFrontend } from "@/schemas/contribution.frontend";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 

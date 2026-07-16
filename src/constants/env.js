@@ -2,4 +2,11 @@ export const SECRET = new TextEncoder().encode(process.env.SECRET_JWT);
 export const MONGODB_URI = process.env.MONGODB_URI;
 export const ACCESSTOKEN = process.env.MP_ACCESS_TOKEN;
 export const PORT = process.env.PORT || 3000;
-export const BASE_URL = process.env.BASE_URL || `localhost:${PORT}`;
+const VERCEL_URL =
+  process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`;
+export const BASE_URL =
+  process.env.BASE_URL || VERCEL_URL || `http://localhost:${PORT}`;
+
+if (!/^https?:\/\/.+/.test(BASE_URL)) {
+  throw new Error(`BASE_URL inválida: "${BASE_URL}"`);
+}

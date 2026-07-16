@@ -28,9 +28,9 @@ export class PaymentCheckout {
           }),
           notification_url: `${BASE_URL}/api/payment/webhook`,
           back_urls: {
-            failure: `${BASE_URL}/?estado=failure`,
-            pending: `${BASE_URL}/?estado=pending`,
-            success: `${BASE_URL}/?estado=success`,
+            failure: `${BASE_URL}/?state=failure`,
+            pending: `${BASE_URL}/?state=pending`,
+            success: `${BASE_URL}/?state=success`,
           },
           auto_return: "approved",
           statement_descriptor: "Colaboracion a Aleida",

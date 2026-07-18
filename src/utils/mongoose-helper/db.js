@@ -7,13 +7,15 @@ if (!MONGODB_URI) {
   );
 }
 
-const cached = (global.moongose = { conn: null });
+const cached = (global.mongoose = { conn: null });
 
 export const conectToData = async () => {
   if (cached.conn) return cached.conn;
 
   console.log("=> Creando nueva conexión a MongoDB...");
-  cached.conn = await mongoose.connect(MONGODB_URI);
+  cached.conn = await mongoose.connect(MONGODB_URI, {
+    bufferCommands: false,
+  });
   return cached.conn;
 };
 

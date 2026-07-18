@@ -50,7 +50,12 @@ export const POST = async (req) => {
     await Contribute.create(result.data);
     return Response.json({ ok: true });
   } catch (error) {
+    if (error.code === 11000) {
+      console.log(`webhook: dupicate payment, already registered ${payId}`);
+      return Response.json({ ok: true });
+    }
+
     console.error("webhook: error", error);
-    return Response.json({ ok: true });
+    return Response.json({ ok: false }, { status: 500 });
   }
 };

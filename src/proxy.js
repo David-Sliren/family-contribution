@@ -22,11 +22,12 @@ export const proxy = async (req) => {
 
     return NextResponse.next();
   } catch (e) {
-    if (e.code === "No_token") console.error(e.message);
-    if (e.name === `JWSInvalid`) console.error(`token error: ${e.message}`);
-    if (e.name === `JWTExpired`) (await cookies()).delete(TOKEN);
+    // if (e.code === "No_token") console.log(e.message);
+    if (e.code === `ERR_JWS_INVALID`) (await cookies()).delete(TOKEN);
+    if (e.code === `ERR_JWT_EXPIRED`) (await cookies()).delete(TOKEN);
 
-    if (!isAuthRoute) return NextResponse.redirect(new URL("/", req.url));
+    if (!isAuthRoute)
+      return NextResponse.redirect(new URL("/auth/login", req.url));
   }
 
   return NextResponse.next();

@@ -3,6 +3,9 @@ import { preference } from "@/constants/payment.js";
 
 export class PaymentCheckout {
   static async createContribution(userId, purpose, amount) {
+    const notificationUrl = `${BASE_URL}/api/payment/webhook`;
+    console.info("notificacion de pago a la ruta: ", notificationUrl);
+
     try {
       const payment = await preference.create({
         body: {
@@ -26,7 +29,7 @@ export class PaymentCheckout {
             purpose,
             amount,
           }),
-          notification_url: `${BASE_URL}/api/payment/webhook`,
+          notification_url: notificationUrl,
           back_urls: {
             failure: `${BASE_URL}/?state=failure`,
             pending: `${BASE_URL}/?state=pending`,

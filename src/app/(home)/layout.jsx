@@ -6,9 +6,8 @@ import { AuthProvider } from "@/components/provaider/AuthProvider";
 import { getUserData } from "@/utils/getUserData";
 import { excludeForUser } from "@/utils/mongoose-helper/excludeInfoOfDatabase";
 import { Notification } from "@/components/ui/notifications/Notification";
-import { unstable_noStore as noStore } from "next/cache";
+
 export default async function layout({ children }) {
-  noStore();
   const userData = await getUserData();
   const user = userData ? excludeForUser(userData) : userData;
 

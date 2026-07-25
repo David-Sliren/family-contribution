@@ -1,5 +1,7 @@
 import "./globals.css";
 import { bodyFont } from "@/config/fonts";
+import { ANALYTICS } from "@/constants/env";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata = {
   title: "Aleida | Contribucion",
@@ -14,6 +16,7 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">{children}</body>
+      <GoogleAnalytics gaId={ANALYTICS} />
     </html>
   );
 }

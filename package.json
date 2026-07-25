@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
+    "@next/third-parties": "^16.2.11",
     "axios": "^1.16.1",
     "bcrypt": "^6.0.0",
     "clsx": "2.1.1",

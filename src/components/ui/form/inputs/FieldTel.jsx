@@ -14,7 +14,9 @@ export const FieldTel = ({ registerHook = {}, error = {} }) => {
           {...registerHook("tel")}
         />
       </div>
-      {error?.tel && <p className="ml-2 text-red-500">{error.tel?.message}</p>}
+      {error?.tel && (
+        <p className="ml-2 text-[12px] text-red-500">{error.tel?.message}</p>
+      )}
     </div>
   );
 };

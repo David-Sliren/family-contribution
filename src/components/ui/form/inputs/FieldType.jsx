@@ -41,7 +41,9 @@ export const FieldType = ({
         )}
       </div>
       {error?.[inputName] && (
-        <p className="ml-2 text-red-500">{error[inputName]?.message}</p>
+        <p className="ml-2 text-[12px] text-red-500">
+          {error[inputName]?.message}
+        </p>
       )}
     </div>
   );

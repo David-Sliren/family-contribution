@@ -31,7 +31,7 @@ export function Toolbar({
   }
 
   return (
-    <div className="flex shrink-0 gap-2.5 items-center flex-wrap w-fit z-8">
+    <div className="flex shrink-0 gap-2.5 items-center w-fit z-8">
       <SearchInput
         placeholder="Buscar medicina"
         defaultValue={searchParams.get("search") ?? ""}

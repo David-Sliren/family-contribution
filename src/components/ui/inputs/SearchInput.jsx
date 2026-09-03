@@ -1,16 +1,11 @@
 import { cn } from "@/utils/cn";
 
-/**
- * Campo de búsqueda — sin borde sólido (DESIGN.md, No-Line Rule aplica
- * explícitamente a search bars). Relleno con surface-container-lowest,
- * borde real solo aparece en foco vía :focus-within del padre "ghost-border".
- */
 export function SearchInput({ className = "", ...props }) {
   return (
     <input
       type="search"
       className={cn(
-        "ghost-border min-h-11 flex-1 min-w-[180px] bg-surface-container-lowest rounded-full px-4 text-on-surface font-body text-sm placeholder:text-on-surface-variant outline-none",
+        "w-full md:min-w-md xl:min-w-xl bg-surface-container-low border-primary/15 border rounded-full py-3 px-6 text-sm text-on-surface shadow-sm placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary/60  transition-all",
         className,
       )}
       {...props}
@@ -22,7 +17,7 @@ export function Select({ className = "", children, ...props }) {
   return (
     <select
       className={cn(
-        "ghost-border min-h-11 bg-surface-container-lowest rounded-full px-4 text-on-surface-variant font-body text-sm outline-none cursor-pointer",
+        "w-fit appearance-none bg-surface-container-low border-primary/15 border rounded-full py-2 px-6 font-headline-md text-label-md text-on-surface shadow-sm focus:outline-none focus:ring-1 focus:ring-primary/60 transition-all cursor-pointer",
         className,
       )}
       {...props}

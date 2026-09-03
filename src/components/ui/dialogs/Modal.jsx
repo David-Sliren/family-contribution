@@ -12,7 +12,7 @@ export const Modal = ({
     <dialog
       ref={ref}
       className={cn(
-        "rounded-2xl p-0  w-[calc(100vw-32px)] bg-surface-container-lowest text-on-surface shadow-tonal-lg backdrop:bg-on-surface/10 m-auto animate-fade-in-up",
+        "rounded-2xl p-0 w-fit max-w-[calc(100vw-32px)] bg-surface-container-lowest text-on-surface shadow-tonal-lg backdrop:bg-on-surface/10 m-auto animate-fade-in-up",
         className,
       )}
       {...props}

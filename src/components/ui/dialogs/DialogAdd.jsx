@@ -14,6 +14,7 @@ export function DialogAdd({
   errorNotification,
   modalRef,
   idModal,
+  handdlerClose = () => "",
 }) {
   return (
     <>
@@ -22,6 +23,7 @@ export function DialogAdd({
         ref={modalRef}
         title={title}
         description={description}
+        onClose={handdlerClose}
       >
         <FormLayout errorNotification={errorNotification}>
           <form onSubmit={handdleFormMain} className="space-y-4">

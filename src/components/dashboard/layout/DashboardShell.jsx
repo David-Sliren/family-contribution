@@ -1,8 +1,15 @@
 import { titleFont } from "@/config/fonts";
+import { cn } from "@/utils/cn";
 
-export function DashboardShell({ title, subtitle, description, children }) {
+export function DashboardShell({
+  title,
+  subtitle,
+  description,
+  className,
+  children,
+}) {
   return (
-    <main className={titleFont.className}>
+    <main className={cn(titleFont.className, className)}>
       <header className="mb-8 max-w-[750px]">
         <h2 className="text-[11px] uppercase tracking-[.12em] font-bold text-on-surface-variant font-body mb-1.5">
           {subtitle}

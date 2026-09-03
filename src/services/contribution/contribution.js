@@ -5,8 +5,15 @@ export const getAllContribution = async () => {
     const { data } = await baseUrlContribution.get("/");
     return data;
   } catch (error) {
-    console.log("error?.response?.data?.message: ", error);
-    // throw error?.response?.data?.message;
-    throw error;
+    throw error?.response?.data?.message;
+  }
+};
+
+export const createContribution = async (contributionData) => {
+  try {
+    const { data } = await baseUrlContribution.post("/", contributionData);
+    return data;
+  } catch (error) {
+    throw error?.response?.data?.message;
   }
 };

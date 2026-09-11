@@ -14,6 +14,6 @@ export const createContribution = async (contributionData) => {
     const { data } = await baseUrlContribution.post("/", contributionData);
     return data;
   } catch (error) {
-    throw error?.response?.data?.message;
+    throw error?.response?.data?.error;
   }
 };

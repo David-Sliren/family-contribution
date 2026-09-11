@@ -11,7 +11,6 @@ import { FieldSelect } from "@/components/ui/form/inputs/FieldSelect";
 import { FieldHidden } from "@/components/ui/form/inputs/FieldHidden";
 
 export function AddContributionDialog({ user, dialogRef }) {
-  console.log("user: ", user.id);
   // notification
   const setNotification = useNotification((state) => state.setNotification);
   const [errorName, setErrorName] = useState("");

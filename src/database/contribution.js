@@ -18,6 +18,7 @@ const contributionSchema = new Schema(
       enum: ["medicinas", "facturas", "cuidador"],
     },
     date: { type: Date, default: Date.now },
+    updateBy: { type: Schema.ObjectId, ref: "User" },
   },
   { timestamps: true },
 );

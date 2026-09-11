@@ -25,4 +25,7 @@ export const contributionSchemaBanckend = z.object({
   status: status,
   purpose: purpose,
   date: z.iso.datetime("elija una fecha correcta").optional(),
+  updateBy: z.refine((val) => Types.ObjectId.isValid(val), {
+    error: "el id no es valido",
+  }),
 });

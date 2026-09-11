@@ -12,19 +12,27 @@ export const proxy = async (req) => {
 
   try {
     if (!token) {
-      const error = new Error("no token found");
-      error.code = "No_token";
-      throw error;
+      const customError = new Error("not found token");
+      customError.code = "NOT_TOKEN";
+      throw customError;
     }
-    await jwtVerify(token.value, SECRET);
+    const { payload } = await jwtVerify(token.value, SECRET);
+    const user = payload;
+    if (user.role === "user" && pathname.includes("dashboard")) {
+      const customError = new Error("user unauthorized");
+      customError.code = "USER_UNAUTHORIZED";
+      throw customError;
+    }
 
     if (isAuthRoute) return NextResponse.redirect(new URL("/", req.url));
 
     return NextResponse.next();
   } catch (e) {
-    // if (e.code === "No_token") console.log(e.message);
     if (e.code === `ERR_JWS_INVALID`) (await cookies()).delete(TOKEN);
     if (e.code === `ERR_JWT_EXPIRED`) (await cookies()).delete(TOKEN);
+
+    if (e.code === "USER_UNAUTHORIZED")
+      return NextResponse.redirect(new URL("/", req.url));
 
     if (!isAuthRoute)
       return NextResponse.redirect(new URL("/auth/login", req.url));
@@ -34,5 +42,11 @@ export const proxy = async (req) => {
 };
 
 export const config = {
-  matcher: ["/medicine", "/additional-costs", "/profile", "/auth/:path*"],
+  matcher: [
+    "/medicine",
+    "/additional-costs",
+    "/profile",
+    "/auth/:path*",
+    "/dashboard/:path*",
+  ],
 };

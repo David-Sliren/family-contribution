@@ -31,6 +31,7 @@ export const POST = async (req) => {
     status: "confirmado",
     purpose,
     date: new Date(pay.date_approved).toISOString(),
+    updateBy: userId,
   };
 
   const result = contributionSchemaBanckend.safeParse(data);

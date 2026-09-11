@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/dashboard/layout/Sidebar";
+import { contributionQueryOptions } from "@/hooks/tanstack/query/useQueryContribution";
 import {
   allPatientQueryOptions,
   mainPatientQueryOptions,
@@ -14,6 +15,7 @@ export default async function Dashboard({ children }) {
     queryClient.prefetchQuery(allPatientQueryOptions()),
     queryClient.prefetchQuery(mainPatientQueryOptions()),
     queryClient.prefetchQuery(userQueryAllOptions()),
+    queryClient.prefetchQuery(contributionQueryOptions()),
   ]);
 
   return (

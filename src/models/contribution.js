@@ -70,7 +70,39 @@ export class Contribute {
 
       return newContribution;
     } catch (error) {
-      // console.log("error: ", error);
+      throw error;
+    }
+  }
+
+  static async update(id, data) {
+    await conectToData();
+    const user = await User.findById(data.updateBy);
+
+    if (!user || (user && user.role !== "admin")) {
+      const customError = new Error("user unauthorized");
+      customError.code = "USER_UNAUTHORIZED";
+      throw customError;
+    }
+
+    try {
+      const contribution = await Contribution.findByIdAndUpdate(id, data, {
+        new: true,
+      });
+
+      if (!contribution) {
+        const customError = new Error("not found contribution");
+        customError.code = "NOT_FOUND_CONTRIBUTION";
+        throw customError;
+      }
+
+      return contribution;
+    } catch (error) {
+      if (error.name == "CastError") {
+        const customError = new Error("invalid id");
+        customError.code = "INVALID_ID";
+        throw customError;
+      }
+
       throw error;
     }
   }

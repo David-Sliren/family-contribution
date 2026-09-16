@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { useState } from "react";
 
 export const FieldHidden = ({
@@ -8,6 +9,7 @@ export const FieldHidden = ({
   registerHook = {},
   error = {},
   defaultValue = "",
+  className = "",
 }) => {
   const [isView, setIsView] = useState(false);
 
@@ -15,7 +17,7 @@ export const FieldHidden = ({
     setIsView(!isView);
   }
   return (
-    <div className="space-y-2 absolute top-2 left-2 w-fit">
+    <div className={clsx("space-y-2 absolute top-2 left-2 w-fit", className)}>
       <div className="relative flex items-center w-fit gap-2">
         <label className="block text-xs font-semibold text-outline/60 tracking-[0.05em] ml-1">
           {name}:

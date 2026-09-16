@@ -1,4 +1,4 @@
-import { baseUrlContribution } from "./config";
+import { baseUrlContribution, baseUrlContributionDashboard } from "./config";
 
 export const getAllContribution = async () => {
   try {
@@ -12,6 +12,18 @@ export const getAllContribution = async () => {
 export const createContribution = async (contributionData) => {
   try {
     const { data } = await baseUrlContribution.post("/", contributionData);
+    return data;
+  } catch (error) {
+    throw error?.response?.data?.error;
+  }
+};
+
+export const updateContribution = async (id, contributionData) => {
+  try {
+    const { data } = await baseUrlContributionDashboard.put(
+      `/${id}`,
+      contributionData,
+    );
     return data;
   } catch (error) {
     throw error?.response?.data?.error;

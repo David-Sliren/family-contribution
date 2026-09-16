@@ -5,8 +5,9 @@ import { defaultDate } from "@/config/dates";
 import { formatMoney } from "@/config/money";
 import { useContributionQueryAll } from "@/hooks/tanstack/query/useQueryContribution";
 import Image from "next/image";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { LuEllipsisVertical, LuPencil } from "react-icons/lu";
+import { UpdateContributionDialog } from "./UpdateContributionDialog";
 
 export const CardContribution = ({ contribution, handdler = () => "" }) => {
   return (
@@ -71,12 +72,26 @@ export const CardContribution = ({ contribution, handdler = () => "" }) => {
 
 export const CardContributions = () => {
   const { data } = useContributionQueryAll();
+  const [editCotribution, setEdictCotribution] = useState(null);
+  const dialogRef = useRef(null);
+
+  function handdlerEditContribution(contribution) {
+    setEdictCotribution(contribution);
+    dialogRef.current?.showModal();
+  }
 
   return (
     <section className="mt-8 w-full xl:max-w-8/15 max-h-125 space-y-2  overflow-y-auto scroll-hiden">
-      {/* <AddContributionDialog user={editUser} dialogRef={dialogRef} /> */}
+      <UpdateContributionDialog
+        contribution={editCotribution}
+        dialogRef={dialogRef}
+      />
       {data.map((contribution) => (
-        <CardContribution key={contribution.id} contribution={contribution} />
+        <CardContribution
+          key={contribution.id}
+          contribution={contribution}
+          handdler={handdlerEditContribution}
+        />
       ))}
     </section>
   );

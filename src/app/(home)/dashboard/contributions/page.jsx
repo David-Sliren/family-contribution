@@ -6,7 +6,8 @@ export default async function ContributionDashboard({ searchParams }) {
   const metadata = {
     title: "Contribuciones",
     subtitle: "Registro de contribuciones",
-    description: "Pendiente.",
+    description:
+      "Consulta las contribuciones registradas por cada usuario y actualiza sus datos para mantener el historial financiero al día.",
   };
 
   return (

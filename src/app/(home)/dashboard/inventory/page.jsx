@@ -7,7 +7,7 @@ export default async function InventoryDashboard({ searchParams }) {
     title: "Inventario",
     subtitle: "Inventario de tratamiento",
     description:
-      "Aquí puedes registrar y administrar los artículos del inventario de tratamiento, incluyendo medicamentos, suplementos y suministros.",
+      "Controla las existencias del tratamiento: registra medicamentos, suplementos y suministros, y actualiza su disponibilidad cuando sea necesario.",
   };
 
   return (

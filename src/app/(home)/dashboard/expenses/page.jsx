@@ -5,7 +5,7 @@ export default function ExpenseDashboard() {
     title: "Gastos",
     subtitle: "Registro de gastos",
     description:
-      "En esta sección puedes registrar y gestionar los gastos de tu familia. Puedes añadir nuevos gastos, actualizar los existentes y eliminar aquellos que ya no sean relevantes.",
+      "Registra, consulta y actualiza los gastos familiares para llevar un control claro de cada compra y su categoría.",
   };
 
   return (

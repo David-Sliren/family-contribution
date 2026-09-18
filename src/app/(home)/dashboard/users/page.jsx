@@ -6,7 +6,8 @@ export default async function UsersDashboard({ searchParams }) {
   const metadata = {
     title: "Usuarios",
     subtitle: "Registro de usuarios",
-    description: "pendiente.",
+    description:
+      "Consulta los usuarios registrados, sus roles y el total de sus aportes; también puedes registrar nuevas contribuciones para cada uno.",
   };
 
   return (

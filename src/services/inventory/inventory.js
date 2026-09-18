@@ -1,13 +1,12 @@
 import { baseUrlInventory, baseUrlInventoryDashboard } from "./config";
-
-const getError = (error) => error?.response?.data?.error || error?.message;
+import { getServiceError } from "../error";
 
 export const getAllInventory = async () => {
   try {
     const { data } = await baseUrlInventory.get("/");
     return data;
   } catch (error) {
-    throw getError(error);
+    throw getServiceError(error);
   }
 };
 
@@ -16,8 +15,7 @@ export const createInventory = async (dataForm) => {
     const { data } = await baseUrlInventoryDashboard.post("/", dataForm);
     return data;
   } catch (error) {
-    console.log("error: ", error?.response?.data);
-    throw getError(error);
+    throw getServiceError(error);
   }
 };
 
@@ -26,7 +24,7 @@ export const updateInventory = async (id, dataForm) => {
     const { data } = await baseUrlInventoryDashboard.put(`/${id}`, dataForm);
     return data;
   } catch (error) {
-    throw getError(error);
+    throw getServiceError(error);
   }
 };
 
@@ -35,6 +33,6 @@ export const deleteInventory = async (id) => {
     const { data } = await baseUrlInventoryDashboard.delete(`/${id}`);
     return data;
   } catch (error) {
-    throw getError(error);
+    throw getServiceError(error);
   }
 };

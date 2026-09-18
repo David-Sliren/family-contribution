@@ -1,11 +1,12 @@
 import { baseUrlContribution, baseUrlContributionDashboard } from "./config";
+import { getServiceError } from "../error";
 
 export const getAllContribution = async () => {
   try {
     const { data } = await baseUrlContribution.get("/");
     return data;
   } catch (error) {
-    throw error?.response?.data?.message;
+    throw getServiceError(error);
   }
 };
 
@@ -14,7 +15,7 @@ export const createContribution = async (contributionData) => {
     const { data } = await baseUrlContribution.post("/", contributionData);
     return data;
   } catch (error) {
-    throw error?.response?.data?.error;
+    throw getServiceError(error);
   }
 };
 
@@ -26,6 +27,6 @@ export const updateContribution = async (id, contributionData) => {
     );
     return data;
   } catch (error) {
-    throw error?.response?.data?.error;
+    throw getServiceError(error);
   }
 };

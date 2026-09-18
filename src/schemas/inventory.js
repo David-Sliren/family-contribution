@@ -22,3 +22,8 @@ export const inventorySchema = z.object({
     .regex(/^[0-9a-fA-F]{24}$/, "el id no es valido")
     .optional(),
 });
+
+export const inventoryUpdateSchema = inventorySchema.omit({
+  createBy: true,
+  patientId: true,
+});

@@ -29,3 +29,8 @@ export const contributionSchemaBanckend = z.object({
     error: "el id no es valido",
   }),
 });
+
+export const contributionUpdateSchema = contributionSchemaBanckend.omit({
+  paymentId: true,
+  userId: true,
+});

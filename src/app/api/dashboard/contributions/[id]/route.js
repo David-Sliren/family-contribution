@@ -1,7 +1,7 @@
 import { TOKEN } from "@/constants/config";
 import { SECRET } from "@/constants/env";
 import { Contribute } from "@/models/contribution";
-import { contributionSchemaBanckend } from "@/schemas/contribution";
+import { contributionUpdateSchema } from "@/schemas/contribution";
 import { jwtVerify } from "jose";
 
 export const PUT = async (req, { params }) => {
@@ -22,9 +22,9 @@ export const PUT = async (req, { params }) => {
     return Response.json({ error: "user unauthorized" }, { status: 401 });
   }
 
-  const fullData = { updateBy: userId, ...body };
+  const fullData = { ...body, updateBy: userId };
 
-  const result = contributionSchemaBanckend.safeParse(fullData);
+  const result = contributionUpdateSchema.safeParse(fullData);
 
   if (!result.success)
     return Response.json(

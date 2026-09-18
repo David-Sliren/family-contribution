@@ -1,7 +1,7 @@
 import { TOKEN } from "@/constants/config";
 import { SECRET } from "@/constants/env";
 import { Inventories } from "@/models/inventory";
-import { inventorySchema } from "@/schemas/inventory";
+import { inventoryUpdateSchema } from "@/schemas/inventory";
 import { jwtVerify } from "jose";
 
 export const DELETE = async (req, { params }) => {
@@ -58,9 +58,9 @@ export const PUT = async (req, { params }) => {
     return Response.json({ error: "user unauthorized" }, { status: 401 });
   }
 
-  const fullData = { updateBy: userId, ...body };
+  const fullData = { ...body, updateBy: userId };
 
-  const result = inventorySchema.safeParse(fullData);
+  const result = inventoryUpdateSchema.safeParse(fullData);
 
   if (!result.success)
     return Response.json(

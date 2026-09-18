@@ -17,7 +17,7 @@ export const POST = async (req) => {
   } catch (error) {
     return Response.json({ error: "user unauthorized" }, { status: 401 });
   }
-  const fullData = { createBy: userId, updateBy: userId, ...body };
+  const fullData = { ...body, createBy: userId, updateBy: userId };
 
   const result = inventorySchema.safeParse(fullData);
 

@@ -41,3 +41,8 @@ export const expenseSchemaFrontend = expenseSchema
   .extend({
     createBy: expenseSchema.shape.createBy.optional(),
   });
+
+export const expenseUpdateSchema = expenseSchema.omit({
+  createBy: true,
+  patientId: true,
+});

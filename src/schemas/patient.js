@@ -22,3 +22,5 @@ export const patientSchema = z.object({
 });
 
 export const patientSchemaFrontend = patientSchema.omit({ userId: true });
+
+export const patientUpdateSchema = patientSchema.omit({ userId: true });

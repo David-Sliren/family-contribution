@@ -34,7 +34,7 @@ export const POST = async (req) => {
   } catch (error) {
     return Response.json({ error: "user unauthorized" }, { status: 401 });
   }
-  const fullData = { userId, ...body };
+  const fullData = { ...body, userId };
 
   const result = patientSchema.safeParse(fullData);
 

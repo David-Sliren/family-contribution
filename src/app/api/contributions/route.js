@@ -1,6 +1,5 @@
 import { TOKEN } from "@/constants/config";
 import { SECRET } from "@/constants/env";
-import { Contribution } from "@/database/contribution";
 import { Contribute } from "@/models/contribution";
 import { contributionSchemaBanckend } from "@/schemas/contribution";
 import { jwtVerify } from "jose";
@@ -35,7 +34,7 @@ export const POST = async (req) => {
     return Response.json({ error: "user unauthorized" }, { status: 401 });
   }
 
-  const fullData = { updateBy: userId, ...body };
+  const fullData = { ...body, updateBy: userId };
 
   const result = contributionSchemaBanckend.safeParse(fullData);
 

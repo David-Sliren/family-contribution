@@ -1,7 +1,7 @@
 import { TOKEN } from "@/constants/config";
 import { SECRET } from "@/constants/env";
 import { Patients } from "@/models/patient";
-import { patientSchema } from "@/schemas/patient";
+import { patientUpdateSchema } from "@/schemas/patient";
 import { jwtVerify } from "jose";
 
 export const GET = async (_req, { params }) => {
@@ -39,9 +39,7 @@ export const PUT = async (req, { params }) => {
   } catch (error) {
     return Response.json({ error: "user unauthorized" }, { status: 401 });
   }
-  const fullData = { userId, ...body };
-
-  const result = patientSchema.safeParse(fullData);
+  const result = patientUpdateSchema.safeParse(body);
 
   if (!result.success)
     return Response.json(
@@ -53,7 +51,11 @@ export const PUT = async (req, { params }) => {
     );
 
   try {
-    const updatePatient = await Patients.update(id, result.data, { new: true });
+    const updatePatient = await Patients.update(
+      id,
+      { ...result.data, userId },
+      { new: true },
+    );
 
     return Response.json(updatePatient, { status: 201 });
   } catch (error) {

@@ -1,10 +1,5 @@
 import { cn } from "@/utils/cn";
 
-/**
- * Card base — Tonal Layering (DESIGN.md Sección 5).
- * Se "levanta" solo por el cambio de superficie (surface-container-lowest
- * sobre surface / surface-container-low), nunca con un box-shadow gris.
- */
 export function Card({
   as: Tag = "article",
   className = "",
@@ -52,3 +47,16 @@ export function PanelCard({ title, className = "", children }) {
     </Card>
   );
 }
+
+export const CardDefaultList = ({ children, className = "" }) => {
+  return (
+    <article
+      className={cn(
+        "relative flex items-center justify-between w-full p-4 rounded-2xl text-sm hover:bg-surface-container-low transition-all duration-200",
+        className,
+      )}
+    >
+      {children}
+    </article>
+  );
+};

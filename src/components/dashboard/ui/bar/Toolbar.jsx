@@ -3,14 +3,8 @@
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SearchInput, Select } from "../../../ui/inputs/SearchInput";
 
-/**
- * En vez de filtrar en memoria del lado del cliente (como el HTML original
- * con [data-filter]), el término de búsquedap vive en la URL (?q=...) y el
- * Server Component (page.jsx) hace la query filtrada. Esto es el mismo
- * patrón que ya usamos para la página de retorno de Mercado Pago:
- * el cliente solo actualiza el estado de navegación, nunca los datos.
- */
 export function Toolbar({
+  searchName = "Buscar",
   selectFilter = "filtrar",
   optionInitialName = "Agrega un nombre",
   optionInitialValue = "",
@@ -33,13 +27,15 @@ export function Toolbar({
   return (
     <div className="flex shrink-0 gap-2.5 items-center w-fit z-8">
       <SearchInput
-        placeholder="Buscar medicina"
+        className="text-xs sm:text-md"
+        placeholder={searchName}
         defaultValue={searchParams.get("search") ?? ""}
         onChange={(e) => updateQuery("search", e.target.value)}
-        aria-label="Buscar medicina"
+        aria-label={searchName}
       />
       <Select
-        aria-label="Filtrar por stock"
+        className="text-xs sm:text-md py-3"
+        aria-label={selectFilter}
         defaultValue={searchParams.get(selectFilter) ?? ""}
         onChange={(e) => updateQuery(selectFilter, e.target.value)}
       >

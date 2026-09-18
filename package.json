@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -36,6 +37,7 @@
     "@tanstack/react-query-devtools": "^5.101.4",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.2.4",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "tailwindcss": "^4.3.3"
   }
 }

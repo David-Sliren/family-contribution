@@ -7,7 +7,7 @@ export default async function InventoryDashboard({ searchParams }) {
     title: "Inventario",
     subtitle: "Inventario de tratamiento",
     description:
-      "Anticipa reposiciones y conserva el contexto de cada tratamiento sin depender de hojas dispersas.",
+      "Aquí puedes registrar y administrar los artículos del inventario de tratamiento, incluyendo medicamentos, suplementos y suministros.",
   };
 
   return (

@@ -1,69 +1,59 @@
 import { Card } from "@/components/ui/cards/Card";
 import { Chip } from "@/components/dashboard/ui/chips/Chip";
+import { DeafultPopover } from "@/components/ui/popovers/DeafultPopover";
+import { useDeleteInventory } from "@/hooks/tanstack/mutation/useMutationInventory";
+import { useNotification } from "@/store/ui/notifications";
+import { LuEllipsisVertical, LuPencil, LuTrash2 } from "react-icons/lu";
 
-const STOCK_ROWS = [
-  { key: "enOrden", label: "En orden" },
-  { key: "bajo", label: "Bajo" },
-  { key: "agotado", label: "Agotado" },
-];
+const statusTone = { "en orden": "success", bajo: "alert", agotado: "alert" };
 
-const category = { name: "Medicine", description: "En orden" };
+export function InventoryCard({ inventory, onEdit }) {
+  const { mutateAsync } = useDeleteInventory(inventory.id);
+  const setNotification = useNotification((state) => state.setNotification);
+  const total = inventory.totalUnit || 0;
 
-/**
- * `category` = { name, description, total, badge: {label, tone}, stock: {enOrden, bajo, agotado} }
- * `stock` son valores 0–100 (ya normalizados) para las barras de progreso.
- */
-export function InventoryCard() {
-  const total = 12;
+  async function handleDelete() {
+    try {
+      await mutateAsync();
+      setNotification({ message: "Artículo eliminado" });
+    } catch (error) {
+      setNotification({ message: error || "No se pudo eliminar el artículo", type: "error" });
+    }
+  }
 
   return (
     <Card className="p-5">
       <div className="flex justify-between items-start gap-2.5">
         <div>
           <h3 className="text-[17px] font-display tracking-tight text-on-surface m-0">
-            {category.name}
+            {inventory.name}
           </h3>
           <p className="text-[12px] text-on-surface-variant font-body mt-1 mb-0">
-            {category.description}
+            {inventory.concentration || inventory.category}
           </p>
         </div>
-        <Chip tone="alert">nada</Chip>
-        {/* {category.badge && (
-        )} */}
+        <div className="flex items-center gap-1">
+          <Chip tone={statusTone[inventory.status] ?? "primary"}>{inventory.status}</Chip>
+          <button popoverTarget={`popover-basic-${inventory.id}`} className="cursor-pointer p-1 text-on-surface-variant hover:text-primary">
+            <LuEllipsisVertical />
+          </button>
+        </div>
       </div>
 
       <div className="flex items-end justify-between mt-5">
         <strong className="text-[28px] font-display tracking-tight text-on-surface">
-          12000
+          {total}
         </strong>
         <span className="text-[11px] text-on-surface-variant font-body">
-          Elementos en stock
+          {inventory.category}
         </span>
       </div>
 
-      <div className="grid gap-2 mt-4">
-        {STOCK_ROWS.map(({ key, label }) => {
-          const value = 7 ?? 0;
-          const widthPct = Math.round((value / total) * 100);
-          return (
-            <div
-              key={key}
-              className="grid grid-cols-[68px_1fr_22px] gap-2 items-center text-[11px] text-on-surface-variant font-body"
-            >
-              <span>{label}</span>
-              <div className="h-[7px] bg-surface-container-low rounded-full overflow-hidden">
-                <i
-                  className="block h-full bg-primary-container rounded-full"
-                  style={{ width: `${widthPct}%` }}
-                />
-              </div>
-              <strong className="text-[11px] text-on-surface text-right">
-                {value}
-              </strong>
-            </div>
-          );
-        })}
-      </div>
+      {inventory.description && <p className="mt-4 text-[11px] text-on-surface-variant">{inventory.description}</p>}
+      <DeafultPopover id={inventory.id}>
+        <button className="flex w-full items-center gap-3 px-4 py-2 text-primary hover:bg-surface-container-low cursor-pointer" onClick={() => onEdit(inventory)}><LuPencil />Editar</button>
+        <button className="flex w-full items-center gap-3 px-4 py-2 text-error hover:bg-surface-container-low cursor-pointer" onClick={handleDelete}><LuTrash2 />Eliminar</button>
+      </DeafultPopover>
     </Card>
   );
 }

@@ -1,109 +1,114 @@
 "use client";
 
-import { useRef, useTransition } from "react";
-import { Modal } from "@/components/ui/dialogs/Modal";
-import { ButtonVariant } from "@/components/ui/buttons/ButtonVariant";
-// import { addMedicine } from "@/actions/medicine.actions";
+import { useEffect, useRef, useState } from "react";
+import { DialogAdd } from "@/components/ui/dialogs/DialogAdd";
+import { FieldHidden } from "@/components/ui/form/inputs/FieldHidden";
+import { FieldSelect } from "@/components/ui/form/inputs/FieldSelect";
+import { FieldType } from "@/components/ui/form/inputs/FieldType";
+import { useHookForm } from "@/hooks/useHookForm";
+import { useCreateInventory } from "@/hooks/tanstack/mutation/useMutationInventory";
+import { useMainPatientQuery } from "@/hooks/tanstack/query/useQueryPatient";
+import {
+  inventoryCategory,
+  inventorySchemaFrontend,
+  inventoryStatus,
+} from "@/schemas/inventory";
+import { useNotification } from "@/store/ui/notifications";
 
-/**
- * Sigue el mismo patrón de Server Action que armamos para contribuciones:
- * la escritura real (auth + Mongoose) vive en /actions/medicine.actions.js,
- * nunca aquí. Este componente solo maneja apertura del modal + isPending.
- */
-export function AddInventoryDialog({ triggerLabel = "Añadir medicina" }) {
+export function AddInventoryDialog() {
   const dialogRef = useRef(null);
-  const [isPending, startTransition] = useTransition();
+  const [errorName, setErrorName] = useState("");
+  const setNotification = useNotification((state) => state.setNotification);
+  const { data: patientData } = useMainPatientQuery();
+  const { mutateAsync, isSuccess } = useCreateInventory();
+  const { handleSubmit, register, errors, reset } = useHookForm({
+    schema: inventorySchemaFrontend,
+  });
 
-  async function handleSubmit(formData) {
-    startTransition(async () => {
-      const result = await addMedicine(formData);
-      if (result.success) {
-        dialogRef.current?.close();
-      }
-      // El error se podría mostrar con el store de notificación de Zustand
-      // (useNotification.setNotification) igual que en el flujo de pagos.
-    });
+  useEffect(() => {
+    if (isSuccess) dialogRef.current?.close();
+  }, [isSuccess]);
+
+  async function handleSubmitForm(data) {
+    setErrorName("");
+    try {
+      await mutateAsync(data);
+      setNotification({ message: "Artículo añadido al inventario" });
+      reset();
+    } catch (error) {
+      setErrorName(error);
+    }
   }
 
   return (
-    <>
-      <ButtonVariant
-        variant="primary"
-        onClick={() => dialogRef.current?.showModal()}
-      >
-        {triggerLabel}
-      </ButtonVariant>
-
-      <Modal
-        ref={dialogRef}
-        title="Añadir medicina"
-        description="Crea un artículo de inventario y define el nivel mínimo de reposición."
-      >
-        <form action={handleSubmit} className="grid gap-3.5">
-          <label className="grid gap-1.5 text-[12px] font-bold font-body text-on-surface">
-            Nombre y presentación
-            <input
-              name="name"
-              required
-              placeholder="Ej. Losartán 50 mg"
-              className="w-full rounded-card bg-surface-container-low px-3 min-h-11 font-body text-sm outline-none"
-            />
-          </label>
-
-          <label className="grid gap-1.5 text-[12px] font-bold font-body text-on-surface">
-            Categoría
-            <select
-              name="category"
-              required
-              defaultValue=""
-              className="w-full rounded-card bg-surface-container-low px-3 min-h-11 font-body text-sm outline-none"
-            >
-              <option value="" disabled>
-                Seleccionar categoría
-              </option>
-              <option value="medicinas">Medicinas</option>
-              <option value="suplementos">Suplementos</option>
-              <option value="insumos">Insumos</option>
-            </select>
-          </label>
-
-          <div className="grid grid-cols-2 gap-3.5">
-            <label className="grid gap-1.5 text-[12px] font-bold font-body text-on-surface">
-              Stock actual
-              <input
-                name="stock"
-                type="number"
-                required
-                placeholder="0"
-                className="w-full rounded-card bg-surface-container-low px-3 min-h-11 font-body text-sm outline-none"
-              />
-            </label>
-            <label className="grid gap-1.5 text-[12px] font-bold font-body text-on-surface">
-              Nivel mínimo
-              <input
-                name="minLevel"
-                type="number"
-                required
-                placeholder="0"
-                className="w-full rounded-card bg-surface-container-low px-3 min-h-11 font-body text-sm outline-none"
-              />
-            </label>
-          </div>
-
-          <div className="flex justify-end gap-2.5 mt-4">
-            <ButtonVariant
-              type="button"
-              variant="secondary"
-              onClick={() => dialogRef.current?.close()}
-            >
-              Cancelar
-            </ButtonVariant>
-            <ButtonVariant type="submit" variant="primary" disabled={isPending}>
-              {isPending ? "Guardando..." : "Guardar medicina"}
-            </ButtonVariant>
-          </div>
-        </form>
-      </Modal>
-    </>
+    <DialogAdd
+      idModal="add-inventory"
+      title="Añadir artículo"
+      description="Registra un medicamento, suplemento o suministro del tratamiento."
+      inputName="Añadir artículo"
+      handdleFormMain={handleSubmit(handleSubmitForm)}
+      errorNotification={errorName}
+      modalRef={dialogRef}
+    >
+      <FieldHidden
+        name={`${patientData?.name ?? ""} ${patientData?.lastName ?? ""}`}
+        inputName="patientId"
+        defaultValue={patientData?.id}
+        registerHook={register}
+        error={errors}
+        className="hidden"
+      />
+      <div className="flex flex-col flex-wrap gap-2 md:flex-row">
+        <FieldType
+          name="Nombre"
+          inputName="name"
+          inputPlaceholder="Ej. Losartán"
+          registerHook={register}
+          error={errors}
+        />
+        <FieldType
+          name="Concentración"
+          inputName="concentration"
+          inputPlaceholder="Ej. 50 mg"
+          registerHook={register}
+          error={errors}
+        />
+        <FieldSelect
+          name="Categoría"
+          inputName="category"
+          fieldValues={inventoryCategory.options}
+          registerHook={register}
+        />
+        <FieldSelect
+          name="Estado"
+          inputName="status"
+          fieldValues={inventoryStatus.options}
+          registerHook={register}
+        />
+        <FieldType
+          name="Unidades"
+          inputName="totalUnit"
+          inputType="number"
+          inputPlaceholder="Ej. 20"
+          registerHook={register}
+          error={errors}
+        />
+        <FieldType
+          name="Precio"
+          inputName="price"
+          inputType="number"
+          inputPlaceholder="Ej. 20000"
+          registerHook={register}
+          error={errors}
+        />
+      </div>
+      <FieldType
+        name="Descripción"
+        inputName="description"
+        inputPlaceholder="Notas del artículo"
+        registerHook={register}
+        error={errors}
+      />
+    </DialogAdd>
   );
 }

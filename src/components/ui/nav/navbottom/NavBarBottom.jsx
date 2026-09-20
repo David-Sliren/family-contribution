@@ -1,11 +1,12 @@
 "use client";
 
 import { useUserStore } from "@/components/provaider/AuthProvider";
-import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { LuHandCoins, LuHeartPulse, LuHouse, LuPill } from "react-icons/lu";
+import { LuHandCoins, LuHouse, LuPill } from "react-icons/lu";
+import { GlassDefault } from "../../glass/GlassDefault";
+import { cn } from "@/utils/cn";
 
 const navBarRoutes = [
   {
@@ -33,7 +34,7 @@ const LinkRoute = ({ href, label, icon: Icon }) => {
   return (
     <Link
       href={href}
-      className={clsx("text-gray-500 font-semibold  pb-1 font-body text-sm", {
+      className={cn("text-gray-500 font-semibold  pb-1 font-body text-sm", {
         "border-b-2 border-primary text-primary": href === pathname,
       })}
     >
@@ -52,13 +53,23 @@ export const NavBarBottom = () => {
 
   return (
     <nav
-      className={`fixed bottom-0 left-0 w-full bg-slate-50/20 backdrop-blur-2xl rounded-t-3xl shadow-[0px_-8px_24px_rgba(110,54,210,0.04)] border-t border-gray-500/40 md:hidden z-20 ${!user && "hidden"}`}
+      className={cn(
+        "fixed bottom-5 left-0 w-full flex justify-center md:hidden z-20",
+        {
+          hidden: !user,
+        },
+      )}
     >
-      <div className="flex justify-around items-center px-4 py-2">
-        {navBarRoutes.map((item) => (
-          <LinkRoute key={item.label} {...item} />
-        ))}
-      </div>
+      <GlassDefault
+        classNameWrapper="flex justify-center w-fit rounded-[2em] px-4 shadow-md hover:px-6 hover:py-1 hover:rounded-[2.5em]"
+        classNameTint="bg-black/10"
+      >
+        <div className="flex justify-around items-center px-4 py-2">
+          {navBarRoutes.map((item) => (
+            <LinkRoute key={item.label} {...item} />
+          ))}
+        </div>
+      </GlassDefault>
     </nav>
   );
 };

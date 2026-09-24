@@ -1,9 +1,19 @@
 import { baseUrlExpenses, baseUrlExpensesDashboard } from "./config";
 import { getServiceError } from "../error";
 
-export const getAllExpenses = async () => {
+export const getAllExpenses = async (queryParams) => {
+  const queries = {};
+
+  if (queryParams.category) queries.category = queryParams.category;
+  if (queryParams.search) queries.search = queryParams.search;
+  if (queryParams.page) queries.page = queryParams.page;
+  if (queryParams.limit) queries.limit = queryParams.limit;
+
+  const querys = new URLSearchParams(queries).toString();
+  const enpoint = querys.length ? `/?${querys}` : "/";
+
   try {
-    const { data } = await baseUrlExpenses.get("/");
+    const { data } = await baseUrlExpenses.get(enpoint);
     return data;
   } catch (error) {
     throw getServiceError(error);

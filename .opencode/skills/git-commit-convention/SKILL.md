@@ -1,6 +1,6 @@
 ---
 name: git-commit-convention
-description: Use when making, splitting, or proposing git commits in this project (family-contribution). Documents the Conventional-Commits-style format tipo(scope): descripcion in Spanish, the types feact/fix/refactor/style/chore, common scopes by layer/feature (Frontend/dashboard/inventory, Backend, etc.), ordering rules (chore first, feature before refactor), and project rules (no console.log, staging only intended files).
+description: Use when making, splitting, or proposing git commits in this project (family-contribution). Documents the Conventional-Commits-style format tipo(scope): descripcion in Spanish, the types feact/fix/refactor/style/chore/docs, common scopes by layer/feature (Frontend/dashboard/inventory, Backend, etc.), ordering rules (chore first, feature before refactor), and project rules (no console.log, staging only intended files).
 ---
 
 # Convencion de commits del proyecto
@@ -27,8 +27,9 @@ tipo(scope): descripcion
 | `refactor`| Reestructurar sin cambiar comportamiento         | 51             |
 | `style`   | Ajustes de estilado/UI puros                     | 7              |
 | `chore`   | Mantenimiento: dependencias, config, tooling     | 5              |
+| `docs`    | Documentacion (AGENTS.md, skills, documentacion) | Nuevo          |
 
-Usa `feact` (con "c") en vez de `feat`. No introduzcas tipos que no existan en el historial.
+Usa `feact` (con "c") en vez de `feat`. No introduzcas tipos que no existan en el historial, salvo `docs` (adoptado por convenio para documentacion del repo y skills).
 
 ## Scopes habituales
 

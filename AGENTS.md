@@ -15,8 +15,20 @@ Next.js 16 App Router app (package `contribution-aleida`) for a family contribut
 - UI state via zustand (`src/store/`). Dashboard filters/pagination are URL state with `nuqs` (see inventory toolbar).
 - Route handlers use async params: `const { id } = await params`.
 
+## Organización de componentes y archivos
+- Ruta por feature: `src/app/(home)/<feature>/page.jsx`; dashboard: `src/app/(home)/dashboard/<feature>/page.jsx`.
+- **Pages livianas**: importan `Index` de `@/components/<feature>/Index`, definen `titleData` (title/subtitle/description) y, en dashboard, pre-fetchean con `...QueryOptions` + `HydrationBoundary`. No llevan JSX de UI.
+- **Componentes de la feature aplanados** en `src/components/<feature>/` (sin subcarpetas por pantalla) y con prefijo de la feature en PascalCase:
+  - `Index.jsx` → `export const Index = ({ title, subtitle, description })`; compone layout genérico + filtros/toolbar + `Suspense`/`ThreePoints` + lista + dialogs. "Index" es el componente de sección, **NO un barrel**: no existen archivos `index.js` de re-export.
+  - `<Feature>List.jsx` o `<Feature>Grid.jsx`: lista cliente con URL state `nuqs` (page + `GlassPaginationBasic`) y query de TanStack.
+  - `<Feature>Card.jsx`: tarjeta de item individual.
+  - `Add<Feature>Dialog.jsx` / `Update<Feature>Dialog.jsx`: modales CRUD.
+- **Layouts genéricos** en `src/components/ui/layout/`: `DashboardShell` (dashboard, header eyebrow+title+description) y `PageLayout` (home, usa `Title`); ambos con firma `({ title, subtitle, description, className, children })`.
+- Utilidades del dashboard en `src/components/dashboard/ui/` (bar/Toolbar, chips/Chip).
+- Solo `page.jsx` usa default export; el resto usa `export const`. Nombres con prefijo de feature se distinguen por ruta (ej. `InventoryCard` en home y en dashboard).
+
 ## Auth
-- Auth proxy (Next 16 renamed middleware→proxy) is `src/proxy.js`; matcher covers `/auth`, `/medicine`, `/additional-costs`, `/profile`, `/dashboard`. Role `user` cannot access `/dashboard`; unauthenticated requests redirect to `/auth/login`.
+- Auth proxy (Next 16 renamed middleware→proxy) is `src/proxy.js`; matcher covers `/auth`, `/inventory`, `/additional-costs`, `/profile`, `/dashboard`. Role `user` cannot access `/dashboard`; unauthenticated requests redirect to `/auth/login`.
 - JWT via `jose`, httpOnly cookie `access-token` (constant `TOKEN` in `src/constants/config.js`), 2h expiry. Routes verify with `jwtVerify` and take `payload.id` for server-injected fields. Mongoose schema plugin in `src/utils/mongoose-helper/cleanDatabase.js` maps `_id`→`id` and strips private fields.
 - Read env vars through `src/constants/env.js`, never `process.env` inline.
 
@@ -27,4 +39,4 @@ Next.js 16 App Router app (package `contribution-aleida`) for a family contribut
 - The `.opencode/` folder is an unrelated npm project (OpenCode plugin dep), not the app; leave its own `package.json`/lockfile alone.
 
 ## Commits
-- Follow the repo's commit convention: load the `git-commit-convention` skill before making/splitting/proposing commits. Key rules: lowercase Spanish, `tipo(scope): descripcion`, types `feact`/`fix`/`refactor`/`style`/`chore` (note the `feact` spelling), work on branch `feact`, no `console.log` in committed code, stage only intended files.
+- Follow the repo's commit convention: load the `git-commit-convention` skill before making/splitting/proposing commits. Key rules: lowercase Spanish, `tipo(scope): descripcion`, types `feact`/`fix`/`refactor`/`style`/`chore`/`docs` (note the `feact` spelling), work on branch `feact`, no `console.log` in committed code, stage only intended files.

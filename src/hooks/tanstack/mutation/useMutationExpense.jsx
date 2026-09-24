@@ -5,51 +5,25 @@ import {
 } from "@/services/expenses/expenses";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-// user-contribution
-export const useCreateExpense = () => {
+const useInvalidateExpense = () => {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationKey: ["create-expense"],
-    mutationFn: (data) => createExpense(data),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["expenses"],
-          exact: true,
-        }),
-      ]);
-    },
-  });
+  return () => queryClient.invalidateQueries({ queryKey: ["expenses"] });
+};
+
+export const useCreateExpense = () => {
+  const invalidate = useInvalidateExpense();
+  return useMutation({ mutationFn: createExpense, onSuccess: invalidate });
 };
 
 export const useUpdateExpense = (id) => {
-  const queryClient = useQueryClient();
+  const invalidate = useInvalidateExpense();
   return useMutation({
-    mutationKey: ["update-expense", id],
     mutationFn: (data) => updateExpense(id, data),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["expenses"],
-          exact: true,
-        }),
-      ]);
-    },
+    onSuccess: invalidate,
   });
 };
 
 export const useDeleteExpense = (id) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationKey: ["delete-expense", id],
-    mutationFn: () => deleteExpense(id),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["expenses"],
-          exact: true,
-        }),
-      ]);
-    },
-  });
+  const invalidate = useInvalidateExpense();
+  return useMutation({ mutationFn: () => deleteExpense(id), onSuccess: invalidate });
 };

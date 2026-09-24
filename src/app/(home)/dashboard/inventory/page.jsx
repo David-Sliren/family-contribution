@@ -1,7 +1,11 @@
 import { Index } from "@/components/dashboard/inventory/Index";
-
+import { inventoryQueryOptions } from "@/hooks/tanstack/query/useQueryInventory";
+import { getQueryClient } from "@/utils/tanstackQuery-config";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 export default async function InventoryDashboard({ searchParams }) {
   const params = await searchParams;
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery(inventoryQueryOptions(params));
 
   const metadata = {
     title: "Inventario",
@@ -11,10 +15,12 @@ export default async function InventoryDashboard({ searchParams }) {
   };
 
   return (
-    <Index
-      title={metadata.title}
-      subtitle={metadata.subtitle}
-      description={metadata.description}
-    />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Index
+        title={metadata.title}
+        subtitle={metadata.subtitle}
+        description={metadata.description}
+      />
+    </HydrationBoundary>
   );
 }

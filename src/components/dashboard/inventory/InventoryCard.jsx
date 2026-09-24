@@ -17,7 +17,10 @@ export function InventoryCard({ inventory, onEdit }) {
       await mutateAsync();
       setNotification({ message: "Artículo eliminado" });
     } catch (error) {
-      setNotification({ message: error || "No se pudo eliminar el artículo", type: "error" });
+      setNotification({
+        message: error || "No se pudo eliminar el artículo",
+        type: "error",
+      });
     }
   }
 
@@ -33,8 +36,13 @@ export function InventoryCard({ inventory, onEdit }) {
           </p>
         </div>
         <div className="flex items-center gap-1">
-          <Chip tone={statusTone[inventory.status] ?? "primary"}>{inventory.status}</Chip>
-          <button popoverTarget={`popover-basic-${inventory.id}`} className="cursor-pointer p-1 text-on-surface-variant hover:text-primary">
+          <Chip tone={statusTone[inventory.status] ?? "primary"}>
+            {inventory.status}
+          </Chip>
+          <button
+            popoverTarget={`popover-basic-${inventory.id}`}
+            className="cursor-pointer p-1 text-on-surface-variant hover:text-primary"
+          >
             <LuEllipsisVertical />
           </button>
         </div>
@@ -49,10 +57,26 @@ export function InventoryCard({ inventory, onEdit }) {
         </span>
       </div>
 
-      {inventory.description && <p className="mt-4 text-[11px] text-on-surface-variant">{inventory.description}</p>}
+      {inventory.description && (
+        <p className="mt-4 text-[11px] text-on-surface-variant">
+          {inventory.description}
+        </p>
+      )}
       <DeafultPopover id={inventory.id}>
-        <button className="flex w-full items-center gap-3 px-4 py-2 text-primary hover:bg-surface-container-low cursor-pointer" onClick={() => onEdit(inventory)}><LuPencil />Editar</button>
-        <button className="flex w-full items-center gap-3 px-4 py-2 text-error hover:bg-surface-container-low cursor-pointer" onClick={handleDelete}><LuTrash2 />Eliminar</button>
+        <button
+          className="flex w-full items-center gap-3 px-4 py-2 text-primary hover:bg-surface-container-low cursor-pointer"
+          onClick={() => onEdit(inventory)}
+        >
+          <LuPencil />
+          Editar
+        </button>
+        <button
+          className="flex w-full items-center gap-3 px-4 py-2 text-error hover:bg-surface-container-low cursor-pointer"
+          onClick={handleDelete}
+        >
+          <LuTrash2 />
+          Eliminar
+        </button>
       </DeafultPopover>
     </Card>
   );

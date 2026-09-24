@@ -4,46 +4,27 @@ import {
 } from "@/services/contribution/contribution";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-// user-contribution
-export const useCreateUserContribution = (id) => {
+const useInvalidateContribution = (id, includeUser = false) => {
   const queryClient = useQueryClient();
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ["contributions"] });
+    queryClient.invalidateQueries({ queryKey: ["users"] });
+    if (includeUser) queryClient.invalidateQueries({ queryKey: ["user", id] });
+  };
+};
+
+export const useCreateUserContribution = (id) => {
+  const invalidate = useInvalidateContribution(id, true);
   return useMutation({
-    mutationKey: ["create-user-contribution", id],
     mutationFn: (data) => createContribution(data),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["contributions"],
-          exact: true,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ["users"],
-          exact: true,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ["user", id],
-        }),
-      ]);
-    },
+    onSuccess: invalidate,
   });
 };
 
 export const useUpdateUserContribution = (id) => {
-  const queryClient = useQueryClient();
+  const invalidate = useInvalidateContribution(id);
   return useMutation({
-    mutationKey: ["update-contribution", id],
     mutationFn: (data) => updateContribution(id, data),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["contributions"],
-          exact: true,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ["users"],
-          exact: true,
-        }),
-      ]);
-    },
+    onSuccess: invalidate,
   });
 };

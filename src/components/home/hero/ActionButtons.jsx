@@ -14,7 +14,7 @@ export const ActionButtons = () => {
         Hacer una Colaboración
       </Link>
       <Link
-        href={isAuth ? "/medicine" : "/auth/login"}
+        href={isAuth ? "/inventory" : "/auth/login"}
         className="px-8 py-4 bg-surface-container-highest text-on-secondary-container rounded-full font-bold text-lg hover:bg-violet-200
       active:scale-[0.98] transition-all cursor-pointer animate-fade-in-up"
       >

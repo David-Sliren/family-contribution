@@ -12,7 +12,7 @@ import {
 } from "react-icons/lu";
 import { defaultDate } from "@/config/dates";
 
-export const MedicationCard = ({
+export const InventoryCard = ({
   name,
   price,
   status,

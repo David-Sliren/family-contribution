@@ -4,7 +4,7 @@ import { useUserStore } from "@/components/provaider/AuthProvider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { LuHandCoins, LuHouse, LuPill } from "react-icons/lu";
+import { LuBoxes, LuHandCoins, LuHouse } from "react-icons/lu";
 import { GlassDefault } from "../../glass/GlassDefault";
 import { cn } from "@/utils/cn";
 
@@ -16,9 +16,9 @@ const navBarRoutes = [
     auth: false,
   },
   {
-    label: "Medicinas",
-    href: "/medicine",
-    icon: <LuPill className="text-lg" />,
+    label: "Inventario",
+    href: "/inventory",
+    icon: <LuBoxes className="text-lg" />,
     auth: true,
   },
   {

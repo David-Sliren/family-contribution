@@ -15,8 +15,8 @@ const navBarRoutes = [
     auth: true,
   },
   {
-    label: "Medicinas",
-    href: "/medicine",
+    label: "Inventario",
+    href: "/inventory",
     auth: true,
   },
 

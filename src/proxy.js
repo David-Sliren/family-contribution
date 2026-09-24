@@ -43,7 +43,7 @@ export const proxy = async (req) => {
 
 export const config = {
   matcher: [
-    "/medicine",
+    "/inventory",
     "/additional-costs",
     "/profile",
     "/auth/:path*",

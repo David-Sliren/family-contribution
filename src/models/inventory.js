@@ -4,33 +4,54 @@ import { User } from "@/database/user";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Inventories {
-  static async getAll() {
+  static async getAll(querys, paginate) {
     await conectToData();
 
-    const medicines = await Inventory.find({});
+    const [inventory, totalItems] = await Promise.all([
+      Inventory.find(querys)
+        .sort("-createdAt")
+        .skip((paginate.page - 1) * paginate.limit)
+        .limit(paginate.limit),
+      Inventory.countDocuments(querys),
+    ]);
 
-    if (!medicines) {
-      const customError = new Error("not found medicines");
-      customError.code = "NOT_FOUND_MEDICINES";
+    if (!inventory) {
+      const customError = new Error("not found inventory");
+      customError.code = "NOT_FOUND_INVENTORY";
       throw customError;
     }
 
-    return medicines;
+    const totalPages =
+      totalItems === 1 ? 1 : Math.ceil(totalItems / paginate.limit);
+    const hasNextPage = paginate.page < totalPages;
+    const hasPrevPage = paginate.page > 1;
+
+    return {
+      data: inventory,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: paginate.page,
+        limit: paginate.limit,
+        hasNextPage,
+        hasPrevPage,
+      },
+    };
   }
 
   static async getById(id) {
     await conectToData();
 
     try {
-      const medicines = await Inventory.findById(id);
+      const inventory = await Inventory.findById(id);
 
-      if (!medicines) {
-        const customError = new Error("not found medicine");
-        customError.code = "NOT_FOUND_MEDICINE";
+      if (!inventory) {
+        const customError = new Error("not found inventory");
+        customError.code = "NOT_FOUND_INVENTORY";
         throw customError;
       }
 
-      return medicines;
+      return inventory;
     } catch (error) {
       if (error.name == "CastError") {
         const customError = new Error("invalid id");
@@ -61,16 +82,16 @@ export class Inventories {
         throw customError;
       }
 
-      const saveMedicine = new Inventory(data);
-      const newMedicine = await saveMedicine.save();
+      const saveInventory = new Inventory(data);
+      const newInventory = await saveInventory.save();
 
-      if (!newMedicine) {
-        const customError = new Error("can't create medicine");
-        customError.code = "CANT_CREATE_MEDICINE";
+      if (!newInventory) {
+        const customError = new Error("can't create inventory");
+        customError.code = "CANT_CREATE_INVENTORY";
         throw customError;
       }
 
-      return newMedicine;
+      return newInventory;
     } catch (error) {
       throw error;
     }
@@ -87,17 +108,17 @@ export class Inventories {
         throw customError;
       }
 
-      const medicine = await Inventory.findById(data.id);
+      const inventory = await Inventory.findById(data.id);
 
-      if (!medicine) {
-        const customError = new Error("not found medicine");
-        customError.code = "NOT_FOUND_MEDICINE";
+      if (!inventory) {
+        const customError = new Error("not found inventory");
+        customError.code = "NOT_FOUND_INVENTORY";
         throw customError;
       }
 
-      await medicine.deleteOne();
+      await inventory.deleteOne();
 
-      return medicine;
+      return inventory;
     } catch (error) {
       if (error.name == "CastError") {
         const customError = new Error("invalid id");
@@ -120,17 +141,17 @@ export class Inventories {
         throw customError;
       }
 
-      const updateMedicine = await Inventory.findByIdAndUpdate(id, data, {
+      const updateInventory = await Inventory.findByIdAndUpdate(id, data, {
         new: true,
       });
 
-      if (!updateMedicine) {
-        const customError = new Error("cant update medicine");
-        customError.code = "CANT_UPDATE_MEDICINE";
+      if (!updateInventory) {
+        const customError = new Error("cant update inventory");
+        customError.code = "CANT_UPDATE_INVENTORY";
         throw customError;
       }
 
-      return updateMedicine;
+      return updateInventory;
     } catch (error) {
       if (error.name == "CastError") {
         const customError = new Error("invalid id");

@@ -21,8 +21,8 @@ export const DELETE = async (req, { params }) => {
   }
 
   try {
-    const medicine = await Inventories.delete({ id, userId });
-    return Response.json(medicine);
+    const inventory = await Inventories.delete({ id, userId });
+    return Response.json(inventory);
   } catch (error) {
     if (error.code === "INVALID_ID") {
       return Response.json({ error: error.message }, { status: 400 });
@@ -32,7 +32,7 @@ export const DELETE = async (req, { params }) => {
       return Response.json({ error: error.message }, { status: 401 });
     }
 
-    if (error.code === "NOT_FOUND_MEDICINE") {
+    if (error.code === "NOT_FOUND_INVENTORY") {
       return Response.json(error.message, { status: 404 });
     }
 
@@ -72,10 +72,10 @@ export const PUT = async (req, { params }) => {
     );
 
   try {
-    const medicine = await Inventories.update(id, result.data);
-    return Response.json(medicine);
+    const inventory = await Inventories.update(id, result.data);
+    return Response.json(inventory);
   } catch (error) {
-    if (error.code === "INVALID_ID" || error.code === "CANT_UPDATE_MEDICINE") {
+    if (error.code === "INVALID_ID" || error.code === "CANT_UPDATE_INVENTORY") {
       return Response.json({ error: error.message }, { status: 400 });
     }
 
@@ -83,7 +83,7 @@ export const PUT = async (req, { params }) => {
       return Response.json({ error: error.message }, { status: 401 });
     }
 
-    if (error.code === "NOT_FOUND_MEDICINE") {
+    if (error.code === "NOT_FOUND_INVENTORY") {
       return Response.json(error.message, { status: 404 });
     }
 

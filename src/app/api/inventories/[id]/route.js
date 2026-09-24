@@ -4,8 +4,8 @@ export const GET = async (_req, { params }) => {
   const { id } = await params;
 
   try {
-    const medicine = await Inventories.getById(id);
-    return Response.json(medicine);
+    const inventory = await Inventories.getById(id);
+    return Response.json(inventory);
   } catch (error) {
     if (error.code === "INVALID_ID") {
       return Response.json({ error: error.message }, { status: 400 });
@@ -15,7 +15,7 @@ export const GET = async (_req, { params }) => {
       return Response.json({ error: error.message }, { status: 401 });
     }
 
-    if (error.code === "NOT_FOUND_MEDICINE") {
+    if (error.code === "NOT_FOUND_INVENTORY") {
       return Response.json(error.message, { status: 404 });
     }
 

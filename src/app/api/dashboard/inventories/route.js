@@ -34,7 +34,7 @@ export const POST = async (req) => {
     const medicine = await Inventories.create(result.data);
     return Response.json(medicine, { status: 201 });
   } catch (error) {
-    if (error.code === "CANT_CREATE_MEDICINE") {
+    if (error.code === "CANT_CREATE_INVENTORY") {
       return Response.json({ error: error.message }, { status: 400 });
     }
 

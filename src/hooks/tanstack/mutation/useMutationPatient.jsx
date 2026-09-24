@@ -1,41 +1,39 @@
 import { createPatient, updatePatient } from "@/services/patient/patient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useCreatePatient = () => {
+const useInvalidatePatient = (id) => {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationKey: ["createPatients"],
-    mutationFn: (data) => createPatient(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["patients"],
-        exact: true,
-      });
+  const invalidate = () =>
+    queryClient.invalidateQueries({
+      predicate: (query) => {
+        const mainPatient = queryClient.getQueryData(["main-patient"]);
+        const isMainPatientId = mainPatient?.id === id;
 
-      queryClient.invalidateQueries({
-        queryKey: ["main-patient"],
-        exact: true,
-      });
+        return isMainPatientId
+          ? query.queryKey[0] === "main-patient" ||
+              query.queryKey[0] === "patients"
+          : query.queryKey[0] === "patients";
+      },
+    });
+
+  return {
+    invalidateAll: () => {
+      queryClient.invalidateQueries({ queryKey: ["main-patient"] });
+      queryClient.invalidateQueries({ queryKey: ["patients"] });
     },
-  });
+    invalidate,
+  };
+};
+
+export const useCreatePatient = () => {
+  const { invalidateAll } = useInvalidatePatient();
+  return useMutation({ mutationFn: createPatient, onSuccess: invalidateAll });
 };
 
 export const useUpdatePatient = (id) => {
-  const queryClient = useQueryClient();
+  const { invalidate } = useInvalidatePatient(id);
   return useMutation({
-    mutationKey: ["updatePatient", id],
     mutationFn: (data) => updatePatient(id, data),
-    onSuccess: () => {
-      const mainPatient = queryClient.getQueryData(["main-patient"]);
-      const isMainPatientId = mainPatient?.id === id;
-      queryClient.invalidateQueries({
-        predicate: (query) => {
-          return isMainPatientId
-            ? query.queryKey[0] === "main-patient" ||
-                query.queryKey[0] === "patients"
-            : query.queryKey[0] === "patients";
-        },
-      });
-    },
+    onSuccess: invalidate,
   });
 };

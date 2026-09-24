@@ -1,34 +1,67 @@
 ---
 name: plan-empirico
-description: Skill de flujo de trabajo por instrucciones numeradas. Se activa UNICAMENTE cuando el usuario la invoca explicitamente o escribe "plan empirico" / "empirical plan". Pregunta cuantas instrucciones quiere dar el usuario (maximo 4 por plan), las enumera de forma secuencial desde 1, las sigue paso a paso y en cada lista que crea usa como titulo la instruccion que esta ejecutando.
+description: Se activa UNICAMENTE cuando el usuario la invoca explicitamente o escribe "plan empirico" / "empirical plan". Guia al usuario en la definicion de maximo 4 instrucciones por plan. El usuario escribe en lenguaje natural libre y el asistente estructura cada instruccion dentro de delimitadores ===instruccion N=== ... ===fin de instruccion N===. El asistente no comienza a trabajar hasta tener todas las instrucciones definidas y confirmadas por el usuario, titula cada lista con la instruccion actual y ejecuta paso a paso.
 ---
 
-# Plan empirico
+# Plan Empírico
 
-Flujo de trabajo para procesar varias instrucciones del usuario de forma ordenada. Esta skill **solo se activa cuando el usuario la invoca o escribe "plan empirico" / "empirical plan" en su prompt**. Si no aparece ninguna de esas claves, NO aplica este flujo: se responde al prompt normal.
+Flujo de trabajo guiado e interactivo para procesar hasta un máximo de 4 instrucciones por plan de forma controlada.
 
-Convencion de prompts del usuario a la que se ajusta: el usuario escribe las instrucciones dentro de bloques `===instruccion N===` ... `===fin de instruccion N===`.
+## Activación
 
-## Reglas
+Esta skill se activa **únicamente** cuando:
+- El usuario la invoca explícitamente (`/plan-empirico`).
+- El usuario incluye en su prompt las frases `"plan empirico"` o `"empirical plan"`.
 
-1. **Pregunta inicial:** antes de empezar, pregunta al usuario cuantas instrucciones quiere darte.
-2. **Limite de 4 por plan:** asegurale en la pregunta que solo puedes proceder con **4 instrucciones por plan**.
-3. **Si no sabe cuantas:** si el usuario no sabe cuantas instrucciones va a dar, dile que entonces le preguntaras **despues de cada instruccion** si desea agregar otra instruccion o proceder con la hecha.
-4. **Enumeracion secuencial:** enumera las instrucciones del usuario de manera secuencial empezando por el numero **1**.
-5. **Pasos titulados:** sigue cada instruccion paso a paso y, en las listas que vallas a crear, coloca como **titulo la instruccion actual** (ej. `# Instruccion 1 — Lista de commits`, `# Instruccion 2 — Lista de refactors`).
-6. **Preguntas de permiso dentro de las instrucciones:** si una instruccion pide solicitar permiso antes de un commit, hazlo textualmente en el momento indicado y espera la respuesta; tambien puedes usar la herramienta de pregunta para recibirla. No continues con el commit hasta tener el permiso.
+Si estas frases no aparecen, responde al prompt normalmente sin forzar este flujo.
 
-## Flujo
+## Principios y Responsabilidades
 
-1. Detecta la activacion: invocacion explicita de la skill o la frase "plan empirico" / "empirical plan" en el prompt.
-2. Pregunta cuantas instrucciones quiere dar (advirtiendo el limite de 4 por plan).
-   - Si responde un numero: si es 1-4, procede con ese total. Si es mas de 4, recuerdale el limite.
-   - Si responde "no se": procede de a una instruccion y tras cada una pregunta "¿agregas otra instruccion o procedemos?".
-3. Enumera las instrucciones recibidas desde 1.
-4. Una por una, sigue la instruccion paso a paso. Cualquier lista que crees lleva como titulo el numero y asunto de la instruccion en curso.
-5. Al terminar las instrucciones del plan, presenta el resumen de lo hecho. Si quedaron instrucciones sin procesar (por el limite de 4), indica que se retomaran en otro plan.
+- **El usuario:** Solo se enfoca en redactar lo que necesita en lenguaje natural libre (con o sin saltos de línea, numerado o sin numerar). Nunca se le exige escribir delimitadores.
+- **El asistente:**
+  - Conduce la conversación y la numeración secuencial (1 a N, máximo 4).
+  - Envuelve internamente y de forma visible el contenido del usuario en los bloques delimitadores:
+    `===instruccion N===`
+    [contenido del usuario]
+    `===fin de instruccion N===`
+  - **No ejecuta trabajo de código ni comandos de modificación** hasta que el paquete completo de instrucciones esté consolidado y el usuario dé la confirmación final de inicio.
+
+## Flujo Operativo Paso a Paso
+
+### 1. Definición y Conteo Inicial
+
+- Al activarse la skill, pregunta al usuario cuántas instrucciones desea incluir en este plan, recordando el límite:
+  > *"¿Cuántas instrucciones deseas trabajar en este plan? (Máximo 4 instrucciones por plan para garantizar precisión y calidad)."*
+- Si el usuario indica un número (ej. 3): guíalo interactivamente para recopilar cada una si no las ha suministrado aún.
+- Si el usuario ya proporcionó el texto completo en su primer mensaje, extrae y separa las peticiones respetando el número indicado o separando hasta un tope de 4.
+- Si el usuario dice que no sabe cuántas dará: indícale que las irán definiendo una a una, preguntando tras cada instrucción si desea agregar la siguiente o cerrar el plan para empezar.
+
+### 2. Estructuración con Delimitadores
+
+- Cada requerimiento se enumera secuencialmente empezando en 1.
+- Muestra las instrucciones consolidadas al usuario utilizando los delimitadores oficiales:
+  ```
+  ===instruccion 1===
+  ...
+  ===fin de instruccion 1===
+  ```
+
+### 3. Confirmación Previa a la Ejecución
+
+- Cuando las instrucciones acordadas estén listas (hasta 4), **antes de ejecutar cualquier acción o cambio en el proyecto**, pregunta al usuario:
+  > *"Tenemos estructurado el plan con [N] instrucción(es). ¿Procedo a trabajar con este plan empírico o prefieres hacer otro plan? (Recomendación: proceder con este plan de hasta 4 instrucciones para ahorrar tokens y mantener la mayor calidad)."*
+
+### 4. Ejecución Guiada
+
+- Una vez confirmada la ejecución:
+  - Ejecuta la instrucción 1.
+  - Cada lista, plan o conjunto de tareas (`todowrite`) que se cree en esta fase debe llevar como encabezado el título de la instrucción activa (ej. `# Instrucción 1 — [Acción]`).
+  - Si una instrucción contiene una regla explícita de solicitar permiso (ej. antes de hacer un commit), haz una pausa y solicita la autorización explícita antes de ejecutar la acción.
+  - Al completar cada instrucción, informa el estado y anuncia el paso a la siguiente:
+    > *"Instrucción [N] completada. Procedemos a trabajar en la instrucción [N+1]."*
+  - Repite hasta concluir las instrucciones del plan.
 
 ## Recordatorio
 
-- La skill NO se activa automaticamente ante cualquier prompt multi-instruccion; solo ante "plan empirico" / "empirical plan" o invocacion explicita.
-- Mantener el limite estricto de 4 instrucciones por plan y avisarlo en la primera pregunta.
+- Sin activación explícita ("plan empirico" / "empirical plan"), este flujo NO se aplica.
+- No modificar archivos ni ejecutar cambios antes de la confirmación formal del plan en el paso 3.

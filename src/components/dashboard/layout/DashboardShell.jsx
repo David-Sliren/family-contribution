@@ -9,7 +9,12 @@ export function DashboardShell({
   children,
 }) {
   return (
-    <main className={cn(titleFont.className, className)}>
+    <main
+      className={cn(
+        `${titleFont.className} px-10 pt-7 pb-30 w-full not-scrollbar space-y-8 overflow-y-auto overflow-x-clip`,
+        className,
+      )}
+    >
       <header className="mb-8 max-w-[750px]">
         <h2 className="text-[11px] uppercase tracking-[.12em] font-bold text-on-surface-variant font-body mb-1.5">
           {subtitle}

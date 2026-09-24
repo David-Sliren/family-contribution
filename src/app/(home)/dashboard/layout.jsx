@@ -1,7 +1,6 @@
 import { Sidebar } from "@/components/dashboard/layout/Sidebar";
 import { contributionQueryOptions } from "@/hooks/tanstack/query/useQueryContribution";
 import { expensesQueryOptions } from "@/hooks/tanstack/query/useQueryExpenses";
-import { inventoryQueryOptions } from "@/hooks/tanstack/query/useQueryInventory";
 import {
   allPatientQueryOptions,
   mainPatientQueryOptions,
@@ -19,14 +18,13 @@ export default async function Dashboard({ children }) {
     queryClient.prefetchQuery(userQueryAllOptions()),
     queryClient.prefetchQuery(contributionQueryOptions()),
     queryClient.prefetchQuery(expensesQueryOptions()),
-    queryClient.prefetchQuery(inventoryQueryOptions()),
   ]);
 
   return (
-    <div className="h-dvh max-h-vh flex bg-surface overflow-hidden">
+    <div className="max-h-[90vh] min-h-[90vh] flex bg-surface overflow-hidden">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Sidebar />
-        <main className="px-10 pt-7 pb-12 w-full ">{children}</main>
+        {children}
       </HydrationBoundary>
     </div>
   );

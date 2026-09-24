@@ -1,7 +1,9 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { SearchInput, Select } from "../../../ui/inputs/SearchInput";
+import { useState, useEffect, useCallback } from "react";
+import { SearchInput } from "../../../ui/inputs/SearchInput";
+import { useQueryState, parseAsString } from "nuqs";
+import { useDebounce } from "use-debounce";
 
 export function Toolbar({
   searchName = "Buscar",
@@ -10,38 +12,40 @@ export function Toolbar({
   optionInitialValue = "",
   children,
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [search, setSearch] = useQueryState(
+    "search",
+    parseAsString.withDefault("").withOptions({
+      shallow: false,
+    }),
+  );
 
-  function updateQuery(key, value) {
-    const params = new URLSearchParams(searchParams);
-    if (value) {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }
+  const [_, setPage] = useQueryState("page", parseAsString.withDefault(1));
+
+  const handleSearch = useCallback(
+    (newSearch) => {
+      setSearch(newSearch);
+      setPage(1);
+    },
+    [setSearch, setPage],
+  );
+
+  const [text, setText] = useState(search);
+  const [searchValue] = useDebounce(text, 400);
+
+  useEffect(() => {
+    if (searchValue !== search) handleSearch(searchValue);
+  }, [search, searchValue, handleSearch]);
 
   return (
     <div className="flex shrink-0 gap-2.5 items-center w-fit z-8">
       <SearchInput
         className="text-xs sm:text-md"
         placeholder={searchName}
-        defaultValue={searchParams.get("search") ?? ""}
-        onChange={(e) => updateQuery("search", e.target.value)}
+        defaultValue={search}
+        onChange={(e) => setText(e.target.value)}
         aria-label={searchName}
       />
-      <Select
-        className="text-xs sm:text-md py-3"
-        aria-label={selectFilter}
-        defaultValue={searchParams.get(selectFilter) ?? ""}
-        onChange={(e) => updateQuery(selectFilter, e.target.value)}
-      >
-        <option value={optionInitialValue}>{optionInitialName}</option>
-        {children}
-      </Select>
+      {children}
     </div>
   );
 }

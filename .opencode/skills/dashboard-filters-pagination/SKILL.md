@@ -206,5 +206,5 @@ return (
 - **Limites por defecto:** `page = 1`, `limit = 10` (tanto en ruta como en hook).
 - **Sort:** `-createdAt` salvo que el feature pida otra cosa.
 - **Sin `console.log()`** en el codigo guardado (convencion del repo).
-- **Commits separados:** `feact(Backend/<feature>): ...` (modelo + ruta) ANTES que `feact(Frontend/dashboard/<feature>): ...` (servicio + hook + pagina + componentes). Ver skill `git-commit-convention`.
+- **Commits separados:** `feat(Backend/<feature>): ...` (modelo + ruta) ANTES que `feat(Frontend/dashboard/<feature>): ...` (servicio + hook + pagina + componentes). Ver skill `git-commit-convention`.
 - Filtros futuros: buscar por otro campo = agregar llave al `query` de la ruta con el mismo nombre, propagarla por servicio/hook/componente y exponerla con otro `SelectFilter`.

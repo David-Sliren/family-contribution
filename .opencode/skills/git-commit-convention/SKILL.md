@@ -1,6 +1,6 @@
 ---
 name: git-commit-convention
-description: Use when making, splitting, or proposing git commits in this project (family-contribution). Documents the Conventional-Commits-style format tipo(scope): descripcion in Spanish, the types feact/fix/refactor/style/chore/docs, common scopes by layer/feature (Frontend/dashboard/inventory, Backend, etc.), ordering rules (chore first, feature before refactor), and project rules (no console.log, staging only intended files).
+description: Use when making, splitting, or proposing git commits in this project (family-contribution). Documents the Conventional-Commits-style format tipo(scope): descripcion in Spanish, the types feat/fix/refactor/style/chore/docs, common scopes by layer/feature (Frontend/dashboard/inventory, Backend, etc.), ordering rules (chore first, feature before refactor), and project rules (no console.log, staging only intended files).
 ---
 
 # Convencion de commits del proyecto
@@ -22,14 +22,14 @@ tipo(scope): descripcion
 
 | Tipo      | Uso                                              | Conteo en repo |
 | --------- | ------------------------------------------------ | -------------- |
-| `feact`   | Nueva funcionalidad (typo intencional de "feat") | 34             |
+| `feat`    | Nueva funcionalidad                               | 34             |
 | `fix`     | Correccion de un error                           | 23             |
 | `refactor`| Reestructurar sin cambiar comportamiento         | 51             |
 | `style`   | Ajustes de estilado/UI puros                     | 7              |
 | `chore`   | Mantenimiento: dependencias, config, tooling     | 5              |
 | `docs`    | Documentacion (AGENTS.md, skills, documentacion) | Nuevo          |
 
-Usa `feact` (con "c") en vez de `feat`. No introduzcas tipos que no existan en el historial, salvo `docs` (adoptado por convenio para documentacion del repo y skills).
+Se escribe `feat` (el historial lo registro como `feact`, un typo ya corregido). No introduzcas tipos que no existan en el historial, salvo `docs` (adoptado por convenio para documentacion del repo y skills).
 
 ## Scopes habituales
 
@@ -57,19 +57,21 @@ style(UI/Modal): agregar tamaño maximo y tamaño por defecto
 chore(tanstackquery/update dependencies): instalar tanstack/react-query y tanstack/react-query-devtools, actualizar algunas librerias
 ```
 
+> Nota: los ejemplos conservan `feact` porque asi quedo registrado en el historial. Los commits nuevos se escriben con `feat`.
+
 ## Como agrupar los cambios en commits
 
-1. **Instalaciones de dependencias van solas**, en `chore(package): agregar libreria(s) "nombre"`, y SIEMPRE antes que los commits que las usan. Ejemplo real: `d8759f6` instala tanstack en `chore(tanstackquery/update dependencies)` y luego el uso llega en commits `feact`/`refactor` posteriores.
+1. **Instalaciones de dependencias van solas**, en `chore(package): agregar libreria(s) "nombre"`, y SIEMPRE antes que los commits que las usan. Ejemplo real: `d8759f6` instala tanstack en `chore(tanstackquery/update dependencies)` y luego el uso llega en commits `feat`/`refactor` posteriores.
 2. **Un commit por unidad logica**: componente nuevo, feature por capa, o refactor por scope.
-3. **Backend antes que Frontend** cuando hay contrato de API: primero `feact(Backend/inventory): ...` (rutas + modelo) y luego `feact(Frontend/dashboard/inventory): ...` (hooks, servicios y componentes).
+3. **Backend antes que Frontend** cuando hay contrato de API: primero `feat(Backend/inventory): ...` (rutas + modelo) y luego `feat(Frontend/dashboard/inventory): ...` (hooks, servicios y componentes).
 4. Separar un cambio de backend puro (`api/`, `models/`, `database/`) de uno de frontend (`components/`, `app/(home)/`, `hooks/tanstack/query/`).
-5. Cuando un scope agrupa front+backend a la vez, indicarlo en el scope (ej. `feact(next/config)` para config de imagenes, `chore(tanstackquery/update dependencies)`).
+5. Cuando un scope agrupa front+backend a la vez, indicarlo en el scope (ej. `feat(next/config)` para config de imagenes, `chore(tanstackquery/update dependencies)`).
 
 ## Reglas obligatorias del proyecto
 
 - **Sin `console.log()` en lo que se commitea.** Historico: `refactor(Frontend/dashboard): quitar "console.log()" de "components/dashboard/users/AddContributionDialog"`. Revisa el `git diff` antes de commitear y eliminalos.
 - **Stage solo los archivos intencionales.** Valida con `git status` y `git diff --stat` antes; no uses `git add -A` a ciegas si hay cambios ajenos.
-- **Los archivos eliminados se incluyen** en el commit de su feature (ej. `InventoryToolbar.jsx` se borro dentro de `feact(Frontend/dashboard/inventory)`).
+- **Los archivos eliminados se incluyen** en el commit de su feature (ej. `InventoryToolbar.jsx` se borro dentro de `feat(Frontend/dashboard/inventory)`).
 - El autor y branch de trabajo habitual: David Sliren, branch `feact`.
 - Despues de commitear puede cambiar a `fix` para las correcciones de esa feature o quedarse (seguir el historiali). No hacer amend de commits ya hechos; crear commits nuevos.
 

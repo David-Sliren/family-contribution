@@ -14,8 +14,15 @@ export const userBackendSchema = z.object({
     .trim(),
 
   relationship: z.enum(
-    ["hijo", "sobrino", "esposo", "hermano", "externo"],
-    'Opcion invalida se requiere uno de estos campos "hijo", "sobrino", "esposo", "hermano" "externo"',
+    [
+      "hijo",
+      "sobrino",
+      "esposo",
+      "hermano",
+      "externo",
+      "nieto",
+    ],
+    'Opcion invalida se requiere uno de estos campos "hijo", "sobrino", "esposo", "hermano" "externo" "nieto"',
   ),
   tel: z
     .string("El telefono es requerido")

@@ -17,7 +17,7 @@ const userSchema = new Schema(
     },
     relationship: {
       type: String,
-      enum: ["hijo", "sobrino", "esposo", "hermano", "externo"],
+      enum: ["hijo", "sobrino", "esposo", "hermano", "externo", "nieto"],
       required: true,
     },
     img: { type: String, default: "" },

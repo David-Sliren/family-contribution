@@ -22,8 +22,8 @@ const navBarRoutes = [
     auth: true,
   },
   {
-    label: "Costos",
-    href: "/additional-costs",
+    label: "Gastos",
+    href: "/expenses",
     icon: <LuHandCoins className="text-lg" />,
     auth: true,
   },

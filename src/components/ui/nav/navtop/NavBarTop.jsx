@@ -21,8 +21,8 @@ const navBarRoutes = [
   },
 
   {
-    label: "Costos adicionales",
-    href: "/additional-costs",
+    label: "Gastos",
+    href: "/expenses",
     auth: true,
   },
 ];

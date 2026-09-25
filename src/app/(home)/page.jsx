@@ -16,7 +16,7 @@ export default async function Home({ searchParams }) {
 
   await Promise.all([
     queryClient.prefetchQuery(userQueryAllOptions()),
-    queryClient.prefetchQuery(contributionQueryOptions()),
+    queryClient.prefetchQuery(contributionQueryOptions({ limit: 20 })),
     queryClient.prefetchQuery(mainPatientQueryOptions()),
   ]);
 

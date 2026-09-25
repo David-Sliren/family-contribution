@@ -8,7 +8,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { useContributionQueryAll } from "@/hooks/tanstack/query/useQueryContribution";
 
 export const ContributionTable = () => {
-  const { data } = useContributionQueryAll();
+  const { data } = useContributionQueryAll({ limit: 20 });
   const {
     page,
     endIndex,
@@ -18,7 +18,7 @@ export const ContributionTable = () => {
     totalPages,
     prevPage,
     nextPage,
-  } = usePagination(data?.length ?? 1, 4);
+  } = usePagination(data?.data?.length ?? 1, 4);
 
   return (
     <section className="py-24 px-6">

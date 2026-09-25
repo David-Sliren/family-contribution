@@ -30,8 +30,8 @@ const HeadRow = ({ className, text }) => {
 };
 
 export const UserTable = ({ startIndex, endIndex }) => {
-  const { data, isLoading } = useContributionQueryAll();
-  const visibleUsers = data?.slice(startIndex, endIndex) ?? [];
+  const { data, isLoading } = useContributionQueryAll({ limit: 20 });
+  const visibleUsers = data?.data?.slice(startIndex, endIndex) ?? [];
 
   return (
     <section className="relative overflow-x-auto min-h-114">

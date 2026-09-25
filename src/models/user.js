@@ -1,12 +1,18 @@
-import { Contribution } from "@/database/contribution";
 import { User } from "@/database/user";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Users {
-  static async getAll() {
+  static async getAll(querys, paginate) {
     await conectToData();
 
-    const user = await User.find({}).populate("contributions", { amount: 1 });
+    const [user, totalItems] = await Promise.all([
+      User.find(querys)
+        .populate("contributions", { amount: 1 })
+        .sort("-createdAt")
+        .skip((paginate.page - 1) * paginate.limit)
+        .limit(paginate.limit),
+      User.countDocuments(querys),
+    ]);
 
     if (!user) {
       const customError = new Error("not found user");
@@ -16,7 +22,22 @@ export class Users {
       throw customError;
     }
 
-    return user;
+    const totalPages =
+      totalItems === 1 ? 1 : Math.ceil(totalItems / paginate.limit);
+    const hasNextPage = paginate.page < totalPages;
+    const hasPrevPage = paginate.page > 1;
+
+    return {
+      data: user,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: paginate.page,
+        limit: paginate.limit,
+        hasNextPage,
+        hasPrevPage,
+      },
+    };
   }
 
   static async getById(id) {

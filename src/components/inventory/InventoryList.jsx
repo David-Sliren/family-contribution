@@ -34,7 +34,7 @@ export const InventoryList = () => {
 
   return (
     <section className="space-y-2.5">
-      <div className="space-y-6 min-h-120 h-120 xl:max-h-120 overflow-x-hidden not-scrollbar animate-fade-in xl:scroll-hiden pb-8">
+      <div className="space-y-6 min-h-120 overflow-x-hidden not-scrollbar animate-fade-in xl:scroll-hiden pb-8">
         {data.data.map((item) => (
           <InventoryCard
             key={item.id}

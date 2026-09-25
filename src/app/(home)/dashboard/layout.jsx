@@ -3,7 +3,6 @@ import {
   allPatientQueryOptions,
   mainPatientQueryOptions,
 } from "@/hooks/tanstack/query/useQueryPatient";
-import { userQueryAllOptions } from "@/hooks/tanstack/query/useQueryUser";
 import { getQueryClient } from "@/utils/tanstackQuery-config";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
@@ -13,7 +12,6 @@ export default async function Dashboard({ children }) {
   await Promise.all([
     queryClient.prefetchQuery(allPatientQueryOptions()),
     queryClient.prefetchQuery(mainPatientQueryOptions()),
-    queryClient.prefetchQuery(userQueryAllOptions()),
   ]);
 
   return (

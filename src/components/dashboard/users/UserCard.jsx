@@ -3,13 +3,10 @@
 import { DeafultPopover } from "@/components/ui/popovers/DeafultPopover";
 import { formatMoney } from "@/config/money";
 import { blurColors } from "@/constants/bgBase64";
-import { useUserQueryAll } from "@/hooks/tanstack/query/useQueryUser";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
-import { LuEllipsisVertical, LuHandCoins, LuPencil } from "react-icons/lu";
-import { AddContributionDialog } from "./AddContributionDialog";
+import { LuEllipsisVertical, LuHandCoins } from "react-icons/lu";
 
-export const CardUser = ({ user, handdler }) => {
+export const UserCard = ({ user, handdler }) => {
   return (
     <article className="relative flex items-center justify-between w-full p-4 rounded-2xl text-sm hover:bg-surface-container-low transition-all duration-200">
       <div className="flex items-center gap-4">
@@ -56,25 +53,5 @@ export const CardUser = ({ user, handdler }) => {
         </button>
       </DeafultPopover>
     </article>
-  );
-};
-
-export const CardsUser = () => {
-  const { data } = useUserQueryAll();
-  const [editUser, setEditUser] = useState({});
-  const dialogRef = useRef(null);
-
-  function handdlerEditUser(user) {
-    setEditUser(user);
-    dialogRef.current?.showModal();
-  }
-
-  return (
-    <section className="mt-8 w-full xl:max-w-8/15 max-h-125 space-y-2  overflow-y-auto scroll-hiden">
-      <AddContributionDialog user={editUser} dialogRef={dialogRef} />
-      {data.map((user) => (
-        <CardUser key={user.id} user={user} handdler={handdlerEditUser} />
-      ))}
-    </section>
   );
 };

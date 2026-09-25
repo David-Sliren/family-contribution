@@ -19,7 +19,7 @@ import { createUser } from "@/services/user/auth";
 // password: "Noseqponer12",
 // confirmPassword: "Noseqponer12",
 // };
-const userOptions = ["externo", "hijo", "esposo", "sobrino", "hermano"];
+const userOptions = ["externo", "hijo", "esposo", "sobrino", "hermano", "nieto"];
 
 export const Index = () => {
   const router = useRouter();

@@ -3,17 +3,21 @@ import { User } from "@/database/user";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Contribute {
-  static async getAll() {
+  static async getAll(querys, paginate) {
     await conectToData();
 
-    const contributions = await Contribution.find(
-      {},
-      { updatedAt: 0 },
-    ).populate("userId", {
-      name: 1,
-      relationship: 1,
-      img: 1,
-    });
+    const [contributions, totalItems] = await Promise.all([
+      Contribution.find(querys, { updatedAt: 0 })
+        .populate("userId", {
+          name: 1,
+          relationship: 1,
+          img: 1,
+        })
+        .sort("-createdAt")
+        .skip((paginate.page - 1) * paginate.limit)
+        .limit(paginate.limit),
+      Contribution.countDocuments(querys),
+    ]);
 
     if (!contributions) {
       const error = new Error("not found countributions");
@@ -21,7 +25,22 @@ export class Contribute {
       throw error;
     }
 
-    return contributions;
+    const totalPages =
+      totalItems === 1 ? 1 : Math.ceil(totalItems / paginate.limit);
+    const hasNextPage = paginate.page < totalPages;
+    const hasPrevPage = paginate.page > 1;
+
+    return {
+      data: contributions,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: paginate.page,
+        limit: paginate.limit,
+        hasNextPage,
+        hasPrevPage,
+      },
+    };
   }
 
   static async getById(id) {

@@ -4,16 +4,32 @@ import { Contribute } from "@/models/contribution";
 import { contributionSchemaBanckend } from "@/schemas/contribution";
 import { jwtVerify } from "jose";
 
-export const GET = async () => {
+export const GET = async (req) => {
+  const searchParams = req.nextUrl.searchParams;
+  const purpose = searchParams.get("purpose");
+  const method = searchParams.get("method");
+  const status = searchParams.get("status");
+  const page = searchParams.get("page");
+  const limit = searchParams.get("limit");
+
+  const paginate = { page: 1, limit: 10 };
+  const query = {};
+
+  if (page) paginate.page = page;
+  if (limit) paginate.limit = limit;
+
+  if (purpose) query.purpose = purpose;
+  if (method) query.method = method;
+  if (status) query.status = status;
+
   try {
-    const contributions = await Contribute.getAll();
+    const contributions = await Contribute.getAll(query, paginate);
 
     return Response.json(contributions);
   } catch (error) {
     if (error.code === "NOT_FOUND_CONTRIBUTIONS")
       return Response.json({ message: error.message }, { status: 404 });
 
-    console.log("unexpected error: ", error);
     return Response.json({ error: "server error" }, { status: 500 });
   }
 };
@@ -66,7 +82,6 @@ export const POST = async (req) => {
     if (error.code === "CANT_CONTRIBUTE")
       return Response.json({ error: error.message }, { status: 400 });
 
-    console.log("unexpected error: ", error);
     return Response.json({ error: "server error" }, { status: 500 });
   }
 };

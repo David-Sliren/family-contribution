@@ -1,6 +1,6 @@
 ---
 name: plan-empirico
-description: Se activa UNICAMENTE cuando el usuario la invoca explicitamente o escribe "plan empirico" / "empirical plan". Guia al usuario en la definicion de maximo 4 instrucciones por plan. El usuario escribe en lenguaje natural libre y el asistente estructura cada instruccion dentro de delimitadores ===instruccion N=== ... ===fin de instruccion N===. El asistente no comienza a trabajar hasta tener todas las instrucciones definidas y confirmadas por el usuario, titula cada lista con la instruccion actual y ejecuta paso a paso.
+description: Se activa UNICAMENTE cuando el usuario la invoca explicitamente o escribe "plan empirico" / "empirical plan". Guia al usuario en la definicion de maximo 4 instrucciones por plan. El usuario escribe en lenguaje natural libre y el asistente estructura cada instruccion dentro de delimitadores ===instruccion N=== ... ===fin de instruccion N===. Cuando hay ambiguedades, el asistente investiga el codigo primero y presenta las dudas como preguntas preparadas de opcion multiple, con una marcada como "(Recomendado)", para que el usuario solo elija. El asistente no comienza a trabajar hasta tener todas las instrucciones definidas y confirmadas por el usuario, titula cada lista de tareas con la instruccion actual y ejecuta paso a paso.
 ---
 
 # Plan Empírico
@@ -46,12 +46,22 @@ Si estas frases no aparecen, responde al prompt normalmente sin forzar este fluj
   ===fin de instruccion 1===
   ```
 
-### 3. Confirmación Previa a la Ejecución
+### 3. Aclaraciones Previas: Preguntas Preparadas
+
+- Si una instrucción tiene ambigüedades o decisiones de diseño por definir (ej. dónde se filtra, qué campos intervienen, si se pagina), el asistente **no pregunta en texto plano**: primero investiga el código afectado (jobs de lectura) y aporta contexto verificado.
+- Presenta cada duda como una **pregunta preparada de opción múltiple**, para que el usuario solo tenga que elegir:
+  - Contexto breve y real del código.
+  - Opciones concretas y excluyentes.
+  - La primera opción debe ser la recomendada, marcada como "(Recomendado)".
+- Con las respuestas, ajusta el contenido de la instrucción dentro de sus delimitadores y muestra la versión consolidada.
+- Evita rondas repetidas: pregunta todo lo necesario en una sola tanda por instrucción.
+
+### 4. Confirmación Previa a la Ejecución
 
 - Cuando las instrucciones acordadas estén listas (hasta 4), **antes de ejecutar cualquier acción o cambio en el proyecto**, pregunta al usuario:
   > *"Tenemos estructurado el plan con [N] instrucción(es). ¿Procedo a trabajar con este plan empírico o prefieres hacer otro plan? (Recomendación: proceder con este plan de hasta 4 instrucciones para ahorrar tokens y mantener la mayor calidad)."*
 
-### 4. Ejecución Guiada
+### 5. Ejecución Guiada
 
 - Una vez confirmada la ejecución:
   - Ejecuta la instrucción 1.
@@ -64,4 +74,4 @@ Si estas frases no aparecen, responde al prompt normalmente sin forzar este fluj
 ## Recordatorio
 
 - Sin activación explícita ("plan empirico" / "empirical plan"), este flujo NO se aplica.
-- No modificar archivos ni ejecutar cambios antes de la confirmación formal del plan en el paso 3.
+- No modificar archivos ni ejecutar cambios antes de la confirmación formal del plan en el paso 4.

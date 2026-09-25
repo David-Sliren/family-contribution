@@ -9,10 +9,10 @@ export const DEFAULT_GOAL = 100000;
 
 export const FloatCard = () => {
   const mainPatient = useMainPatientQuery();
-  const user = useUserQueryAll(); // queda pendiente para cuando se inserten los fondos a el paciente, eliminar luego de eso.
+  const user = useUserQueryAll({ page: 1, limit: 20 }); // queda pendiente para cuando se inserten los fondos a el paciente, eliminar luego de eso.
 
   const wallet =
-    user.data?.reduce((acc, item) => acc + item?.totalContributed, 0) ?? 0;
+    user.data?.data?.reduce((acc, item) => acc + item?.totalContributed, 0) ?? 0;
 
   const GOAL = reduceGoal(wallet ?? 0, mainPatient.data?.goal ?? DEFAULT_GOAL);
 

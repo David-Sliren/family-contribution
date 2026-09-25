@@ -26,14 +26,15 @@ const StatCard = ({ icon: IconName, title, text }) => {
 };
 
 export const Stats = () => {
-  const user = useUserQueryAll();
+  const user = useUserQueryAll({ page: 1, limit: 20 });
   const mainPatient = useMainPatientQuery();
 
   const wallet =
-    user.data?.reduce((acc, item) => acc + item?.totalContributed, 0) ?? 0;
+    user.data?.data?.reduce((acc, item) => acc + item?.totalContributed, 0) ?? 0;
 
   const countUsersActive =
-    user.data?.filter((item) => item?.contributions.length > 0).length ?? 0;
+    user.data?.data?.filter((item) => item?.contributions.length > 0).length ??
+    0;
 
   const STAT_CARD = [
     {

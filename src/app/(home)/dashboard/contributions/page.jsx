@@ -1,7 +1,12 @@
 import { Index } from "@/components/dashboard/contributions/Index";
+import { contributionQueryOptions } from "@/hooks/tanstack/query/useQueryContribution";
+import { getQueryClient } from "@/utils/tanstackQuery-config";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function ContributionDashboard({ searchParams }) {
   const params = await searchParams;
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery(contributionQueryOptions(params));
 
   const metadata = {
     title: "Contribuciones",
@@ -11,10 +16,12 @@ export default async function ContributionDashboard({ searchParams }) {
   };
 
   return (
-    <Index
-      title={metadata.title}
-      subtitle={metadata.subtitle}
-      description={metadata.description}
-    />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Index
+        title={metadata.title}
+        subtitle={metadata.subtitle}
+        description={metadata.description}
+      />
+    </HydrationBoundary>
   );
 }

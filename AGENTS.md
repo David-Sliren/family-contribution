@@ -39,4 +39,4 @@ Next.js 16 App Router app (package `contribution-aleida`) for a family contribut
 - The `.opencode/` folder is an unrelated npm project (OpenCode plugin dep), not the app; leave its own `package.json`/lockfile alone.
 
 ## Commits
-- Follow the repo's commit convention: load the `git-commit-convention` skill before making/splitting/proposing commits. Key rules: lowercase Spanish, `tipo(scope): descripcion`, types `feat`/`fix`/`refactor`/`style`/`chore`/`docs` (use `feat`, not the historical `feact` typo), work on branch `feact`, no `console.log` in committed code, stage only intended files.
+- Follow the repo's commit convention: load the `git-commit-convention` skill before making/splitting/proposing commits. Key rules: lowercase Spanish, `tipo(scope): descripcion`, types `feat`/`fix`/`refactor`/`style`/`chore`/`docs` (use `feat`, not the historical `feact` typo), work on branch `feat`, no `console.log` in committed code, stage only intended files.

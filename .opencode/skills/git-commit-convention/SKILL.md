@@ -72,7 +72,7 @@ chore(tanstackquery/update dependencies): instalar tanstack/react-query y tansta
 - **Sin `console.log()` en lo que se commitea.** Historico: `refactor(Frontend/dashboard): quitar "console.log()" de "components/dashboard/users/AddContributionDialog"`. Revisa el `git diff` antes de commitear y eliminalos.
 - **Stage solo los archivos intencionales.** Valida con `git status` y `git diff --stat` antes; no uses `git add -A` a ciegas si hay cambios ajenos.
 - **Los archivos eliminados se incluyen** en el commit de su feature (ej. `InventoryToolbar.jsx` se borro dentro de `feat(Frontend/dashboard/inventory)`).
-- El autor y branch de trabajo habitual: David Sliren, branch `feact`.
+- El autor y branch de trabajo habitual: David Sliren, branch `feat` (renombrada desde el typo historico `feact`).
 - Despues de commitear puede cambiar a `fix` para las correcciones de esa feature o quedarse (seguir el historiali). No hacer amend de commits ya hechos; crear commits nuevos.
 
 ## Verificacion

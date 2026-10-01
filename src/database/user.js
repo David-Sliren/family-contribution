@@ -5,10 +5,14 @@ import {
 } from "@/utils/mongoose-helper/virtualFuntions";
 import { Schema, model, models } from "mongoose";
 
-const userSchema = new Schema(
+/*
+  se paso a usar better auth para la autenticación y registro de usuarios.
+  se hizo uso de la librería better-auth-mongoose para poder usar el modelo de usuario existente y extenderlo con campos adicionales.
+  los campos username, email y password ya no se definen en el modelo de usuario, ya que better auth los maneja internamente.
+*/
+export const userSchema = new Schema(
   {
     name: { type: String, required: true },
-    username: { type: String, required: true, unique: true, sparse: true },
     role: {
       type: String,
       enum: ["user", "carer", "admin"],
@@ -22,8 +26,6 @@ const userSchema = new Schema(
     },
     img: { type: String, default: "" },
     tel: { type: String, required: true },
-    email: { type: String, default: "" },
-    password: { type: String, required: true },
     isDisabled: { type: Boolean, default: false },
   },
   {

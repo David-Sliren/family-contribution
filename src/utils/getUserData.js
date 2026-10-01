@@ -3,7 +3,9 @@ import { SECRET } from "@/constants/env";
 import { Users } from "@/models/user";
 import { jwtVerify } from "jose";
 import { unstable_noStore as noStore } from "next/cache";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { auth } from "./auth";
+import { cache } from "react";
 
 export const getUserData = async () => {
   noStore();
@@ -24,3 +26,7 @@ export const getUserData = async () => {
     return null;
   }
 };
+
+export const getSession = cache(async () =>
+  auth.api.getSession({ headers: await headers() }),
+);

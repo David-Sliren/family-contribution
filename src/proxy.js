@@ -1,41 +1,32 @@
 import { NextResponse } from "next/server";
-import { jwtVerify } from "jose";
-import { SECRET } from "./constants/env";
-import { TOKEN } from "./constants/config";
-import { cookies } from "next/headers";
+// import { jwtVerify } from "jose";
+// import { SECRET } from "./constants/env";
+// import { TOKEN } from "./constants/config";
+import { getSession } from "./utils/getUserData";
 
 export const proxy = async (req) => {
-  const token = req.cookies.get(TOKEN);
+  const session = await getSession();
+
   const { pathname } = req.nextUrl;
-
+  const isApiRoute = pathname.startsWith("/api");
   const isAuthRoute = pathname.includes("auth");
+  const isDashboardRoute = pathname.includes("dashboard");
 
-  try {
-    if (!token) {
-      const customError = new Error("not found token");
-      customError.code = "NOT_TOKEN";
-      throw customError;
-    }
-    const { payload } = await jwtVerify(token.value, SECRET);
-    const user = payload;
-    if (user.role === "user" && pathname.includes("dashboard")) {
-      const customError = new Error("user unauthorized");
-      customError.code = "USER_UNAUTHORIZED";
-      throw customError;
-    }
+  const deny = (error, status) =>
+    isApiRoute
+      ? Response.json({ error }, { status })
+      : NextResponse.redirect(new URL("/", req.url));
 
-    if (isAuthRoute) return NextResponse.redirect(new URL("/", req.url));
+  if (!session && !isAuthRoute) {
+    return deny("Token invalid", 401);
+  }
 
-    return NextResponse.next();
-  } catch (e) {
-    if (e.code === `ERR_JWS_INVALID`) (await cookies()).delete(TOKEN);
-    if (e.code === `ERR_JWT_EXPIRED`) (await cookies()).delete(TOKEN);
+  if (session && isAuthRoute) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
-    if (e.code === "USER_UNAUTHORIZED")
-      return NextResponse.redirect(new URL("/", req.url));
-
-    if (!isAuthRoute)
-      return NextResponse.redirect(new URL("/auth/login", req.url));
+  if (session && session.user.role !== "admin" && isDashboardRoute) {
+    return deny("user unauthorized", 403);
   }
 
   return NextResponse.next();

@@ -1,3 +1,4 @@
+import "@/database/contribution";
 import { User } from "@/database/user";
 import { conectToData } from "@/utils/mongoose-helper/db";
 

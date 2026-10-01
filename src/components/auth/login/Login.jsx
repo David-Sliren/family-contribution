@@ -7,8 +7,9 @@ import { useHookForm } from "@/hooks/useHookForm";
 import { useRouter } from "next/navigation";
 import { loginSchema } from "@/schemas/login";
 import { Info } from "@/components/ui/form/info/Info";
-import { loginUser } from "@/services/user/auth";
+// import { loginUser } from "@/services/user/auth";
 import { useNotification } from "@/store/ui/notifications";
+import { authClient } from "@/utils/auth-client";
 
 const DEFAULVALUES = {
   // username: "juanperez01",
@@ -27,11 +28,27 @@ export const Index = () => {
   async function handleSubmitForm(data) {
     const { confirmPassword, ...backendData } = data;
     try {
-      await loginUser(backendData);
-      setNotification({ message: "Disfrute su sesion" });
-      router.refresh();
-    } catch (error) {
-      setErrorName(error);
+      // await loginUser(backendData);
+      const { data, error } = await authClient.signIn.username({
+        ...backendData,
+      });
+
+      if (!error) {
+        setNotification({ message: "Disfrute su sesion" });
+        return router.replace("/");
+      }
+
+      if (error.code === "INVALID_USERNAME_OR_PASSWORD") {
+        return setErrorName(
+          "Es incorrecto el nombre de usuario o la contraseña ",
+        );
+      }
+
+      setErrorName(
+        error.message || "No se pudo hacer el registro, intente nuevamente",
+      );
+    } catch (e) {
+      setErrorName("No se pudo conectar con el servidor, intente nuevamente");
     }
   }
 

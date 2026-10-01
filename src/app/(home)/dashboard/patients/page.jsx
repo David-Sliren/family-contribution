@@ -1,4 +1,7 @@
 import { Index } from "@/components/dashboard/patients/Index";
+import { allPatientQueryOptions } from "@/hooks/tanstack/query/useQueryPatient";
+import { getQueryClient } from "@/utils/tanstackQuery-config";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 const metadata = {
   title: "Pacientes",
@@ -8,11 +11,17 @@ const metadata = {
 };
 
 export default async function PatientsDashboard() {
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery(allPatientQueryOptions());
+
   return (
-    <Index
-      title={metadata.title}
-      subtitle={metadata.subtitle}
-      description={metadata.description}
-    />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Index
+        title={metadata.title}
+        subtitle={metadata.subtitle}
+        description={metadata.description}
+      />
+    </HydrationBoundary>
   );
 }

@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { DashboardShell } from "../layout/DashboardShell";
 import { Toolbar } from "../ui/bar/Toolbar";
 import { AddPatientDialog } from "./AddPatientDialog";
 import { TablePatiens } from "./TablePatiens";
+import { ThreePoints } from "@/components/ui/loader/ThreePoints";
 
 export const Index = ({ title, subtitle, description }) => {
   return (
@@ -10,7 +12,9 @@ export const Index = ({ title, subtitle, description }) => {
         <Toolbar selectFilter="patients" optionInitialName="Todos" />
         <AddPatientDialog />
       </section>
-      <TablePatiens />
+      <Suspense fallback={<ThreePoints />}>
+        <TablePatiens />
+      </Suspense>
     </DashboardShell>
   );
 };

@@ -1,5 +1,4 @@
 "use client";
-import { useUserStore } from "@/components/provaider/AuthProvider";
 import { LuHeart } from "react-icons/lu";
 
 export const UserInfo = ({ profiledata }) => {

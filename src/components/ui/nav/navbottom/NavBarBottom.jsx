@@ -49,7 +49,7 @@ const LinkRoute = ({ href, label, icon: Icon }) => {
 };
 
 export const NavBarBottom = () => {
-  const user = useUserStore((state) => state.user);
+  const { user } = useUserStore((state) => state.user);
 
   return (
     <nav

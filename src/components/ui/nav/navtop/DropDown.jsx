@@ -1,18 +1,18 @@
 import { useUserStore } from "@/components/provaider/AuthProvider";
-import { logoutUser } from "@/services/user/auth";
+// import { logoutUser } from "@/services/user/auth";
 
 import { motion } from "motion/react";
 import Link from "next/link";
 import { LuLayoutDashboard, LuLogOut, LuUser } from "react-icons/lu";
 
 export const DropDown = ({ id, username = "", email = "", handleDropdown }) => {
-  const logout = useUserStore((state) => state.logout);
-  const user = useUserStore((state) => state.user);
+  const { logout } = useUserStore((state) => state.logout);
+  const { user } = useUserStore((state) => state.user);
 
   async function handleLogout() {
     try {
       handleDropdown;
-      await logoutUser();
+      // await logoutUser();
       logout();
       window.location.href = "/";
     } catch (error) {

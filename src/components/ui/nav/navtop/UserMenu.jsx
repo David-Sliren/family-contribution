@@ -9,7 +9,7 @@ import { useUserStore } from "@/components/provaider/AuthProvider";
 import { blurColors } from "@/constants/bgBase64";
 
 export const UserMenu = () => {
-  const user = useUserStore((state) => state.user);
+  const { user } = useUserStore((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const firstName = user?.name?.split(" ")[0] || "default";
 

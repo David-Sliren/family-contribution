@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 export const ActionButtons = () => {
-  const isAuth = useUserStore((state) => state.isAuth);
+  const { isAuth } = useUserStore((state) => state.isAuth);
   return (
     <article className="flex flex-wrap gap-4 pt-4">
       <Link

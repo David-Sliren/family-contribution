@@ -43,7 +43,7 @@ const LinkRoute = ({ href, label }) => {
 };
 
 export const NavBarTop = () => {
-  const isAuth = useUserStore((state) => state.isAuth);
+  const { isAuth } = useUserStore((state) => state.isAuth);
 
   const filterNavRoutes = navBarRoutes.filter((nbt) => !nbt.auth || isAuth);
 

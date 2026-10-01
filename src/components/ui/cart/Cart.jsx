@@ -8,7 +8,7 @@ import { useMedicineStorage } from "@/store/medicineStore";
 import { useUserStore } from "@/components/provaider/AuthProvider";
 
 export const Cart = () => {
-  const user = useUserStore((state) => state.user);
+  const { user } = useUserStore((state) => state.user);
   const { products, setIsOpenCart } = useMedicineStorage();
 
   return (

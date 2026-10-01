@@ -1,6 +1,5 @@
 "use client";
 
-import { useUserStore } from "@/components/provaider/AuthProvider";
 import { formatMoney } from "@/config/money";
 import { useUserQueryById } from "@/hooks/tanstack/query/useQueryUser";
 import clsx from "clsx";

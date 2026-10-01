@@ -1,6 +1,6 @@
 ---
 name: plan-empirico
-description: Se activa UNICAMENTE cuando el usuario la invoca explicitamente o escribe "plan empirico" / "empirical plan". Guia al usuario en la definicion de maximo 4 instrucciones por plan. El usuario escribe en lenguaje natural libre y el asistente estructura cada instruccion dentro de delimitadores ===instruccion N=== ... ===fin de instruccion N===. Cuando hay ambiguedades, el asistente investiga el codigo primero y presenta las dudas como preguntas preparadas de opcion multiple, con una marcada como "(Recomendado)", para que el usuario solo elija. El asistente no comienza a trabajar hasta tener todas las instrucciones definidas y confirmadas por el usuario, titula cada lista de tareas con la instruccion actual y ejecuta paso a paso.
+description: Se activa UNICAMENTE cuando el usuario la invoca explicitamente o escribe "plan empirico" / "empirical plan". Guia al usuario en la definicion de maximo 4 instrucciones por plan. El usuario escribe en lenguaje natural libre y el asistente estructura cada instruccion dentro de delimitadores ===instruccion N=== ... ===fin de instruccion N===. Cuando hay ambiguedades, el asistente investiga el codigo primero y presenta las dudas como preguntas preparadas de opcion multiple, con una marcada como "(Recomendado)", para que el usuario solo elija. El asistente no comienza a trabajar hasta tener todas las instrucciones definidas y confirmadas por el usuario, titula cada lista de tareas con la instruccion actual y ejecuta paso a paso. Los pasos 1, 3 y 4 usan siempre la herramienta question con preguntas preparadas de opcion multiple, nunca texto plano.
 ---
 
 # Plan Empírico
@@ -26,12 +26,34 @@ Si estas frases no aparecen, responde al prompt normalmente sin forzar este fluj
     `===fin de instruccion N===`
   - **No ejecuta trabajo de código ni comandos de modificación** hasta que el paquete completo de instrucciones esté consolidado y el usuario dé la confirmación final de inicio.
 
+## Herramientas Obligatorias
+
+- Los **pasos 1, 3 y 4** se ejecutan **siempre con la herramienta `question`**. Está prohibido preguntar en texto plano en esos pasos: cualquier duda se formula como pregunta preparada.
+- Todas las dudas de una misma instrucción van en **una sola llamada** a `question` con varias preguntas en el arreglo `questions`. No abras rondas sucesivas de preguntas.
+- Cada pregunta debe tener:
+  - Contexto breve y real del código (verificado leyendo los archivos, no supuesto).
+  - Opciones concretas y excluyentes entre sí.
+  - La primera opción con el sufijo `(Recomendado)`.
+  - `header` corto (máx. 30 caracteres).
+- `question` permite respuesta personalizada: si el usuario escribe texto libre en lugar de elegir una opción, acepta esa respuesta, ajústala al contexto de la instrucción y reflétela en los delimitadores.
+
+## Estado Activo
+
+- Si la skill **ya está activa** en la conversación, **retoma el paso donde quedó**. No vuelvas a preguntar el conteo inicial ni anuncies la activación otra vez.
+- El bloque consolidado de instrucciones permanece **visible en cada mensaje** del flujo, no solo en el momento de definirlo.
+
 ## Flujo Operativo Paso a Paso
 
 ### 1. Definición y Conteo Inicial
 
-- Al activarse la skill, pregunta al usuario cuántas instrucciones desea incluir en este plan, recordando el límite:
-  > *"¿Cuántas instrucciones deseas trabajar en este plan? (Máximo 4 instrucciones por plan para garantizar precisión y calidad)."*
+- Al activarse la skill, pregunta al usuario cuántas instrucciones desea incluir. **Usa `question`** con estas opciones:
+  - `1` — "Una instrucción"
+  - `2` — "Dos instrucciones"
+  - `3` — "Tres instrucciones"
+  - `4` — "Cuatro instrucciones"
+  - `No sé` — "No sé cuántas, definámoslas una a una"
+  
+  En el `header` recuerda el límite: "Máximo 4 instrucciones".
 - Si el usuario indica un número (ej. 3): guíalo interactivamente para recopilar cada una si no las ha suministrado aún.
 - Si el usuario ya proporcionó el texto completo en su primer mensaje, extrae y separa las peticiones respetando el número indicado o separando hasta un tope de 4.
 - Si el usuario dice que no sabe cuántas dará: indícale que las irán definiendo una a una, preguntando tras cada instrucción si desea agregar la siguiente o cerrar el plan para empezar.
@@ -45,21 +67,24 @@ Si estas frases no aparecen, responde al prompt normalmente sin forzar este fluj
   ...
   ===fin de instruccion 1===
   ```
+- **Muestra el bloque siempre**, incluso cuando la instrucción todavía está vacía o pendiente de redactar, en el mismo mensaje en que formulas la pregunta. El usuario debe ver la estructura en todo momento.
 
 ### 3. Aclaraciones Previas: Preguntas Preparadas
 
 - Si una instrucción tiene ambigüedades o decisiones de diseño por definir (ej. dónde se filtra, qué campos intervienen, si se pagina), el asistente **no pregunta en texto plano**: primero investiga el código afectado (jobs de lectura) y aporta contexto verificado.
-- Presenta cada duda como una **pregunta preparada de opción múltiple**, para que el usuario solo tenga que elegir:
+- Presenta cada duda como una **pregunta preparada de opción múltiple** con la herramienta `question`, para que el usuario solo tenga que elegir:
   - Contexto breve y real del código.
   - Opciones concretas y excluyentes.
-  - La primera opción debe ser la recomendada, marcada como "(Recomendado)".
-- Con las respuestas, ajusta el contenido de la instrucción dentro de sus delimitadores y muestra la versión consolidada.
-- Evita rondas repetidas: pregunta todo lo necesario en una sola tanda por instrucción.
+  - La primera opción debe ser la recomendada, marcada como `(Recomendado)`.
+- Con las respuestas, ajusta el contenido de la instrucción dentro de sus delimitadores y vuelve a mostrar la versión consolidada.
+- Evita rondas repetidas: pregunta todo lo necesario en una sola llamada a `question`.
 
 ### 4. Confirmación Previa a la Ejecución
 
-- Cuando las instrucciones acordadas estén listas (hasta 4), **antes de ejecutar cualquier acción o cambio en el proyecto**, pregunta al usuario:
-  > *"Tenemos estructurado el plan con [N] instrucción(es). ¿Procedo a trabajar con este plan empírico o prefieres hacer otro plan? (Recomendación: proceder con este plan de hasta 4 instrucciones para ahorrar tokens y mantener la mayor calidad)."*
+- Cuando las instrucciones acordadas estén listas (hasta 4), **antes de ejecutar cualquier acción o cambio en el proyecto**, confirma con `question`:
+  - `Proceder` — "Sí, procede con este plan (Recomendado)"
+  - `Otro plan` — "No, prefiero hacer otro plan"
+- No ejecutes nada hasta que la respuesta sea positiva.
 
 ### 5. Ejecución Guiada
 

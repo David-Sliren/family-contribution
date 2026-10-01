@@ -1,24 +1,15 @@
-import { TOKEN } from "@/constants/config";
-import { SECRET } from "@/constants/env";
 import { PaymentCheckout } from "@/models/payments/mercadoPago";
 import { contributionSchemaFrontend } from "@/schemas/contribution.frontend";
-import { jwtVerify } from "jose";
-import { cookies } from "next/headers";
+import { getSession } from "@/utils/getUserData";
 
 export const POST = async (req) => {
+  const session = await getSession();
+
+  if (!session)
+    return Response.json({ error: "Token invalid" }, { status: 401 });
+
+
   const body = await req.json();
-  const token = req.cookies.get(TOKEN);
-  if (!token) return Response.json({ error: "Token invalid" }, { status: 401 });
-
-  let userId;
-
-  try {
-    const { payload } = await jwtVerify(token.value, SECRET);
-
-    userId = payload.id;
-  } catch (error) {
-    return Response.json({ error: "user unauthorized" }, { status: 401 });
-  }
 
   const result = contributionSchemaFrontend.safeParse(body);
 
@@ -35,7 +26,7 @@ export const POST = async (req) => {
 
   try {
     const pay = await PaymentCheckout.createContribution(
-      userId,
+      session.user.id,
       result.data.purpose,
       result.data.amount,
     );

@@ -1,8 +1,6 @@
-import { TOKEN } from "@/constants/config";
-import { SECRET } from "@/constants/env";
 import { Patients } from "@/models/patient";
 import { patientSchema } from "@/schemas/patient";
-import { jwtVerify } from "jose";
+import { getSession } from "@/utils/getUserData";
 
 export const GET = async (_req) => {
   try {
@@ -23,18 +21,15 @@ export const GET = async (_req) => {
 export const POST = async (req) => {
   const body = await req.json();
 
-  const token = req.cookies.get(TOKEN);
-  if (!token) return Response.json({ error: "Token invalid" }, { status: 401 });
+  const session = await getSession();
 
-  let userId;
+  if (!session)
+    return Response.json({ error: "Token invalid" }, { status: 401 });
 
-  try {
-    const { payload } = await jwtVerify(token.value, SECRET);
-    userId = payload.id;
-  } catch (error) {
-    return Response.json({ error: "user unauthorized" }, { status: 401 });
-  }
-  const fullData = { ...body, userId };
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
+  const fullData = { ...body, userId: session.user.id };
 
   const result = patientSchema.safeParse(fullData);
 

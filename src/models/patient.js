@@ -71,7 +71,7 @@ export class Patients {
     }
   }
 
-  static async delete(id) {
+  static async delete({ id }) {
     await conectToData();
     try {
       const patient = await Patient.findById(id).populate("userId", {

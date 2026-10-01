@@ -1,14 +1,25 @@
-import { SECRET } from "@/constants/env";
-import { User } from "@/database/user";
-import { getUserData } from "@/utils/getUserData";
-import { jwtVerify } from "jose";
-import { cookies } from "next/headers";
+import { Users } from "@/models/user";
+import { getSession } from "@/utils/getUserData";
 
 export const GET = async () => {
-  const user = await getUserData();
+  const session = await getSession();
 
-  if (!user)
-    return Response.json({ message: "unauthorizated" }, { status: 401 });
+  if (!session)
+    return Response.json({ error: "Token invalid" }, { status: 401 });
 
-  return Response.json(user);
+  try {
+    const user = await Users.getById(session.user.id);
+
+    return Response.json(user);
+  } catch (error) {
+    if (error.code === "INVALID_ID") {
+      return Response.json({ error: error.message }, { status: 400 });
+    }
+
+    if (error.code === "NOT_FOUND_USER") {
+      return Response.json({ error: error.message }, { status: 404 });
+    }
+
+    return Response.json({ error: "internal server error" }, { status: 500 });
+  }
 };

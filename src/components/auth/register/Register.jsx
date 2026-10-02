@@ -47,7 +47,8 @@ export const Index = () => {
 
       if (!error) {
         router.replace("/");
-        reset();
+
+        return reset();
       }
 
       if (error.code === "USERNAME_IS_ALREADY_TAKEN") {

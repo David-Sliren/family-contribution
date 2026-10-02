@@ -38,10 +38,9 @@ Next.js 16 App Router app (package `contribution-aleida`) for a family contribut
 - `src/proxy.js` (Next 16 renombró middleware→proxy) usa `getSession()`; matcher: `/inventory`, `/expenses`, `/profile`, `/auth/:path*`, `/dashboard/:path*`. Sin sesión → JSON 401 en `/api/*` y redirect `/` en páginas; con sesión en ruta de auth → redirect `/`; no-admin en dashboard → 403/redirect.
 - Sesión en cliente: `AuthProvider` (`src/components/provaider/`, ojo con el typo) recibe la sesión del server; `useUserStore()` **ya no es un store de zustand** y devuelve `{ user, isAuth, isPending, logout }` respaldado por `authClient.useSession()` (su argumento `selector` hoy se ignora).
 - Mongoose schema plugin `cleanUser` en `src/utils/mongoose-helper/cleanDatabase.js` mapea `_id`→`id` y elimina campos privados.
-- **Legado (no usar)**: `SECRET`/`TOKEN` en `src/constants/`, los imports comentados en `proxy.js`/`AuthProvider.jsx` y `store/user/userStore.js` (borrado) son restos de la auth JWT anterior.
 
 ## Env / payments
-- Requires `.env.local` (see `.env.example`): `MONGODB_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `BASE_URL`, `MP_ACCESS_TOKEN`, `NEXT_PUBLIC_GA_ID`. `SECRET_JWT` es legado (solo lo lee el export `SECRET`) y está pendiente de eliminar.
+- Requires `.env.local` (see `.env.example`): `MONGODB_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `BASE_URL`, `MP_ACCESS_TOKEN`, `NEXT_PUBLIC_GA_ID`.
 - Lee las variables con `src/constants/env.js`, nunca `process.env` en línea. `BASE_URL` cae a `VERCEL_URL` y `MP_ACCESS_TOKEN` se expone como `ACCESSTOKEN_MP` (`src/constants/payment.js`).
 - MercadoPago checkout in COP; min amount 6000 is enforced in both schemas. `BASE_URL` feeds the webhook and back URLs, so local payment testing needs a public tunnel (an ngrok origin is in `allowedDevOrigins` of `next.config.mjs`). Approved payments create a Contribution via `src/app/api/payment/webhook/route.js` (duplicate `paymentId` is ignored, error 11000).
 - Only `res.cloudinary.com` is allowed in `next.config.mjs` remote images. `pnpm-workspace.yaml` `allowBuilds` gates native deps (bcrypt, sharp, unrs-resolver) — new native deps may need an entry there.

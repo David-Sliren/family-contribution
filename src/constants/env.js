@@ -2,7 +2,6 @@
 export const ANALYTICS = process.env.NEXT_PUBLIC_GA_ID;
 
 // Private
-export const SECRET = new TextEncoder().encode(process.env.SECRET_JWT);
 export const MONGODB_URI = process.env.MONGODB_URI;
 export const ACCESSTOKEN_MP = process.env.MP_ACCESS_TOKEN;
 export const PORT = process.env.PORT || 3000;

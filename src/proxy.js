@@ -1,7 +1,4 @@
 import { NextResponse } from "next/server";
-// import { jwtVerify } from "jose";
-// import { SECRET } from "./constants/env";
-// import { TOKEN } from "./constants/config";
 import { getSession } from "./utils/getUserData";
 
 export const proxy = async (req) => {

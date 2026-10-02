@@ -7,7 +7,6 @@ import { useHookForm } from "@/hooks/useHookForm";
 import { useRouter } from "next/navigation";
 import { loginSchema } from "@/schemas/login";
 import { Info } from "@/components/ui/form/info/Info";
-// import { loginUser } from "@/services/user/auth";
 import { useNotification } from "@/store/ui/notifications";
 import { authClient } from "@/utils/auth-client";
 
@@ -28,7 +27,6 @@ export const Index = () => {
   async function handleSubmitForm(data) {
     const { confirmPassword, ...backendData } = data;
     try {
-      // await loginUser(backendData);
       const { data, error } = await authClient.signIn.username({
         ...backendData,
       });

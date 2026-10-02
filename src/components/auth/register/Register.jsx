@@ -9,7 +9,6 @@ import React, { useState } from "react";
 import { useHookForm } from "@/hooks/useHookForm";
 import { useRouter } from "next/navigation";
 import { Info } from "@/components/ui/form/info/Info";
-// import { createUser } from "@/services/user/auth";
 import { authClient } from "@/utils/auth-client";
 
 const DEFAULVALUES = {

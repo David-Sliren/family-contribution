@@ -4,12 +4,10 @@ import { NavBarBottom } from "@/components/ui/nav/navbottom/NavBarBottom";
 import { Cart } from "@/components/ui/cart/Cart";
 import { AuthProvider } from "@/components/provaider/AuthProvider";
 import { getSession } from "@/utils/getUserData";
-// import { excludeForUser } from "@/utils/mongoose-helper/excludeInfoOfDatabase";
 import { Notification } from "@/components/ui/notifications/Notification";
 
 export default async function layout({ children }) {
   const session = await getSession();
-  // const user = userData ? excludeForUser(userData) : userData;
 
   return (
     <AuthProvider initialState={session?.user ?? null}>

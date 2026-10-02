@@ -1,5 +1,4 @@
 import { useUserStore } from "@/components/provaider/AuthProvider";
-// import { logoutUser } from "@/services/user/auth";
 
 import { motion } from "motion/react";
 import Link from "next/link";
@@ -12,11 +11,10 @@ export const DropDown = ({ id, username = "", email = "", handleDropdown }) => {
   async function handleLogout() {
     try {
       handleDropdown;
-      // await logoutUser();
       logout();
       window.location.href = "/";
-    } catch (error) {
-      console.log(error);
+    } catch {
+      // el cierre de sesion no deberia fallar
     }
   }
 

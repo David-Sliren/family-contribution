@@ -2,11 +2,10 @@ import { Patients } from "@/models/patient";
 
 export const GET = async (_req) => {
   try {
-    // Queda pendiente a actualizacion, aplicar filtrado por la propiedad
-    // isMain de la colecion patient
-    const patient = await Patients.getAll();
-    let mainpatient = patient.length
-      ? patient[0].toJSON({ virtuals: false })
+    const patients = await Patients.getAll();
+    const main = patients.find((patient) => patient.isMain);
+    let mainpatient = patients.length
+      ? (main ?? patients[0]).toJSON({ virtuals: false })
       : {};
 
     return Response.json(mainpatient);

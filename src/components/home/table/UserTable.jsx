@@ -55,13 +55,13 @@ export const UserTable = ({ startIndex, endIndex }) => {
             {visibleUsers.map((item) => (
               <UserRow
                 key={item.id}
-                id={item.userId.id}
+                id={item.createBy.id}
                 amount={item.amount}
                 date={item.date}
-                relationship={item.userId.relationship}
+                relationship={item.createBy.relationship}
                 userState={item.status}
-                userName={item.userId.name}
-                userImg={item.userId.img}
+                userName={item.createBy.name}
+                userImg={item.createBy.img}
               />
             ))}
           </tbody>

@@ -12,9 +12,9 @@ export const ContributionCard = ({ contribution, handdler = () => "" }) => {
     <article className="relative flex items-center justify-between w-full p-4 rounded-2xl text-sm hover:bg-surface-container-low transition-all duration-200">
       <div className="flex items-center gap-4">
         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold font-headline-md overflow-hidden">
-          {contribution?.userId.img ? (
+          {contribution?.createBy.img ? (
             <Image
-              src={contribution?.userId.img}
+              src={contribution?.createBy.img}
               height={200}
               width={200}
               placeholder="blur"
@@ -23,13 +23,13 @@ export const ContributionCard = ({ contribution, handdler = () => "" }) => {
             />
           ) : (
             <span className="capitalize">
-              {contribution?.userId.name[0] ?? "I"}
+              {contribution?.createBy.name[0] ?? "I"}
             </span>
           )}
         </div>
         <div>
           <h3 className="font-semibold text-on-surface text-[10px] sm:text-xs">
-            {contribution?.userId.name} salazar andulce
+            {contribution?.createBy.name} salazar andulce
           </h3>
           <p className="text-[10px] text-on-surface-variant">
             {defaultDate(contribution?.date)}

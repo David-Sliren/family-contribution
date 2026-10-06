@@ -3,16 +3,12 @@
 import { useEffect, useState } from "react";
 import { FieldType } from "@/components/ui/form/inputs/FieldType";
 import { useHookForm } from "@/hooks/useHookForm";
-import { patientSchemaFrontend } from "@/schemas/patient";
 import { DialogAdd } from "@/components/ui/dialogs/DialogAdd";
 import { useNotification } from "@/store/ui/notifications";
 import { useUpdateUserContribution } from "@/hooks/tanstack/mutation/useMutationContribution";
 import { FieldSelect } from "@/components/ui/form/inputs/FieldSelect";
 import { FieldHidden } from "@/components/ui/form/inputs/FieldHidden";
-import {
-  contributionSchemaFrontend,
-  contributionSchemaFrontendDashboard,
-} from "@/schemas/contribution.frontend";
+import { contributionSchemaFrontendDashboard } from "@/schemas/contribution.frontend";
 
 export function UpdateContributionDialog({ contribution, dialogRef }) {
   // notification
@@ -33,7 +29,7 @@ export function UpdateContributionDialog({ contribution, dialogRef }) {
     if (contribution)
       reset({
         ...contribution,
-        userId: contribution?.userId?.id,
+        createBy: contribution?.createBy?.id,
       });
   }, [contribution, reset]);
 
@@ -56,7 +52,7 @@ export function UpdateContributionDialog({ contribution, dialogRef }) {
       <DialogAdd
         idModal="update-contribution"
         title="Actualizar contribucion"
-        description={`Estas actualizando la contribucion de ${contribution?.userId?.name}`}
+        description={`Estas actualizando la contribucion de ${contribution?.createBy?.name}`}
         inputName="Actualizar"
         handdleFormMain={handleSubmit(handleSubmitForm)}
         errorNotification={errorName}
@@ -75,11 +71,11 @@ export function UpdateContributionDialog({ contribution, dialogRef }) {
             />
             <FieldHidden
               name="usuario"
-              inputName="userId"
+              inputName="createBy"
               inputType="text"
               registerHook={register}
               error={errors}
-              defaultValue={contribution?.userId?.id}
+              defaultValue={contribution?.createBy?.id}
               className="relative top-0 left-0 w-fit opacity-50"
             />
           </div>

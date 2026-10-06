@@ -25,7 +25,7 @@ export function AddContributionDialog({ user, dialogRef }) {
 
   useEffect(() => {
     // console.log("user.id: ", user.id);
-    if (user) reset({ userId: user.id });
+    if (user) reset({ createBy: user.id });
   }, [reset, user]);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export function AddContributionDialog({ user, dialogRef }) {
 
           <FieldHidden
             name="usuario"
-            inputName="userId"
+            inputName="createBy"
             inputType="text"
             registerHook={register}
             error={errors}

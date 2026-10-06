@@ -9,7 +9,6 @@ const contributionSchema = new Schema(
       enum: ["pasarela", "efectivo", "transferencia"],
       required: true,
     },
-    userId: { type: Schema.ObjectId, ref: "User" },
     amount: { type: Number, required: true },
     status: { type: String, required: true, enum: ["confirmado", "pendiente"] },
     purpose: {
@@ -18,6 +17,8 @@ const contributionSchema = new Schema(
       enum: ["medicinas", "facturas", "cuidador"],
     },
     date: { type: Date, default: Date.now },
+    patientId: { type: Schema.ObjectId, required: true, ref: "Patient" },
+    createBy: { type: Schema.ObjectId, required: true, ref: "User" },
     updateBy: { type: Schema.ObjectId, ref: "User" },
   },
   { timestamps: true },

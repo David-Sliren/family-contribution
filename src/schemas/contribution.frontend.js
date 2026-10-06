@@ -24,7 +24,7 @@ export const contributionSchemaFrontend = z.object({
 export const contributionSchemaFrontendDashboard = z.object({
   paymentId: z.string().optional().or(z.literal("")),
   method: method,
-  userId: z.string("no hay "),
+  createBy: z.string("no hay "),
   amount: z.coerce
     .number("se espera un numero")
     .positive("El monto debe ser mayor a 0")

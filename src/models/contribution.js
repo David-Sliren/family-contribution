@@ -8,7 +8,7 @@ export class Contribute {
 
     const [contributions, totalItems] = await Promise.all([
       Contribution.find(querys, { updatedAt: 0 })
-        .populate("userId", {
+        .populate("createBy", {
           name: 1,
           relationship: 1,
           img: 1,
@@ -71,7 +71,7 @@ export class Contribute {
     await conectToData();
 
     try {
-      const user = await User.findById(data.userId);
+      const user = await User.findById(data.createBy);
       if (!user) {
         const customError = new Error("user unathorized");
         customError.code = "USER_UNAUTHORIZED";

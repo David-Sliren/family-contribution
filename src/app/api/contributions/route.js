@@ -1,4 +1,5 @@
 import { Contribute } from "@/models/contribution";
+import { Patients } from "@/models/patient";
 import { contributionSchemaBanckend } from "@/schemas/contribution";
 import { getSession } from "@/utils/getUserData";
 
@@ -40,7 +41,21 @@ export const POST = async (req) => {
 
   const body = await req.json();
 
-  const fullData = { ...body, updateBy: session.user.id };
+  const patients = await Patients.getAll();
+  const mainPatient = patients.find((patient) => patient.isMain) ?? patients[0];
+
+  if (!mainPatient)
+    return Response.json(
+      { error: "no hay pacientes registrados" },
+      { status: 400 },
+    );
+
+  const fullData = {
+    ...body,
+    createBy: session.user.id,
+    patientId: mainPatient.id,
+    updateBy: session.user.id,
+  };
 
   const result = contributionSchemaBanckend.safeParse(fullData);
 
@@ -54,12 +69,6 @@ export const POST = async (req) => {
       },
       { status: 400 },
     );
-
-  if (result.data.amount < 10000) {
-    return Response.json({
-      error: "the contribuionn must be greater than or equal to 10000",
-    });
-  }
 
   try {
     const newContribution = await Contribute.create(result.data);

@@ -38,7 +38,7 @@ export const userSchema = new Schema(
 userSchema.virtual("contributions", {
   ref: "Contribution",
   localField: "_id",
-  foreignField: "userId",
+  foreignField: "createBy",
 });
 
 userSchema.virtual("totalContributed").get(totalContributed);

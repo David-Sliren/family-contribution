@@ -15,7 +15,10 @@ const method = z.enum(["pasarela", "efectivo", "transferencia"], {
 export const contributionSchemaBanckend = z.object({
   paymentId: z.string().optional(),
   method: method,
-  userId: z.refine((val) => Types.ObjectId.isValid(val), {
+  patientId: z.refine((val) => Types.ObjectId.isValid(val), {
+    error: "el id no es valido",
+  }),
+  createBy: z.refine((val) => Types.ObjectId.isValid(val), {
     error: "el id no es valido",
   }),
   amount: z.coerce
@@ -32,5 +35,6 @@ export const contributionSchemaBanckend = z.object({
 
 export const contributionUpdateSchema = contributionSchemaBanckend.omit({
   paymentId: true,
-  userId: true,
+  patientId: true,
+  createBy: true,
 });

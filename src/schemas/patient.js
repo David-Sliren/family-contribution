@@ -11,7 +11,7 @@ export const patientSchema = z.object({
   age: z.coerce
     .number("Debe ser un numero")
     .min(1, "Debe tener como minimo 1 año"),
-  userId: z.string().regex(/^[0-9a-fA-F]{24}$/, "el id no es valido"),
+  createBy: z.string().regex(/^[0-9a-fA-F]{24}$/, "el id no es valido"),
   goal: z.coerce
     .number("Debe ser un numero")
     .min(100000, "Debe ser mayoro igual a 100000"),
@@ -21,6 +21,6 @@ export const patientSchema = z.object({
   clinicName: z.string().min(3, "Debe tener minimo 3 caracteres").optional(),
 });
 
-export const patientSchemaFrontend = patientSchema.omit({ userId: true });
+export const patientSchemaFrontend = patientSchema.omit({ createBy: true });
 
-export const patientUpdateSchema = patientSchema.omit({ userId: true });
+export const patientUpdateSchema = patientSchema.omit({ createBy: true });

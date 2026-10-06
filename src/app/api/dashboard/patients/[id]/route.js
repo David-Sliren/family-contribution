@@ -55,7 +55,7 @@ export const PUT = async (req, { params }) => {
   try {
     const updatePatient = await Patients.update(id, {
       ...result.data,
-      userId: session.user.id,
+      updateBy: session.user.id,
     });
 
     return Response.json(updatePatient, { status: 201 });

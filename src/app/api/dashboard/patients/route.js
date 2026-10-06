@@ -29,7 +29,7 @@ export const POST = async (req) => {
   if (session.user.role !== "admin")
     return Response.json({ error: "user unauthorized" }, { status: 403 });
 
-  const fullData = { ...body, userId: session.user.id };
+  const fullData = { ...body, createBy: session.user.id };
 
   const result = patientSchema.safeParse(fullData);
 

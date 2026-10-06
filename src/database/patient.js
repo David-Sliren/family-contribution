@@ -22,15 +22,15 @@ const patientSchema = new Schema(
     lastName: { type: String, required: true },
     img: { type: String, default: "" },
     age: { type: Number, required: true },
-    userId: { type: Schema.ObjectId, ref: "User" },
     goal: { type: Number, required: true },
-    founds: { type: Number, required: true, default: 0 },
     reason: { type: String, required: true },
     description: { type: String, required: true },
     carerName: { type: String, default: "" },
     clinicName: { type: String, default: "" },
     isDisabled: { type: Boolean, default: false },
     isMain: { type: Boolean, default: false },
+    createBy: { type: Schema.ObjectId, required: true, ref: "User" },
+    updateBy: { type: Schema.ObjectId, ref: "User" },
   },
   {
     timestamps: true,
@@ -38,6 +38,12 @@ const patientSchema = new Schema(
     toObject: { virtuals: true },
   },
 );
+
+patientSchema.virtual("founds", {
+  ref: "Contribution",
+  localField: "_id",
+  foreignField: "patientId",
+});
 
 patientSchema.virtual("inventories", {
   ref: "Inventory",

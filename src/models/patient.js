@@ -1,6 +1,7 @@
 import { Patient } from "@/database/patient";
-import { Inventory } from "@/database/inventory";
-import { Expense } from "@/database/expense";
+import "@/database/inventory";
+import "@/database/expense";
+import "@/database/contribution";
 import { User } from "@/database/user";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
@@ -24,6 +25,7 @@ export class Patients {
 
     try {
       const patients = await Patient.findById(id)
+        .populate("founds")
         .populate("inventories")
         .populate("expenses");
 
@@ -48,7 +50,7 @@ export class Patients {
     await conectToData();
 
     try {
-      const user = await User.findById(data.userId);
+      const user = await User.findById(data.createBy);
 
       if (!user || (user && user.role !== "admin")) {
         const customError = new Error("user unathorized");
@@ -71,14 +73,13 @@ export class Patients {
     }
   }
 
-  static async delete({ id }) {
+  static async delete({ id, userId }) {
     await conectToData();
     try {
-      const patient = await Patient.findById(id).populate("userId", {
-        role: 1,
-      });
+      const user = await User.findById(userId);
+      const patient = await Patient.findById(id);
 
-      if (!patient || (patient && patient.userId.role !== "admin")) {
+      if (!patient || !user || (user && user.role !== "admin")) {
         const customError = new Error("user unathorized");
         customError.code = "USER_UNAUTHORIZED";
         throw customError;
@@ -101,7 +102,7 @@ export class Patients {
     await conectToData();
 
     try {
-      const user = await User.findById(data.userId);
+      const user = await User.findById(data.updateBy);
 
       if (!user || (user && user.role !== "admin")) {
         const customError = new Error("user unathorized");

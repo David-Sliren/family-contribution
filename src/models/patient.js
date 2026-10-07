@@ -25,8 +25,8 @@ export class Patients {
 
     try {
       const patients = await Patient.findById(id)
-        .populate("founds")
-        .populate("inventories")
+        .populate("funds")
+        .populate("totalInventories")
         .populate("expenses");
 
       if (!patients) {

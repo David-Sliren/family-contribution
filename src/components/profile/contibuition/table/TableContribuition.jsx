@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 import { DetailsRow } from "./DetailsRow";
 import { FooterButton } from "./FooterButton";
 import { usePagination } from "@/hooks/usePagination";
@@ -51,7 +51,7 @@ export const TableContribuition = ({ contributions }) => {
     <article className="rounded-xl">
       <div className="overflow-x-auto min-h-114">
         {visibleDetails.length === 0 ? (
-          <AnimationEmpy />
+          <AnimationEmpty />
         ) : (
           <table className="w-full h-fit text-left border-collapse">
             <thead>

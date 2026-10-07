@@ -1,7 +1,7 @@
 import { UserRow } from "./UserRow";
 import { useContributionQueryAll } from "@/hooks/tanstack/query/useQueryContribution";
 import { ThreePoints } from "@/components/ui/loader/ThreePoints";
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 
 const HEAD_ROW = [
   {
@@ -37,7 +37,7 @@ export const UserTable = ({ startIndex, endIndex }) => {
     <section className="relative overflow-x-auto min-h-114">
       {isLoading && <ThreePoints />}
       {visibleUsers.length === 0 ? (
-        <AnimationEmpy />
+        <AnimationEmpty />
       ) : (
         <table className="w-full text-left border-collapse">
           <thead>

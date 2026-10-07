@@ -3,7 +3,7 @@ import { useExpensesQueryAll } from "@/hooks/tanstack/query/useQueryExpenses";
 import { useQueryState } from "nuqs";
 import { parseAsString, parseAsInteger } from "nuqs";
 import { GlassPaginationBasic } from "@/components/ui/glass-componenst/GlassPagination";
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 import { ExpenseCard } from "./ExpenseCard";
 
 export const ExpenseList = () => {
@@ -26,7 +26,7 @@ export const ExpenseList = () => {
     setPage((old) => Math.max(old - 1, 1));
   }
 
-  if (!data.data.length) return <AnimationEmpy title="No hay gastos" />;
+  if (!data.data.length) return <AnimationEmpty title="No hay gastos" />;
 
   return (
     <section className="space-y-2.5">

@@ -5,7 +5,7 @@ import React, { useRef, useState } from "react";
 import { AddContributionDialog } from "./AddContributionDialog";
 import { UserCard } from "./UserCard";
 import { useUserQueryAll } from "@/hooks/tanstack/query/useQueryUser";
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 import { useQueryState } from "nuqs";
 import { parseAsString, parseAsInteger } from "nuqs";
 import { GlassPaginationBasic } from "@/components/ui/glass-componenst/GlassPagination";
@@ -50,7 +50,7 @@ export const UserList = () => {
   return (
     <section className="xl:max-w-8/15 space-y-2.5">
       {!users.data.length ? (
-        <AnimationEmpy title="No hay usuarios" />
+        <AnimationEmpty title="No hay usuarios" />
       ) : (
         <>
           <ListContainer>

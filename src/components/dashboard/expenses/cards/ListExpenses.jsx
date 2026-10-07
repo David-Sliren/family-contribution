@@ -5,7 +5,7 @@ import React, { useRef, useState } from "react";
 import { UpdateExpenseDialog } from "../UpdateExpenseDialog";
 import { CardExpense } from "./CardExpense";
 import { useExpensesQueryAll } from "@/hooks/tanstack/query/useQueryExpenses";
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 import { useQueryState } from "nuqs";
 import { parseAsString, parseAsInteger } from "nuqs";
 import { GlassPaginationBasic } from "@/components/ui/glass-componenst/GlassPagination";
@@ -45,7 +45,7 @@ export const ListExpenses = () => {
   return (
     <section className="xl:max-w-8/15 space-y-2.5">
       {!expenses.data.length ? (
-        <AnimationEmpy title="No hay gastos" />
+        <AnimationEmpty title="No hay gastos" />
       ) : (
         <>
           <ListContainer>

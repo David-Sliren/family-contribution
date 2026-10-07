@@ -5,7 +5,7 @@ import React, { useRef, useState } from "react";
 import { UpdateContributionDialog } from "./UpdateContributionDialog";
 import { ContributionCard } from "./ContributionCard";
 import { useContributionQueryAll } from "@/hooks/tanstack/query/useQueryContribution";
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 import { useQueryState } from "nuqs";
 import { parseAsString, parseAsInteger } from "nuqs";
 import { GlassPaginationBasic } from "@/components/ui/glass-componenst/GlassPagination";
@@ -47,7 +47,7 @@ export const ContributionList = () => {
   return (
     <section className="xl:max-w-8/15 space-y-2.5">
       {!contributions.data.length ? (
-        <AnimationEmpy title="No hay contribuciones" />
+        <AnimationEmpty title="No hay contribuciones" />
       ) : (
         <>
           <ListContainer>

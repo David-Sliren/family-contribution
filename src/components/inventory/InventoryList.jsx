@@ -5,7 +5,7 @@ import { useInventoryQueryAll } from "@/hooks/tanstack/query/useQueryInventory";
 import { useQueryState } from "nuqs";
 import { parseAsString, parseAsInteger } from "nuqs";
 import { GlassPaginationBasic } from "@/components/ui/glass-componenst/GlassPagination";
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 
 export const InventoryList = () => {
   const { addProducts } = useMedicineStorage();
@@ -30,7 +30,7 @@ export const InventoryList = () => {
   }
 
   if (!data.data.length)
-    return <AnimationEmpy title="No hay artículos en el inventario" />;
+    return <AnimationEmpty title="No hay artículos en el inventario" />;
 
   return (
     <section className="space-y-2.5">

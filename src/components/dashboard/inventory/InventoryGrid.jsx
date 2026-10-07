@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 import { useInventoryQueryAll } from "@/hooks/tanstack/query/useQueryInventory";
 import { InventoryCard } from "./InventoryCard";
 import { UpdateInventoryDialog } from "./UpdateInventoryDialog";
@@ -47,7 +47,7 @@ export function InventoryGrid() {
   }
 
   if (!inventory.data.length)
-    return <AnimationEmpy title="No hay artículos en el inventario" />;
+    return <AnimationEmpty title="No hay artículos en el inventario" />;
 
   return (
     <section className="space-y-2.5">

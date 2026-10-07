@@ -1,5 +1,5 @@
 import { ThreePoints } from "@/components/ui/loader/ThreePoints";
-import { AnimationEmpy } from "@/lottie-files/components/AnimationEmpy";
+import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 import { cn } from "@/utils/cn";
 
 export const Th = ({ className, text, ...props }) => {
@@ -79,7 +79,7 @@ export const Table = ({
     <section className={cn("relative overflow-x-auto min-h-114", className)}>
       {isLoading && <ThreePoints />}
       {!hasData ? (
-        <AnimationEmpy title={emptyTitle} />
+        <AnimationEmpty title={emptyTitle} />
       ) : (
         <table className="w-full text-left border-collapse" {...props}>
           {children}

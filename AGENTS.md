@@ -26,6 +26,13 @@ Next.js 16 App Router app (package `contribution-aleida`) for a family contribut
 - El virtual `contributions` de `user` (`src/database/user.js`) usa `foreignField: "createBy"` y alimenta `totalContributed`/`monthMoreActive` (perfil, stats, UserCard).
 - Las mutaciones de contribution/inventory/expense (además de patient) invalidan la query `main-patient` en `onSuccess` (`src/hooks/tanstack/mutation/`) para que las métricas se actualicen tras cada acción.
 
+## Eventos
+- Colección `event` (`src/database/event.js`): `type` (`contribution|inventory|expense`), `action` (`creado|actualizado|eliminado`), refs (`entityId`, `patientId`, `createBy` = actor), `description` y `amount`. zod en `src/schemas/event.js` (`eventBackendSchema` / `eventFrontedSchema`).
+- `Events.register` (`src/models/event.js`) compone la descripción en el servidor con `formatMoney` (`src/config/money.js`), valida con zod y **nunca rompe** la mutación principal (try/catch + `console.error`, devuelve `null`). Se invoca desde `Contribute`/`Expenses`/`Inventories` en create, update y delete — `Contribute` no tiene delete —; el webhook de pago queda cubierto porque llama a `Contribute.create`.
+- `GET /api/events` paginado (`page`/`limit`/`type`) **sin chequeo de sesión**, igual que los demás GET de lista: el prefetch SSR hace self-fetch sin cookies y lo rechazaría con 401. La UI queda protegida por el proxy en `/dashboard`.
+- Frontend: `services/event/` + `useQueryEvent` (queryKey `["events"]`); las mutaciones de contribution/inventory/expense invalidan `["events"]` en `onSuccess`.
+- `ActivityTimeline` (dashboard home) es client con `useSuspenseQuery`; `home/Index.jsx` lo envuelve en `Suspense`/`ThreePoints` y `dashboard/page.jsx` pre-fetchea con `HydrationBoundary`.
+
 ## Organización de componentes y archivos
 - Ruta por feature: `src/app/(home)/<feature>/page.jsx`; dashboard: `src/app/(home)/dashboard/<feature>/page.jsx`.
 - **Pages livianas**: importan `Index` de `@/components/<feature>/Index`, definen `titleData` (home) o `metadata` (dashboard) con title/subtitle/description y, en dashboard, pre-fetchean con `...QueryOptions` + `HydrationBoundary`. No llevan JSX de UI.

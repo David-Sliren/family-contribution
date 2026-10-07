@@ -25,6 +25,7 @@ Next.js 16 App Router app (package `contribution-aleida`) for a family contribut
 - `/api/main-patient` elige el paciente con `isMain: true` (fallback al primero; los forms todavía no pueden marcar `isMain`), lo resuelve con `getById` y devuelve los totales poblados. `MetricsGrid` (dashboard) y `Stats` (home) leen esos totales para "Fondo disponible" (`totalFunds − totalExpenses`), gastos y aportes del mes.
 - El virtual `contributions` de `user` (`src/database/user.js`) usa `foreignField: "createBy"` y alimenta `totalContributed`/`monthMoreActive` (perfil, stats, UserCard).
 - Las mutaciones de contribution/inventory/expense (además de patient) invalidan la query `main-patient` en `onSuccess` (`src/hooks/tanstack/mutation/`) para que las métricas se actualicen tras cada acción.
+- **Fondo para gastos**: `Expenses.create`/`update` rechazan si `amount > totalFunds − totalExpenses` (paciente con populate de `funds`/`expenses`; en update se suma el monto actual del gasto). Error `INSUFFICIENT_FUNDS` → 400 en `/api/dashboard/expenses` con mensaje en inglés (los errores del backend van en inglés); `AddExpenseDialog`/`UpdateExpenseDialog` validan antes con los totales de `main-patient` y muestran "Fondo disponible" en el form (copy en español).
 
 ## Eventos
 - Colección `event` (`src/database/event.js`): `type` (`contribution|inventory|expense`), `action` (`creado|actualizado|eliminado`), refs (`entityId`, `patientId`, `createBy` = actor), `description` y `amount`. zod en `src/schemas/event.js` (`eventBackendSchema` / `eventFrontedSchema`).

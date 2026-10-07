@@ -7,7 +7,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const useInvalidateExpense = () => {
   const queryClient = useQueryClient();
-  return () => queryClient.invalidateQueries({ queryKey: ["expenses"] });
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ["expenses"] });
+    queryClient.invalidateQueries({ queryKey: ["main-patient"] });
+  };
 };
 
 export const useCreateExpense = () => {

@@ -7,7 +7,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const useInvalidateInventory = () => {
   const queryClient = useQueryClient();
-  return () => queryClient.invalidateQueries({ queryKey: ["inventory"] });
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ["inventory"] });
+    queryClient.invalidateQueries({ queryKey: ["main-patient"] });
+  };
 };
 
 export const useCreateInventory = () => {

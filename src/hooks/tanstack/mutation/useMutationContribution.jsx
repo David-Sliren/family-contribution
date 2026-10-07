@@ -9,6 +9,7 @@ const useInvalidateContribution = (id, includeUser = false) => {
   return () => {
     queryClient.invalidateQueries({ queryKey: ["contributions"] });
     queryClient.invalidateQueries({ queryKey: ["users"] });
+    queryClient.invalidateQueries({ queryKey: ["main-patient"] });
     if (includeUser) queryClient.invalidateQueries({ queryKey: ["user", id] });
   };
 };

@@ -29,8 +29,9 @@ export const Stats = () => {
   const user = useUserQueryAll({ page: 1, limit: 20 });
   const mainPatient = useMainPatientQuery();
 
-  const wallet =
-    user.data?.data?.reduce((acc, item) => acc + item?.totalContributed, 0) ?? 0;
+  const totalFunds = mainPatient?.data?.totalFunds ?? 0;
+  const totalExpenses = mainPatient?.data?.totalExpenses ?? 0;
+  const availableFunds = Math.max(totalFunds - totalExpenses, 0);
 
   const countUsersActive =
     user.data?.data?.filter((item) => item?.contributions.length > 0).length ??
@@ -40,7 +41,7 @@ export const Stats = () => {
     {
       iconName: <LuWallet />,
       title: "Fondo Disponible",
-      more: `${formatMoney(wallet)}`,
+      more: `${formatMoney(availableFunds)}`,
     },
 
     {

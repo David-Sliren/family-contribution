@@ -7,19 +7,9 @@ import { PanelCard } from "@/components/ui/cards/Card";
 
 const events = [
   {
-    title: "Nuevo aporte registrado",
-    description: "Contribución destinada al cuidado general.",
-    time: "10:42",
-  },
-  {
-    title: "Stock actualizado",
-    description: "Se ajustó la existencia de Losartán.",
-    time: "Ayer",
-  },
-  {
-    title: "Gasto añadido",
-    description: "Comprobante cargado para consulta externa.",
-    time: "22 ago",
+    title: "Mas adelante se proporcionará un resumen de la actividad reciente.",
+    description: "",
+    time: "",
   },
 ];
 

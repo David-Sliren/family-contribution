@@ -1,6 +1,7 @@
 import { Inventory } from "@/database/inventory";
 import { Patient } from "@/database/patient";
 import { User } from "@/database/user";
+import { Events } from "@/models/event";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Inventories {
@@ -91,6 +92,13 @@ export class Inventories {
         throw customError;
       }
 
+      await Events.register({
+        type: "inventory",
+        action: "creado",
+        entity: newInventory,
+        actor: data.createBy,
+      });
+
       return newInventory;
     } catch (error) {
       throw error;
@@ -117,6 +125,13 @@ export class Inventories {
       }
 
       await inventory.deleteOne();
+
+      await Events.register({
+        type: "inventory",
+        action: "eliminado",
+        entity: inventory,
+        actor: data.userId,
+      });
 
       return inventory;
     } catch (error) {
@@ -150,6 +165,13 @@ export class Inventories {
         customError.code = "CANT_UPDATE_INVENTORY";
         throw customError;
       }
+
+      await Events.register({
+        type: "inventory",
+        action: "actualizado",
+        entity: updateInventory,
+        actor: data.updateBy,
+      });
 
       return updateInventory;
     } catch (error) {

@@ -1,6 +1,7 @@
 import { Expense } from "@/database/expense";
 import { Patient } from "@/database/patient";
 import { User } from "@/database/user";
+import { Events } from "@/models/event";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Expenses {
@@ -91,6 +92,13 @@ export class Expenses {
         throw customError;
       }
 
+      await Events.register({
+        type: "expense",
+        action: "creado",
+        entity: newExpense,
+        actor: data.createBy,
+      });
+
       return newExpense;
     } catch (error) {
       throw error;
@@ -117,6 +125,13 @@ export class Expenses {
       }
 
       await expense.deleteOne();
+
+      await Events.register({
+        type: "expense",
+        action: "eliminado",
+        entity: expense,
+        actor: data.userId,
+      });
 
       return expense;
     } catch (error) {
@@ -150,6 +165,13 @@ export class Expenses {
         customError.code = "CANT_UPDATE_EXPENSE";
         throw customError;
       }
+
+      await Events.register({
+        type: "expense",
+        action: "actualizado",
+        entity: updateExpense,
+        actor: data.updateBy,
+      });
 
       return updateExpense;
     } catch (error) {

@@ -1,5 +1,6 @@
 import { Contribution } from "@/database/contribution";
 import { User } from "@/database/user";
+import { Events } from "@/models/event";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Contribute {
@@ -87,6 +88,13 @@ export class Contribute {
         throw customError;
       }
 
+      await Events.register({
+        type: "contribution",
+        action: "creado",
+        entity: newContribution,
+        actor: data.createBy,
+      });
+
       return newContribution;
     } catch (error) {
       throw error;
@@ -113,6 +121,13 @@ export class Contribute {
         customError.code = "NOT_FOUND_CONTRIBUTION";
         throw customError;
       }
+
+      await Events.register({
+        type: "contribution",
+        action: "actualizado",
+        entity: contribution,
+        actor: data.updateBy,
+      });
 
       return contribution;
     } catch (error) {

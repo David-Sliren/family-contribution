@@ -10,6 +10,7 @@ const useInvalidateExpense = () => {
   return () => {
     queryClient.invalidateQueries({ queryKey: ["expenses"] });
     queryClient.invalidateQueries({ queryKey: ["main-patient"] });
+    queryClient.invalidateQueries({ queryKey: ["events"] });
   };
 };
 

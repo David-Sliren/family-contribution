@@ -10,6 +10,7 @@ const useInvalidateInventory = () => {
   return () => {
     queryClient.invalidateQueries({ queryKey: ["inventory"] });
     queryClient.invalidateQueries({ queryKey: ["main-patient"] });
+    queryClient.invalidateQueries({ queryKey: ["events"] });
   };
 };
 

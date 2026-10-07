@@ -1,3 +1,4 @@
+import { formatMoney } from "@/config/money";
 import { Expense } from "@/database/expense";
 import { Patient } from "@/database/patient";
 import { User } from "@/database/user";
@@ -75,11 +76,23 @@ export class Expenses {
         throw customError;
       }
 
-      const patient = await Patient.findById(data.patientId);
+      const patient = await Patient.findById(data.patientId)
+        .populate("funds")
+        .populate("expenses");
 
       if (!patient) {
         const customError = new Error("patient not found");
         customError.code = "PATIENT_NOT_FOUND";
+        throw customError;
+      }
+
+      const available = patient.totalFunds - patient.totalExpenses;
+
+      if (data.amount > available) {
+        const customError = new Error(
+          `insufficient funds, only ${formatMoney(available)} available`,
+        );
+        customError.code = "INSUFFICIENT_FUNDS";
         throw customError;
       }
 
@@ -154,6 +167,37 @@ export class Expenses {
         const customError = new Error("user unauthorized");
         customError.code = "USER_UNAUTHORIZED";
         throw customError;
+      }
+
+      const currentExpense = await Expense.findById(id);
+
+      if (!currentExpense) {
+        const customError = new Error("cant update expense");
+        customError.code = "CANT_UPDATE_EXPENSE";
+        throw customError;
+      }
+
+      if (currentExpense.patientId) {
+        const patient = await Patient.findById(currentExpense.patientId)
+          .populate("funds")
+          .populate("expenses");
+
+        if (!patient) {
+          const customError = new Error("patient not found");
+          customError.code = "PATIENT_NOT_FOUND";
+          throw customError;
+        }
+
+        const available =
+          patient.totalFunds - patient.totalExpenses + currentExpense.amount;
+
+        if (data.amount > available) {
+          const customError = new Error(
+            `insufficient funds, only ${formatMoney(available)} available`,
+          );
+          customError.code = "INSUFFICIENT_FUNDS";
+          throw customError;
+        }
       }
 
       const updateExpense = await Expense.findByIdAndUpdate(id, data, {

@@ -67,6 +67,14 @@ export const PUT = async (req, { params }) => {
       return Response.json({ error: error.message }, { status: 400 });
     }
 
+    if (error.code === "INSUFFICIENT_FUNDS") {
+      return Response.json({ error: error.message }, { status: 400 });
+    }
+
+    if (error.code === "PATIENT_NOT_FOUND") {
+      return Response.json({ error: error.message }, { status: 404 });
+    }
+
     if (error.code === "USER_UNAUTHORIZED") {
       return Response.json({ error: error.message }, { status: 401 });
     }

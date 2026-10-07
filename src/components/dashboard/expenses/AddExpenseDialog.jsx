@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { formatMoney } from "@/config/money";
 import { FieldType } from "@/components/ui/form/inputs/FieldType";
 import { useHookForm } from "@/hooks/useHookForm";
 import { DialogAdd } from "@/components/ui/dialogs/DialogAdd";
@@ -35,8 +36,14 @@ export function AddExpenseDialog() {
     if (isSuccess) dialogRef.current?.close();
   }, [isSuccess, dialogRef]);
 
+  const available =
+    (patientData?.totalFunds ?? 0) - (patientData?.totalExpenses ?? 0);
+
   async function handleSubmitForm(data) {
-    setErrorName("");
+    if (Number(data.amount) > available) {
+      setErrorName(`Fondo insuficiente, solo quedan ${formatMoney(available)}`);
+      return;
+    }
 
     try {
       await mutateAsync(data);
@@ -57,7 +64,16 @@ export function AddExpenseDialog() {
         handdleFormMain={handleSubmit(handleSubmitForm)}
         errorNotification={errorName}
         modalRef={dialogRef}
+        handdlerClose={() => {
+          setErrorName("");
+          reset();
+        }}
       >
+        <p className="m-0 text-[13px] font-body text-primary font-light pb-2">
+          {available > 0
+            ? `Fondo disponible: ${formatMoney(available)}`
+            : "No hay fondos disponibles"}
+        </p>
         <div className="flex flex-col flex-wrap md:flex-row gap-2">
           <FieldHidden
             name={`${patientData?.name} ${patientData?.lastName}`}

@@ -2,7 +2,12 @@ import { useUserStore } from "@/components/provaider/AuthProvider";
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { LuLayoutDashboard, LuLogOut, LuUser } from "react-icons/lu";
+import {
+  LuLayoutDashboard,
+  LuLogOut,
+  LuSettings,
+  LuUser,
+} from "react-icons/lu";
 
 export const DropDown = ({ id, username = "", email = "", handleDropdown }) => {
   const { logout } = useUserStore((state) => state.logout);
@@ -10,7 +15,7 @@ export const DropDown = ({ id, username = "", email = "", handleDropdown }) => {
 
   async function handleLogout() {
     try {
-      handleDropdown;
+      handleDropdown();
       logout();
       window.location.href = "/";
     } catch {
@@ -42,6 +47,15 @@ export const DropDown = ({ id, username = "", email = "", handleDropdown }) => {
         >
           <LuUser size={16} />
           Mi Perfil
+        </Link>
+
+        <Link
+          href={`/profile/config`}
+          onClick={handleDropdown}
+          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer"
+        >
+          <LuSettings size={16} />
+          Ajustes
         </Link>
         {user && user?.role == "admin" && (
           <Link

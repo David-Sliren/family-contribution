@@ -14,14 +14,7 @@ export const userBackendSchema = z.object({
     .trim(),
 
   relationship: z.enum(
-    [
-      "hijo",
-      "sobrino",
-      "esposo",
-      "hermano",
-      "externo",
-      "nieto",
-    ],
+    ["hijo", "sobrino", "esposo", "hermano", "externo", "nieto"],
     'Opcion invalida se requiere uno de estos campos "hijo", "sobrino", "esposo", "hermano" "externo" "nieto"',
   ),
   tel: z
@@ -42,6 +35,25 @@ export const userBackendSchema = z.object({
 
 export const userFrontedSchema = userBackendSchema
   .extend({
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "La contraseña no coincide",
+    path: ["confirmPassword"],
+  });
+
+export const profileFrontedSchema = userBackendSchema.pick({
+  name: true,
+  username: true,
+  relationship: true,
+});
+
+export const passwordFrontedSchema = userBackendSchema
+  .pick({ password: true })
+  .extend({
+    currentPassword: z
+      .string("Se requiere la contraseña actual")
+      .min(1, "Escribe tu contraseña actual"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

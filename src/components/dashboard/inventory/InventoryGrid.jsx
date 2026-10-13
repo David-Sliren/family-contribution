@@ -51,7 +51,7 @@ export function InventoryGrid() {
 
   return (
     <section className="space-y-2.5">
-      <section className="flex flex-col justify-between min-h-140 max-h-140 overflow-y-auto scroll-hiden space-y-4 pb-10">
+      <section className="flex flex-col justify-between min-h-140 sm:overflow-y-auto scroll-hiden space-y-4 pb-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <UpdateInventoryDialog
             inventory={inventoryToEdit}

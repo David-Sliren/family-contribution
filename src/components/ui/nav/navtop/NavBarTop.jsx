@@ -49,8 +49,8 @@ export const NavBarTop = () => {
 
   const { setIsOpenCart, products } = useMedicineStorage();
   return (
-    <nav className="bg-slate-50 backdrop-blur-xl border-b border-gray-500/80 xl:border-gray-600/30">
-      <div className="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+    <nav className="container-nav backdrop-blur-3xl mx-auto max-w-full transition-all duration-200 ease-linear">
+      <nav className="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl">
         <div className="flex items-center gap-8">
           <Link
             href="/"
@@ -93,7 +93,7 @@ export const NavBarTop = () => {
             </Link>
           )}
         </div>
-      </div>
+      </nav>
     </nav>
   );
 };

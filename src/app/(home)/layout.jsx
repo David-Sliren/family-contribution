@@ -11,10 +11,10 @@ export default async function layout({ children }) {
 
   return (
     <AuthProvider initialState={session?.user ?? null}>
-      <header className="sticky top-0 z-50">
+      <header className="sticky top-0 z-50 [container-type:scroll-state]">
         <NavBarTop />
       </header>
-      <main className="bg-slate-50 relative">
+      <main className="relative">
         {children}
         <NavBarBottom />
       </main>

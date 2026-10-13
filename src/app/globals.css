@@ -86,7 +86,7 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -113,4 +113,10 @@ body {
     var(--color-primary),
     var(--color-primary-container)
   );
+}
+
+@container scroll-state(stuck: top) {
+  .container-nav {
+    @apply sm:max-w-[30rem] md:max-w-[60rem] sm:rounded-full sm:relative sm:top-4 shadow-md sm:shadow-2xl;
+  }
 }

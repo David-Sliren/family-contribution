@@ -87,7 +87,7 @@ export const AvatarUpload = ({
     <form
       onSubmit={handleSubmit}
       className={cn(
-        "flex flex-col sm:flex-row items-center sm:items-start gap-6 bg-slate-50/70 p-5 rounded-xl border border-slate-100",
+        "flex flex-col sm:flex-row items-center sm:items-start gap-6 bg-slate-50/70 p-5 rounded-xl border border-slate-100 animate-fade-in-up",
         className,
       )}
     >

@@ -18,7 +18,7 @@ export const Index = ({ title, subtitle, description }) => {
 
   return (
     <PageLayout title={title} subtitle={subtitle} description={description}>
-      <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 sm:p-8">
+      <section className="bg-white rounded-2xl sm:border border-slate-200/80 shadow-sm sm:p-8">
         <div className="flex flex-col md:flex-row gap-6">
           <ConfigSidebar />
           <div className="flex-1 min-w-0">{renderPanel()}</div>

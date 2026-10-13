@@ -61,7 +61,7 @@ export const ConfigPerfil = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-2">
       <AvatarUpload
         img={user?.img || user?.image || DEFAULT_IMG}
         onSave={handleSaveAvatar}

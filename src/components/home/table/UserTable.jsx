@@ -1,7 +1,10 @@
+"use client";
+
 import { UserRow } from "./UserRow";
 import { useContributionQueryAll } from "@/hooks/tanstack/query/useQueryContribution";
-import { ThreePoints } from "@/components/ui/loader/ThreePoints";
 import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
+import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
+import { FooterButton } from "@/components/ui/table/FooterButton";
 
 const HEAD_ROW = [
   {
@@ -29,17 +32,46 @@ const HeadRow = ({ className, text }) => {
   );
 };
 
-export const UserTable = ({ startIndex, endIndex }) => {
-  const { data, isLoading } = useContributionQueryAll({ limit: 20 });
-  const visibleUsers = data?.data?.slice(startIndex, endIndex) ?? [];
+export const UserTable = () => {
+  const [purpose] = useQueryState("purpose", parseAsString.withDefault(""));
+  const [method] = useQueryState("method", parseAsString.withDefault(""));
+  const [status] = useQueryState("status", parseAsString.withDefault(""));
+  const [page, setPage] = useQueryState(
+    "page",
+    parseAsInteger
+      .withDefault(1)
+      .withOptions({ clearOnDefault: true, scroll: false }),
+  );
+
+  function handleNextPage() {
+    setPage((old) => old + 1);
+  }
+
+  function handlePrevPage() {
+    setPage((old) => Math.max(old - 1, 1));
+  }
+
+  const { data: contributions } = useContributionQueryAll({
+    purpose,
+    method,
+    status,
+    page,
+    limit: 10,
+  });
+
+  const pagination = contributions.pagination;
+
+  if (contributions.data.length === 0)
+    return (
+      <section className="relative overflow-x-auto min-h-114">
+        <AnimationEmpty />
+      </section>
+    );
 
   return (
-    <section className="relative overflow-x-auto min-h-114">
-      {isLoading && <ThreePoints />}
-      {visibleUsers.length === 0 ? (
-        <AnimationEmpty />
-      ) : (
-        <table className="w-full text-left border-collapse">
+    <section className="flex flex-col justify-between relative min-h-114 overflow-hidden">
+      <div className="flex-1 w-full text-left overflow-x-auto scrollbar-none">
+        <table className="w-full">
           <thead>
             <tr className="bg-surface-container-low/50">
               {HEAD_ROW.map((item) => (
@@ -52,7 +84,7 @@ export const UserTable = ({ startIndex, endIndex }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-surface-container-low">
-            {visibleUsers.map((item) => (
+            {contributions.data.map((item) => (
               <UserRow
                 key={item.id}
                 id={item.createBy.id}
@@ -66,7 +98,15 @@ export const UserTable = ({ startIndex, endIndex }) => {
             ))}
           </tbody>
         </table>
-      )}
+      </div>
+      <FooterButton
+        current={page}
+        isFirstPage={!pagination.hasPrevPage}
+        isLastPage={!pagination.hasNextPage}
+        prev={handlePrevPage}
+        next={handleNextPage}
+        last={pagination.totalPages}
+      />
     </section>
   );
 };

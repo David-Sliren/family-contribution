@@ -1,25 +1,9 @@
-"use client";
-
 import { LuDownload, LuListFilter } from "react-icons/lu";
-
+import { Suspense } from "react";
 import { UserTable } from "./UserTable";
-import { FooterButton } from "./FooterButton";
-import { usePagination } from "@/hooks/usePagination";
-import { useContributionQueryAll } from "@/hooks/tanstack/query/useQueryContribution";
+import { ThreePoints } from "@/components/ui/loader/ThreePoints";
 
 export const ContributionTable = () => {
-  const { data } = useContributionQueryAll({ limit: 20 });
-  const {
-    page,
-    endIndex,
-    startIndex,
-    isFirstPage,
-    islastPage,
-    totalPages,
-    prevPage,
-    nextPage,
-  } = usePagination(data?.data?.length ?? 1, 4);
-
   return (
     <section className="py-24 px-6">
       <div className="max-w-screen-2xl mx-auto">
@@ -45,15 +29,9 @@ export const ContributionTable = () => {
           </div>
         </div>
         <div className=" rounded-[2.5rem] overflow-hidden tonal-shadow-sm border border-outline-variant/10 -mx-4 sm:mx-0">
-          <UserTable startIndex={startIndex} endIndex={endIndex} />
-          <FooterButton
-            prev={prevPage}
-            next={nextPage}
-            last={totalPages}
-            current={page + 1}
-            isFirstPage={isFirstPage}
-            isLastPage={islastPage}
-          />
+          <Suspense fallback={<ThreePoints />}>
+            <UserTable />
+          </Suspense>
         </div>
       </div>
     </section>

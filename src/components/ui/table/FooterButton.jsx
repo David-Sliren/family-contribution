@@ -1,15 +1,22 @@
+import { cn } from "@/utils/cn";
 import React from "react";
 
 export const FooterButton = ({
   prev,
   next,
-  current = 4,
+  current = 0,
   last = 12,
   isFirstPage,
   isLastPage,
+  className = "",
 }) => {
   return (
-    <div className="px-8 py-6 bg-surface-container-low/20 flex justify-between items-center">
+    <div
+      className={cn(
+        "px-8 py-6 bg-surface-container-low/20 flex justify-between items-center w-full",
+        className,
+      )}
+    >
       <p className="text-sm text-on-surface-variant font-medium">
         pagina {current} de {last}
       </p>

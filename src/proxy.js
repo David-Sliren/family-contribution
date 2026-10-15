@@ -8,13 +8,17 @@ export const proxy = async (req) => {
   const isApiRoute = pathname.startsWith("/api");
   const isAuthRoute = pathname.includes("auth");
   const isDashboardRoute = pathname.includes("dashboard");
+  // los GET de /api/dashboard/* se sirven en SSR (self-fetch sin cookies),
+  // igual que /api/events y /api/contributions: solo se blindan mutaciones
+  const isDashboardRead =
+    isApiRoute && isDashboardRoute && req.method === "GET";
 
   const deny = (error, status) =>
     isApiRoute
       ? Response.json({ error }, { status })
       : NextResponse.redirect(new URL("/", req.url));
 
-  if (!session && !isAuthRoute) {
+  if (!session && !isAuthRoute && !isDashboardRead) {
     return deny("Token invalid", 401);
   }
 
@@ -36,6 +40,7 @@ export const config = {
     "/profile",
     "/auth/:path*",
     "/dashboard/:path*",
+    "/api/dashboard/:path*",
     "/api/files/:path*",
   ],
 };

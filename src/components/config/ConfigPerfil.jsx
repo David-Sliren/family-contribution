@@ -11,6 +11,8 @@ import { authClient } from "@/utils/auth-client";
 import { useState } from "react";
 import { AvatarUpload } from "../ui/avatar/AvatarUpload";
 import { DEFAULT_IMG } from "@/constants/forDefault";
+import { uploadFile } from "@/utils/uploadFile";
+import { FOLDER_IMAGES } from "@/constants/sizes";
 
 export const ConfigPerfil = () => {
   const { user } = useUserStore();
@@ -25,10 +27,34 @@ export const ConfigPerfil = () => {
     },
   });
 
-  async function handleSaveAvatar() {
+  async function handleSaveAvatar(file) {
+    const folder = FOLDER_IMAGES[0].name;
+
+    let url;
+
+    try {
+      ({ url } = await uploadFile({ file, folder }));
+    } catch {
+      setNotification({
+        message: "No se pudo subir la imagen, intente nuevamente",
+        type: "error",
+      });
+      throw new Error("upload failed");
+    }
+
+    const { error } = await authClient.updateUser({ image: url });
+
+    if (error) {
+      setNotification({
+        message: "No se pudo guardar la imagen de perfil",
+        type: "error",
+      });
+      throw new Error("save failed");
+    }
+
     setNotification({
-      message: "Estará disponible próximamente",
-      type: "info",
+      message: "Imagen de perfil actualizada",
+      type: "success",
     });
   }
 
@@ -63,7 +89,7 @@ export const ConfigPerfil = () => {
   return (
     <div className="flex flex-col gap-2">
       <AvatarUpload
-        img={user?.img || user?.image || DEFAULT_IMG}
+        image={user?.image || DEFAULT_IMG}
         onSave={handleSaveAvatar}
       />
       <FormLayout title="Información personal" errorNotification={isError}>

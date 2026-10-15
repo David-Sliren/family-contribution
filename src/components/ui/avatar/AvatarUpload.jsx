@@ -1,15 +1,15 @@
 "use client";
 import { blurColors } from "@/constants/bgBase64";
+import { IMAGE_MIME_TYPES, fileImageFronted } from "@/schemas/file";
 import { cn } from "@/utils/cn";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { LuCamera, LuUser } from "react-icons/lu";
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const MAX_SIZE_MB = 3;
+const fileSignature = (f) => `${f.name}-${f.size}`;
 
 export const AvatarUpload = ({
-  img = "",
+  image = "",
   alt = "Avatar",
   title = "Foto de perfil",
   description = "Formatos permitidos: JPG, PNG o WebP. Tamaño máximo: 3 MB.",
@@ -21,6 +21,7 @@ export const AvatarUpload = ({
 }) => {
   const inputRef = useRef(null);
   const previewRef = useRef("");
+  const savedRef = useRef("");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [error, setError] = useState("");
@@ -32,7 +33,7 @@ export const AvatarUpload = ({
     };
   }, []);
 
-  const currentImg = preview || img;
+  const currentImg = preview || image;
 
   function handleOpenPicker() {
     inputRef.current?.click();
@@ -44,13 +45,16 @@ export const AvatarUpload = ({
 
     if (!selected) return;
 
-    if (!ALLOWED_TYPES.includes(selected.type)) {
-      setError("Formato no permitido, usa JPG, PNG o WebP");
+    const parsed = fileImageFronted.safeParse({ file: selected });
+
+    if (!parsed.success) {
+      setError(parsed.error.issues[0].message);
       return;
     }
 
-    if (selected.size > MAX_SIZE_MB * 1024 * 1024) {
-      setError(`La imagen no debe superar los ${MAX_SIZE_MB} MB`);
+    if (savedRef.current === fileSignature(selected)) {
+      handleRemove();
+      setError("Esta imagen ya fue guardada, elige otra");
       return;
     }
 
@@ -78,6 +82,12 @@ export const AvatarUpload = ({
     try {
       setIsSubmitting(true);
       await onSave(file);
+
+      savedRef.current = fileSignature(file);
+      setFile(null);
+      setError("");
+    } catch {
+      // el padre ya notifica el error; se mantiene la selección para reintentar
     } finally {
       setIsSubmitting(false);
     }
@@ -129,7 +139,7 @@ export const AvatarUpload = ({
             <input
               ref={inputRef}
               onChange={handleChange}
-              accept={ALLOWED_TYPES.join(",")}
+              accept={IMAGE_MIME_TYPES.join(",")}
               className="hidden"
               type="file"
             />

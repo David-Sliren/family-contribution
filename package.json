@@ -17,6 +17,7 @@
     "bcrypt": "^6.0.0",
     "better-auth": "^1.7.6",
     "better-auth-mongoose": "^0.1.2",
+    "cloudinary": "^2.11.0",
     "clsx": "2.1.1",
     "date-fns": "4.1.0",
     "jose": "^6.2.9",

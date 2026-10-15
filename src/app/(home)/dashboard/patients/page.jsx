@@ -10,10 +10,11 @@ const metadata = {
     "Registra a los pacientes de tu familia y mantiene actualizada su información clínica y de contacto.",
 };
 
-export default async function PatientsDashboard() {
+export default async function PatientsDashboard({ searchParams }) {
+  const params = await searchParams;
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery(allPatientQueryOptions());
+  await queryClient.prefetchQuery(allPatientQueryOptions(params));
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

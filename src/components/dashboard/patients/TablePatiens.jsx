@@ -35,7 +35,7 @@ const RowPatient = ({ patient, handdler }) => {
 };
 
 export const TablePatiens = () => {
-  const { data, isLoading } = useAllPatientQuery();
+  const { data: patients } = useAllPatientQuery();
   const [editPatient, setEditPatient] = useState({});
   const dialogRef = useRef(null);
   const {
@@ -47,9 +47,9 @@ export const TablePatiens = () => {
     isFirstPage,
     islastPage,
     totalPages,
-  } = usePagination(data?.length ?? 1, 10);
+  } = usePagination(patients.data.length ?? 1, 10);
 
-  const viewData = data.slice(startIndex, endIndex);
+  const viewData = patients.data.slice(startIndex, endIndex);
 
   function handdlerEditPatient(patient) {
     setEditPatient(patient);
@@ -60,8 +60,7 @@ export const TablePatiens = () => {
     <>
       <Table
         className="rounded-2xl"
-        isLoading={isLoading}
-        hasData={data?.length}
+        hasData={patients.data.length}
         emptyTitle="No hay pacientes"
       >
         <Thead className="bg-primary-container">

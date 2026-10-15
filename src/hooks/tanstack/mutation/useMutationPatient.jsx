@@ -1,39 +1,38 @@
-import { createPatient, updatePatient } from "@/services/patient/patient";
+import {
+  createPatient,
+  setMainPatient,
+  updatePatient,
+} from "@/services/patient/patient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const useInvalidatePatient = (id) => {
+// invalida las queries de pacientes y del paciente principal, para que la
+// grilla, el PortCard (home) y el Sidebar se refresquen tras cada cambio
+const useInvalidatePatient = () => {
   const queryClient = useQueryClient();
-  const invalidate = () =>
-    queryClient.invalidateQueries({
-      predicate: (query) => {
-        const mainPatient = queryClient.getQueryData(["main-patient"]);
-        const isMainPatientId = mainPatient?.id === id;
 
-        return isMainPatientId
-          ? query.queryKey[0] === "main-patient" ||
-              query.queryKey[0] === "patients"
-          : query.queryKey[0] === "patients";
-      },
-    });
-
-  return {
-    invalidateAll: () => {
-      queryClient.invalidateQueries({ queryKey: ["main-patient"] });
-      queryClient.invalidateQueries({ queryKey: ["patients"] });
-    },
-    invalidate,
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ["main-patient"] });
+    queryClient.invalidateQueries({ queryKey: ["patients"] });
   };
 };
 
 export const useCreatePatient = () => {
-  const { invalidateAll } = useInvalidatePatient();
-  return useMutation({ mutationFn: createPatient, onSuccess: invalidateAll });
+  const invalidate = useInvalidatePatient();
+  return useMutation({ mutationFn: createPatient, onSuccess: invalidate });
 };
 
 export const useUpdatePatient = (id) => {
-  const { invalidate } = useInvalidatePatient(id);
+  const invalidate = useInvalidatePatient();
   return useMutation({
     mutationFn: (data) => updatePatient(id, data),
+    onSuccess: invalidate,
+  });
+};
+
+export const useSetMainPatient = () => {
+  const invalidate = useInvalidatePatient();
+  return useMutation({
+    mutationFn: (id) => setMainPatient(id),
     onSuccess: invalidate,
   });
 };

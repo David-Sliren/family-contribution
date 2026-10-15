@@ -35,7 +35,7 @@ export const UserMenu = () => {
         <Image
           alt="User profile avatar"
           className="w-9 h-9 rounded-full object-cover cursor-pointer"
-          src={user?.img || "/family-img/Default.png"}
+          src={user?.image || "/family-img/Default.png"}
           height={500}
           width={500}
           placeholder="blur"

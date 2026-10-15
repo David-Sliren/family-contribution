@@ -24,7 +24,7 @@ export const userSchema = new Schema(
       enum: ["hijo", "sobrino", "esposo", "hermano", "externo", "nieto"],
       required: true,
     },
-    img: { type: String, default: "" },
+    image: { type: String, default: "" },
     tel: { type: String, required: true },
     isDisabled: { type: Boolean, default: false },
   },

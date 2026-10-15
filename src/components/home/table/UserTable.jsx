@@ -93,7 +93,7 @@ export const UserTable = () => {
                 relationship={item.createBy.relationship}
                 userState={item.status}
                 userName={item.createBy.name}
-                userImg={item.createBy.img}
+                userImg={item.createBy.image}
               />
             ))}
           </tbody>

@@ -12,7 +12,7 @@ export class Contribute {
         .populate("createBy", {
           name: 1,
           relationship: 1,
-          img: 1,
+          image: 1,
         })
         .sort("-createdAt")
         .skip((paginate.page - 1) * paginate.limit)

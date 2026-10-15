@@ -147,13 +147,13 @@ export function Sidebar() {
         >
           <article className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full grid place-items-center overflow-hidden">
-              {!mainPatient?.img ? (
+              {!mainPatient?.image ? (
                 <span className="flex justify-center items-center bg-primary-container size-full text-xs text-on-primary-container capitalize">
                   {mainPatient?.name ? mainPatient?.name[0] : "i"}
                 </span>
               ) : (
                 <Image
-                  src={mainPatient?.img}
+                  src={mainPatient?.image}
                   placeholder="blur"
                   blurDataURL={blurColors.purple}
                   alt="Paciente principal"

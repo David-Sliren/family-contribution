@@ -20,7 +20,7 @@ const patientSchema = new Schema(
   {
     name: { type: String, required: true },
     lastName: { type: String, required: true },
-    img: { type: String, default: "" },
+    image: { type: String, default: "" },
     age: { type: Number, required: true },
     goal: { type: Number, required: true },
     reason: { type: String, required: true },

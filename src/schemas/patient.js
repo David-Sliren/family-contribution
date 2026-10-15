@@ -3,7 +3,7 @@ import z from "zod";
 export const patientSchema = z.object({
   name: z.string().min(3, "Debe tener minimo 3 caracteres"),
   lastName: z.string().min(3, "Debe tener minimo 3 caracteres"),
-  img: z
+  image: z
     .string()
     .min(3, "Debe tener minimo 3 caracteres")
     .optional()

@@ -11,9 +11,9 @@ export const UserCard = ({ user, handdler }) => {
     <article className="relative flex items-center justify-between w-full p-4 rounded-2xl text-sm hover:bg-surface-container-low transition-all duration-200">
       <div className="flex items-center gap-4">
         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold font-headline-md overflow-hidden">
-          {user?.img ? (
+          {user?.image ? (
             <Image
-              src={user?.img}
+              src={user?.image}
               height={200}
               width={200}
               placeholder="blur"

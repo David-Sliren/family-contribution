@@ -2,9 +2,26 @@ import { Patients } from "@/models/patient";
 import { patientSchema } from "@/schemas/patient";
 import { getSession } from "@/utils/getUserData";
 
-export const GET = async (_req) => {
+export const GET = async (req) => {
+  const searchParams = req.nextUrl.searchParams;
+  const search = searchParams.get("search");
+  const page = searchParams.get("page");
+  const limit = searchParams.get("limit");
+
+  const paginate = { page: 1, limit: 10 };
+  const query = {};
+
+  if (page) paginate.page = Number(page);
+  if (limit) paginate.limit = Number(limit);
+
+  if (search)
+    query.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { lastName: { $regex: search, $options: "i" } },
+    ];
+
   try {
-    const patient = await Patients.getAll();
+    const patient = await Patients.getAll(query, paginate);
 
     return Response.json(patient);
   } catch (error) {

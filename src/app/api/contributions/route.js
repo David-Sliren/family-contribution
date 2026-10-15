@@ -41,7 +41,7 @@ export const POST = async (req) => {
 
   const body = await req.json();
 
-  const patients = await Patients.getAll();
+  const { data: patients } = await Patients.getAll();
   const mainPatient = patients.find((patient) => patient.isMain) ?? patients[0];
 
   if (!mainPatient)

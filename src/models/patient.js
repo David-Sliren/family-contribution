@@ -6,10 +6,17 @@ import { User } from "@/database/user";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Patients {
-  static async getAll() {
+  // paginate.limit en 0 (default) equivale a sin límite, igual que el find({}) anterior
+  static async getAll(querys = {}, paginate = { page: 1, limit: 0 }) {
     await conectToData();
 
-    const patients = await Patient.find({});
+    const [patients, totalItems] = await Promise.all([
+      Patient.find(querys)
+        .sort("-createdAt")
+        .skip((paginate.page - 1) * paginate.limit)
+        .limit(paginate.limit),
+      Patient.countDocuments(querys),
+    ]);
 
     if (!patients) {
       const customError = new Error("not found patients");
@@ -17,7 +24,22 @@ export class Patients {
       throw customError;
     }
 
-    return patients;
+    const totalPages =
+      totalItems === 1 ? 1 : Math.ceil(totalItems / paginate.limit);
+    const hasNextPage = paginate.page < totalPages;
+    const hasPrevPage = paginate.page > 1;
+
+    return {
+      data: patients,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: paginate.page,
+        limit: paginate.limit,
+        hasNextPage,
+        hasPrevPage,
+      },
+    };
   }
 
   static async getById(id) {
@@ -57,6 +79,10 @@ export class Patients {
         customError.code = "USER_UNAUTHORIZED";
         throw customError;
       }
+
+      // el primer paciente (o el primero en no tener principal) queda como principal
+      const hasMain = await Patient.exists({ isMain: true });
+      if (!hasMain) data.isMain = true;
 
       const savePatient = new Patient(data);
       const newPatient = await savePatient.save();
@@ -120,6 +146,48 @@ export class Patients {
       }
 
       return updatePatient;
+    } catch (error) {
+      if (error.name == "CastError") {
+        const customError = new Error("invalid id");
+        customError.code = "INVALID_ID";
+        throw customError;
+      }
+
+      throw error;
+    }
+  }
+
+  static async setMain({ id, updateBy }) {
+    await conectToData();
+
+    try {
+      const user = await User.findById(updateBy);
+
+      if (!user || (user && user.role !== "admin")) {
+        const customError = new Error("user unathorized");
+        customError.code = "USER_UNAUTHORIZED";
+        throw customError;
+      }
+
+      // solo puede haber un paciente principal: se quita el principal anterior
+      await Patient.updateMany(
+        { _id: { $ne: id }, isMain: true },
+        { $set: { isMain: false } },
+      );
+
+      const patient = await Patient.findByIdAndUpdate(
+        id,
+        { $set: { isMain: true, updateBy } },
+        { new: true },
+      );
+
+      if (!patient) {
+        const customError = new Error("cant update patient");
+        customError.code = "CANT_UPDATE_PATIENT";
+        throw customError;
+      }
+
+      return patient;
     } catch (error) {
       if (error.name == "CastError") {
         const customError = new Error("invalid id");

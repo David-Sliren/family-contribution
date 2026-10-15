@@ -2,7 +2,7 @@ import { Patients } from "@/models/patient";
 
 export const GET = async (_req) => {
   try {
-    const patients = await Patients.getAll();
+    const { data: patients } = await Patients.getAll();
     const main = patients.find((patient) => patient.isMain) ?? patients[0];
 
     if (!main) return Response.json({});

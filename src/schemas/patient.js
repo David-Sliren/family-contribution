@@ -23,4 +23,6 @@ export const patientSchema = z.object({
 
 export const patientSchemaFrontend = patientSchema.omit({ createBy: true });
 
-export const patientUpdateSchema = patientSchema.omit({ createBy: true });
+export const patientUpdateSchema = patientSchema
+  .omit({ createBy: true })
+  .partial();

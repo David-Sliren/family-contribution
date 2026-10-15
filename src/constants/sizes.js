@@ -6,7 +6,7 @@ export const FOLDER_IMAGES = [
   },
   {
     name: "cover",
-    with: 1280,
-    height: 960,
+    with: 960,
+    height: 1280,
   },
 ];

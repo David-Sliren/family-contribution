@@ -8,3 +8,6 @@ export const PORT = process.env.PORT || 3000;
 export const VERCEL_URL =
   process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`;
 export const BASE_URL = process.env.BASE_URL || VERCEL_URL;
+export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+export const CLOUDINARY_APY_KEY = process.env.CLOUDINARY_APY_KEY;
+export const CLOUDINARY_APY_SECRECT = process.env.CLOUDINARY_APY_SECRECT;

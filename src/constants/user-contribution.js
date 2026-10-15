@@ -1,4 +1,3 @@
-import { defaultDate } from "@/config/dates";
 import { sortByDate } from "@/utils/sorts";
 
 const IMG_DEFAUL = "/family-img/Default.png";

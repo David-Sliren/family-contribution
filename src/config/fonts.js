@@ -1,6 +1,4 @@
 import {
-  Geist,
-  Geist_Mono,
   Inter,
   Montserrat_Alternates,
 } from "next/font/google";

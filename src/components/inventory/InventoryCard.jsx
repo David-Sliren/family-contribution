@@ -7,7 +7,6 @@ import {
   LuClipboardPlus,
   LuPill,
   LuSparkle,
-  LuSpeaker,
   LuTriangleAlert,
 } from "react-icons/lu";
 import { defaultDate } from "@/config/dates";

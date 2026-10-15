@@ -36,7 +36,7 @@ export function AddContributionDialog({ user, dialogRef }) {
     try {
       await mutateAsync(data);
       setNotification({ message: "Contribucion añadida" });
-      reset();
+      reset({ createBy: user.id });
     } catch (error) {
       setErrorName(error);
     }

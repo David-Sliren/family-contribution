@@ -21,9 +21,13 @@ export const getAllContribution = async (queryParams) => {
   }
 };
 
+// solo para uso del dashboard (admin); los usuarios aportan por la pasarela
 export const createContribution = async (contributionData) => {
   try {
-    const { data } = await baseUrlContribution.post("/", contributionData);
+    const { data } = await baseUrlContributionDashboard.post(
+      "/",
+      contributionData,
+    );
     return data;
   } catch (error) {
     throw getServiceError(error);

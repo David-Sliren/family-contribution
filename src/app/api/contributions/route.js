@@ -1,7 +1,8 @@
 import { Contribute } from "@/models/contribution";
-import { Patients } from "@/models/patient";
-import { contributionSchemaBanckend } from "@/schemas/contribution";
-import { getSession } from "@/utils/getUserData";
+
+// NOTE: el POST de contribuciones vive en /api/dashboard/contributions
+// (solo admin). Los usuarios aportan a su nombre unicamente por la
+// pasarela de pago (webhook -> Contribute.create).
 
 export const GET = async (req) => {
   const searchParams = req.nextUrl.searchParams;
@@ -28,58 +29,6 @@ export const GET = async (req) => {
   } catch (error) {
     if (error.code === "NOT_FOUND_CONTRIBUTIONS")
       return Response.json({ message: error.message }, { status: 404 });
-
-    return Response.json({ error: "server error" }, { status: 500 });
-  }
-};
-
-export const POST = async (req) => {
-  const session = await getSession();
-
-  if (!session)
-    return Response.json({ error: "Token invalid" }, { status: 401 });
-
-  const body = await req.json();
-
-  const { data: patients } = await Patients.getAll();
-  const mainPatient = patients.find((patient) => patient.isMain) ?? patients[0];
-
-  if (!mainPatient)
-    return Response.json(
-      { error: "no hay pacientes registrados" },
-      { status: 400 },
-    );
-
-  const fullData = {
-    ...body,
-    createBy: session.user.id,
-    patientId: mainPatient.id,
-    updateBy: session.user.id,
-  };
-
-  const result = contributionSchemaBanckend.safeParse(fullData);
-
-  if (!result.success)
-    return Response.json(
-      {
-        data: result.error.issues.map((e) => ({
-          path: e.path,
-          error: e.message,
-        })),
-      },
-      { status: 400 },
-    );
-
-  try {
-    const newContribution = await Contribute.create(result.data);
-
-    return Response.json(newContribution, { status: 201 });
-  } catch (error) {
-    if (error.code === "USER_UNAUTHORIZED")
-      return Response.json({ error: error.message }, { status: 401 });
-
-    if (error.code === "CANT_CONTRIBUTE")
-      return Response.json({ error: error.message }, { status: 400 });
 
     return Response.json({ error: "server error" }, { status: 500 });
   }

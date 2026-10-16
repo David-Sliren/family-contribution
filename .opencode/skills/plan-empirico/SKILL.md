@@ -1,110 +1,56 @@
 ---
 name: plan-empirico
-description: Se activa UNICAMENTE cuando el usuario escribe "plan empirico" / "empirical plan" o invoca la skill de forma explicita. Guia un flujo interactivo de hasta 4 instrucciones por plan. El usuario redacta en lenguaje natural libre; el asistente numera y envuelve cada instruccion en delimitadores ===instruccion N=== ... ===fin de instruccion N===, muestra siempre el bloque consolidado, investiga el codigo antes de preguntar y presenta cada duda como pregunta preparada de opcion multiple con una marcada "(Recomendado)". No ejecuta cambios hasta la confirmacion del usuario y la salida del plan mode. Los pasos 1, 3 y 4 usan siempre la herramienta question.
+description: Ayuda a definir y ejecutar planes de trabajo interactivos de hasta cuatro instrucciones, con investigación previa, aclaraciones y confirmación antes de hacer cambios. Actívala con «plan empirico» / «empirical plan», invócala como skill o úsala cuando el usuario pida claramente este flujo guiado.
+metadata:
+  opencode/slash: "true"
 ---
 
-# Plan Empírico
+# Plan empírico
 
-Flujo de trabajo guiado e interactivo para procesar hasta un máximo de 4 instrucciones por plan de forma controlada.
+Guía una conversación para definir y, tras confirmación, ejecutar un plan de hasta cuatro instrucciones. El usuario expresa sus necesidades en lenguaje natural; el asistente organiza el plan, investiga el código pertinente y deja claro el resultado esperado antes de cambiar archivos.
 
-## Activación
+## Activación y estado
 
-Esta skill se activa **únicamente** cuando el usuario:
-- Escribe en su prompt las frases `"plan empirico"` o `"empirical plan"`.
-- La invoca explícitamente por su nombre.
+El usuario puede activar este flujo escribiendo «plan empirico» / «empirical plan», mencionando `@plan-empirico` o usando el comando `/plan-empirico` en OpenCode. El metadato `opencode/slash: "true"` expone esta skill como comando slash. También puedes usarla si la petición claramente pide definir un plan interactivo antes de ejecutar. No fuerces este flujo ante una petición ordinaria de planificación o una tarea sencilla.
 
-No existe un slash command `/plan-empirico`: la activación es por prompt o por invocación explícita. Si estas señales no aparecen, responde al prompt normalmente sin forzar este flujo.
+No preguntes proactivamente si el usuario quiere ejemplos. Si invoca la skill sin describir una tarea, escribe una activación incompleta o pregunta cómo usarla, sugiere brevemente: «Para ver ejemplos, ejecuta `--help_`». En los demás casos, empieza directamente con su petición. Solo cuando el usuario invoque la skill con `--help_`, presenta ejemplos breves de una petición sencilla y de una lista con más de cuatro peticiones; luego pregunta si quiere iniciar un plan. Conserva cualquier petición de trabajo que el usuario ya hubiera descrito y no le pidas que la repita. No interpretes `--help_` como una autorización para ejecutar cambios.
 
-## Principios y Responsabilidades
+Si hay un plan activo sin cerrar y su contenido está disponible en la conversación, retómalo desde el punto pendiente y conserva las instrucciones ya acordadas. Distingue lo completado de lo que quedó a medias o pendiente; no repitas trabajo ya hecho. Si el contexto anterior no está disponible o no permite saber el estado con seguridad, no reconstruyas ni inventes el plan: explica qué información falta y pide al usuario que comparta el plan o un breve resumen de lo completado y lo pendiente. Si el plan anterior se cerró con «Plan de N instrucciones finalizado», una nueva invocación comienza un plan nuevo.
 
-- **El usuario:** solo redacta lo que necesita en lenguaje natural libre (con o sin saltos de línea, numerado o sin numerar). Nunca se le exige escribir delimitadores ni el conteo (salvo que la propia skill lo pregunte).
-- **El asistente:**
-  - Conduce la conversación y la numeración secuencial (1 a N, máximo 4).
-  - Envuelve internamente y de forma visible el contenido en los bloques:
-    `===instruccion N===`
-    [contenido]
-    `===fin de instruccion N===`
-  - Muestra el bloque consolidado **en todos los mensajes** del flujo, no solo al definirlo.
-  - **No modifica archivos ni ejecuta comandos de cambio** hasta que el plan esté consolidado, el usuario confirme y el plan mode esté desactivado.
+## Construcción del plan
 
-## Herramientas Obligatorias
+1. Si el usuario ya describió lo que necesita, organiza su petición directamente. Si todavía no dio una tarea concreta, empieza con una invitación sencilla, por ejemplo: «¿Qué te gustaría resolver? Cuéntamelo en lenguaje natural; puedo organizar hasta cuatro instrucciones en un plan». No empieces preguntando cuántos planes quiere hacer ni exijas que cuente o redacte las instrucciones de una forma especial.
+2. Agrupa las peticiones relacionadas en hasta cuatro instrucciones por plan. Si aparecen más de cuatro, conserva y muestra la lista completa; pregunta si el usuario prefiere priorizar cuatro para este plan o dividir el trabajo en varios planes. Al dividirlo, conserva todas las peticiones, respeta las prioridades expresadas y ordena por dependencias cuando las haya. Muestra los planes propuestos y señala cuál se abordaría primero. Cada plan tiene como máximo cuatro instrucciones y requiere su propia confirmación antes de ejecutarse; al acabar uno, presenta el siguiente y pide confirmación para continuar. No descartes ni empieces trabajo de planes posteriores sin avisar. Si el usuario no sabe por dónde empezar, define una instrucción a la vez y ofrece agregar otra o cerrar el plan.
+3. Para sugerir instrucciones o resolver ambigüedades, investiga primero el código relevante con operaciones de solo lectura. Expón brevemente los hallazgos verificados y presenta las decisiones pendientes como opciones concretas, excluyentes y con una recomendación cuando tenga sentido. Pregunta solo lo que pueda cambiar el alcance o el resultado; resuelve detalles rutinarios con criterio. Agrupa en una sola ronda las preguntas de una misma instrucción y acepta respuestas en texto libre.
+4. Redacta cada instrucción de modo que quede claro el resultado esperado y, cuando sea útil, cómo se comprobará. No impongas criterios de aceptación formales a tareas sencillas.
+5. Después de cada respuesta, incorpora lo acordado y muestra el plan consolidado actualizado. Usa este formato para cada instrucción:
 
-- Los **pasos 1, 3 y 4** (y la ruta de sugerencias del paso 1) se ejecutan **siempre con la herramienta `question`**. Está prohibido preguntar en texto plano en esos pasos.
-- **Una sola llamada a `question` por instrucción**: mete todas las dudas de esa instrucción en el arreglo `questions`. No abras rondas sucesivas para la misma instrucción.
-- Cada pregunta debe tener:
-  - Contexto breve y **real** del código (verificado leyendo archivos, no supuesto).
-  - Opciones concretas y excluyentes entre sí.
-  - La primera opción marcada con el sufijo `(Recomendado)`.
-  - `header` corto (máx. 30 caracteres).
-- `question` permite respuesta personalizada: si el usuario escribe texto libre en lugar de elegir una opción, acepta esa respuesta, ajústala al contexto y refléjela en los delimitadores.
+   ```text
+   ===instruccion 1===
+   [petición acordada]
+   ===fin de instruccion 1===
+   ```
 
-## Estado Activo vs. Plan Nuevo
+   No muestres instrucciones vacías salvo que ayude a pedir el contenido que falta. Mantén la numeración consecutiva.
 
-- **Plan interrumpido a mitad:** si la skill está activa y quedó un plan sin cerrar en la misma conversación, **retoma el paso donde quedó**. No vuelvas a preguntar el conteo inicial ni anuncies la activación otra vez.
-- **Plan nuevo:** cuando el plan anterior ya se **cerró** (se anunció "Plan de N instrucciones finalizado"), una nueva invocación es un plan nuevo y **sí** empieza por el paso 1 (incluida la pregunta de conteo). Un plan terminado cuenta como nuevo.
+## Cómo preguntar
 
-## Flujo Operativo Paso a Paso
+Usa la herramienta estructurada de preguntas/opciones disponible en el entorno cuando exista. Cada pregunta debe incluir el contexto necesario, opciones claras y una forma de responder libremente; marca la opción recomendada como «(Recomendado)» cuando haya una recomendación fundada. Agrupa las preguntas relacionadas en una llamada si la herramienta lo permite.
 
-### 1. Conteo y Redacción
+Si el entorno no ofrece esa herramienta, pregunta en el chat con una lista numerada breve y acepta una opción, una combinación de opciones o texto libre. No dependas de un nombre de herramienta específico ni detengas el flujo por su ausencia.
 
-1. Pregunta cuántas instrucciones tendrá el plan. **Usa `question`** con estas opciones (el `header` recuerda el límite):
-   - `1` — "Una instrucción"
-   - `2` — "Dos instrucciones"
-   - `3` — "Tres instrucciones"
-   - `4` — "Cuatro instrucciones"
-   - `No sé` — "No sé cuántas, definámoslas una a una"
-2. Muestra el bloque de la instrucción (vacío o "pendiente de redactar") en el mismo mensaje y pregunta cómo definirla con `question`:
-   - `Voy a escribirla ahora` — el usuario la redacta libre (Recomendado).
-   - `Partir de una sugerencia` — el asistente propone candidatas.
-3. Ruta de sugerencias (si el usuario la elige o no sabe qué pedir):
-   - Investiga el código afectado con jobs de **solo lectura** y enumera hallazgos verificados.
-   - Ofrece de 1 a 3 instrucciones candidatas como opciones en **una sola llamada** a `question`, con contexto real; la primera marcada `(Recomendado)`.
-   - Con la elegida, ajusta el contenido dentro de los delimitadores.
-4. Casos especiales:
-   - Si el usuario ya suministró el texto completo en su primer mensaje, extrae y separa las peticiones (hasta 4).
-   - Si dijo que no sabe cuántas: ve definiendo una a una y, tras cada una, pregunta si agrega la siguiente o cierra el plan.
+## Confirmación y ejecución
 
-### 2. Estructuración con Delimitadores
+Aclara si el usuario quiere solo definir el plan o también ejecutarlo. Si ya pidió explícitamente dejarlo preparado, no vuelvas a preguntarlo. Cuando el plan esté completo, muestra su versión consolidada y ofrece estas opciones: dejar el plan preparado sin cambios, confirmar y ejecutar el plan, ajustar/reemplazarlo o cancelarlo. La elección explícita de «confirmar y ejecutar» es la autorización para empezar ese plan, solo si el modo actual permite modificar archivos; si está activo un modo de solo lectura, explica que debe desactivarse antes de ejecutar. Si el usuario elige dejarlo preparado, presenta el plan final y ciérralo sin cambios. Si lo cancela o no lo confirma, cierra ese plan sin ejecutar cambios y resume brevemente qué quedó acordado. Una respuesta ambigua o negativa no cuenta como autorización para ejecutar.
 
-- Numera secuencialmente desde 1 y muestra las instrucciones consolidadas:
-  ```
-  ===instruccion 1===
-  ...
-  ===fin de instruccion 1===
-  ```
-- **Muestra el bloque siempre**, incluso cuando la instrucción aún está vacía, en el mismo mensaje en que formulas la pregunta.
+Al ejecutar:
 
-### 3. Aclaraciones Previas: Preguntas Preparadas
+- Trabaja una instrucción a la vez y carga las skills del proyecto que correspondan antes de la acción (por ejemplo, la skill de commits antes de preparar un commit).
+- Si una acción requiere una autorización adicional según las instrucciones del proyecto o del entorno, pausa y solicita esa autorización.
+- Informa al terminar cada instrucción, el resultado y la comprobación realizada cuando corresponda; luego indica cuál sigue. Usa las verificaciones disponibles y adecuadas al proyecto. La mención de cómo comprobar un resultado no implica añadir ni ejecutar pruebas automáticamente: respeta las instrucciones del proyecto y hazlo solo cuando corresponda o el usuario lo solicite. No marques una instrucción como completa si falta trabajo necesario.
+- Si una instrucción falla o queda a medias, explica qué se intentó, qué resultado hubo y qué falta. Conserva ese estado y ofrece continuar desde el punto pendiente; no reinicies el plan ni declares éxito parcial como finalización.
+- Si el usuario cambia una instrucción durante la ejecución, actualiza el plan visible. Si el cambio modifica materialmente el alcance, el resultado esperado o las acciones aprobadas, pausa y pide confirmación del plan actualizado antes de continuar. Para ajustes menores que no cambian lo aprobado, incorpora el cambio y comunícalo.
+- Si el usuario pide detenerse, pausa y resume qué instrucciones están completas, a medias y pendientes. No interpretes «detente» como cancelación permanente; pregunta si desea retomar después, modificar o cerrar el plan solo cuando haga falta para saber cómo seguir.
+- Al finalizar la última, anuncia: «Plan de N instrucción(es) finalizado».
 
-- Si una instrucción tiene ambigüedades o decisiones de diseño (ej. dónde filtrar, qué campos intervienen, si se pagina), **no preguntes en texto plano**: primero investiga el código afectado y aporta contexto verificado.
-- Presenta todas las dudas de esa instrucción en **una sola llamada** a `question`:
-  - Contexto breve y real del código.
-  - Opciones concretas y excluyentes.
-  - La primera opción recomendada, marcada `(Recomendado)`.
-- Con las respuestas, ajusta el contenido dentro de sus delimitadores y **vuelve a mostrar** la versión consolidada.
-
-### 4. Confirmación Previa a la Ejecución
-
-- Cuando las instrucciones estén listas (hasta 4), **antes de ejecutar cualquier cambio** confirma con `question`:
-  - `Proceder` — "Sí, procede con este plan (Recomendado)"
-  - `Otro plan` — "No, prefiero hacer otro plan"
-- Confirmar **no** habilita por sí solo la ejecución: si el **plan mode** sigue activo (modo solo lectura), el asistente no puede editar ni ejecutar comandos. En ese caso, informa al usuario que salga del plan mode para poder trabajar.
-- No ejecutes nada hasta que la respuesta sea positiva y estés en modo build.
-
-### 5. Ejecución Guiada
-
-- Al empezar (modo build):
-  - Ejecuta la instrucción 1.
-  - **Carga las skills del proyecto que apliquen** antes de la acción correspondiente (ej. `git-commit-convention` antes de preparar o hacer commits).
-- Durante la ejecución:
-  - Cada `todowrite` que crees lleva como encabezado el título de la instrucción activa (ej. `# Instrucción 1 — [Acción]`).
-  - Si una instrucción exige pedir permiso (ej. antes de un commit), haz una pausa y solicita la autorización explícita.
-  - Al cerrar cada instrucción, informa y anuncia el siguiente paso:
-    > *"Instrucción [N] completada. Procedemos a trabajar en la instrucción [N+1]."*
-- Al terminar la última, cierra el plan:
-  > *"Plan de [N] instrucción(es) finalizado."*
-
-## Recordatorio
-
-- Sin activación explícita ("plan empirico" / "empirical plan"), este flujo NO se aplica.
-- No modificar archivos ni ejecutar cambios antes de la confirmación formal del paso 4 y de estar fuera del plan mode.
+No realices cambios antes de que el usuario confirme el plan. La confirmación no sustituye permisos adicionales ni cambia las restricciones del entorno.

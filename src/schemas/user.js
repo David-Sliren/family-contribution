@@ -22,7 +22,8 @@ export const userBackendSchema = z.object({
     .min(10, "El numero debe tener 10 caracteres")
     .startsWith("3", "El numero debe empezar con 3")
     .regex(/^\+?[1-9]\d{1,14}$/, "Formato de teléfono inválido")
-    .max(10, "El numero debe tener menos de 10 caracteres"),
+    .max(10, "El numero debe tener menos de 10 caracteres")
+    .default(""),
 
   email: z.email("Formato de correo electrónico inválido").optional(),
 

@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { conectToData } from "@/utils/mongoose-helper/db";
 import "@/database/user";
 import { PREFIXTOKEN } from "@/constants/config";
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "@/constants/env";
 
 await conectToData();
 
@@ -15,8 +16,8 @@ export const auth = betterAuth({
   user: {
     modelName: "User",
     additionalFields: {
-      tel: { type: "string", required: true },
-      relationship: { type: "string", required: true },
+      tel: { type: "string", required: false, defaultValue: "" },
+      relationship: { type: "string", defaultValue: "externo" },
       role: { type: "string", defaultValue: "user", input: false },
     },
   },
@@ -24,6 +25,12 @@ export const auth = betterAuth({
 
   advanced: {
     cookiePrefix: PREFIXTOKEN,
+  },
+  socialProviders: {
+    google: {
+      clientId: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+    },
   },
   plugins: [username()],
 });

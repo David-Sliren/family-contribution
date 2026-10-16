@@ -25,7 +25,9 @@ export const userSchema = new Schema(
       required: true,
     },
     image: { type: String, default: "" },
-    tel: { type: String, required: true },
+    // opcional: el login social (Google) no trae telefono; el registro
+    // manual lo sigue exigiendo via zod frontend.
+    tel: { type: String, default: "" },
     isDisabled: { type: Boolean, default: false },
   },
   {

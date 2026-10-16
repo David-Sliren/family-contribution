@@ -1,4 +1,4 @@
-import { baseUrlUser } from "./config";
+import { baseUrlUser, baseUrlUserDashboard } from "./config";
 import { getServiceError } from "../error";
 
 export const getAllUsers = async (queryParams) => {
@@ -24,6 +24,15 @@ export const getAllUsers = async (queryParams) => {
 export const getById = async (id) => {
   try {
     const { data } = await baseUrlUser.get(`/${id}`);
+    return data;
+  } catch (error) {
+    throw getServiceError(error);
+  }
+};
+
+export const updateUserRole = async (id, role) => {
+  try {
+    const { data } = await baseUrlUserDashboard.put(`/${id}`, { role });
     return data;
   } catch (error) {
     throw getServiceError(error);

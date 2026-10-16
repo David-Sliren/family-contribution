@@ -9,6 +9,8 @@ import { AnimationEmpty } from "@/lottie-files/components/AnimationEmpty";
 import { useQueryState } from "nuqs";
 import { parseAsString, parseAsInteger } from "nuqs";
 import { GlassPaginationBasic } from "@/components/ui/glass-componenst/GlassPagination";
+import { ChangeUserRoleDialog } from "./ChangeUserRoleDialog";
+import { useUserStore } from "@/components/provaider/AuthProvider";
 
 export const UserList = () => {
   const [search] = useQueryState("search", parseAsString.withDefault(""));
@@ -25,6 +27,9 @@ export const UserList = () => {
   );
   const [editUser, setEditUser] = useState({});
   const dialogRef = useRef(null);
+  const roleDialogRef = useRef(null);
+  const [roleUserId, setRoleUserId] = useState(null);
+  const { user: currentUser } = useUserStore();
   const { data: users } = useUserQueryAll({
     search,
     role,
@@ -33,10 +38,18 @@ export const UserList = () => {
     limit: 10,
   });
   const pagination = users.pagination;
+  const roleUser = users.data.find((user) => user.id === roleUserId);
 
   function handdlerEditUser(user) {
     setEditUser(user);
     dialogRef.current?.showModal();
+  }
+
+  function handleChangeRole(user) {
+    setRoleUserId(user.id);
+    requestAnimationFrame(() => {
+      if (!roleDialogRef.current?.open) roleDialogRef.current?.showModal();
+    });
   }
 
   function handleNextPage() {
@@ -55,8 +68,23 @@ export const UserList = () => {
         <>
           <ListContainer>
             <AddContributionDialog user={editUser} dialogRef={dialogRef} />
+            {roleUser && (
+              <ChangeUserRoleDialog
+                key={roleUserId}
+                user={roleUser}
+                dialogRef={roleDialogRef}
+              />
+            )}
             {users.data?.map((user) => (
-              <UserCard key={user.id} user={user} handdler={handdlerEditUser} />
+              <UserCard
+                key={user.id}
+                user={user}
+                handdler={handdlerEditUser}
+                changeRoleHandler={handleChangeRole}
+                isCurrentUser={
+                  !currentUser?.id || currentUser.id === user.id
+                }
+              />
             ))}
           </ListContainer>
 

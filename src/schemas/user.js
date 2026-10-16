@@ -34,6 +34,10 @@ export const userBackendSchema = z.object({
     .regex(/[1-9]\d{1,4}/, "La contraseña debe tener minimo 2 numeros"),
 });
 
+export const userRoleBackendSchema = z.object({
+  role: z.enum(["user", "carer", "admin"]),
+});
+
 export const userFrontedSchema = userBackendSchema
   .extend({
     confirmPassword: z.string(),

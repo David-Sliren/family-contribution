@@ -72,4 +72,32 @@ export class Users {
       throw error;
     }
   }
+
+  static async updateRole(id, role) {
+    await conectToData();
+
+    try {
+      const user = await User.findByIdAndUpdate(
+        id,
+        { role },
+        { new: true, runValidators: true },
+      );
+
+      if (!user) {
+        const customError = new Error("not found user");
+        customError.code = "NOT_FOUND_USER";
+        throw customError;
+      }
+
+      return user;
+    } catch (error) {
+      if (error.name === "CastError") {
+        const customError = new Error("invalid id");
+        customError.code = "INVALID_ID";
+        throw customError;
+      }
+
+      throw error;
+    }
+  }
 }

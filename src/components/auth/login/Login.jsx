@@ -9,6 +9,9 @@ import { loginSchema } from "@/schemas/login";
 import { Info } from "@/components/ui/form/info/Info";
 import { useNotification } from "@/store/ui/notifications";
 import { authClient } from "@/utils/auth-client";
+import { FcGoogle } from "react-icons/fc";
+import { ProvaiderSingInButton } from "@/components/ui/form/buttons/ProvaiderButton";
+import { handleSingInProvaider } from "@/utils/handlers";
 
 const DEFAULVALUES = {
   // username: "juanperez01",
@@ -50,6 +53,22 @@ export const Index = () => {
     }
   }
 
+  async function handleGoogle() {
+    try {
+      setErrorName("");
+      const error = await handleSingInProvaider("google", "/");
+
+      if (error) {
+        setErrorName(
+          error.message ||
+            "No se pudo iniciar sesion con Google, intente nuevamente",
+        );
+      }
+    } catch (e) {
+      setErrorName("No se pudo conectar con el servidor, intente nuevamente");
+    }
+  }
+
   return (
     <FormLayout title="Iniciar sesion" errorNotification={errorName}>
       <form onSubmit={handleSubmit(handleSubmitForm)} className="space-y-4">
@@ -76,6 +95,21 @@ export const Index = () => {
           isSubmitting={isSubmitting}
         />
       </form>
+
+      <div className="flex items-center gap-3 my-5">
+        <span className="h-px flex-1 bg-outline-variant/25" />
+        <span className="text-on-surface-variant text-xs font-body">
+          o continúa con
+        </span>
+        <span className="h-px flex-1 bg-outline-variant/25" />
+      </div>
+
+      <ProvaiderSingInButton
+        icon={FcGoogle}
+        name="Google"
+        handle={handleGoogle}
+      />
+
       <Info
         text="¿No tienes cuenta?"
         linkName="Registrarse"

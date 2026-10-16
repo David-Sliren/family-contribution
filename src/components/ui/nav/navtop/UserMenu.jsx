@@ -52,7 +52,7 @@ export const UserMenu = () => {
         {isOpen && (
           <DropDown
             id={user?.id}
-            username={user?.username}
+            username={user?.username || user?.name || user?.email}
             email={user?.email}
             handleDropdown={handleDropdown}
           />

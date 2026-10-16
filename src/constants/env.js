@@ -11,3 +11,5 @@ export const BASE_URL = process.env.BASE_URL || VERCEL_URL;
 export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
 export const CLOUDINARY_APY_KEY = process.env.CLOUDINARY_APY_KEY;
 export const CLOUDINARY_APY_SECRECT = process.env.CLOUDINARY_APY_SECRECT;
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;

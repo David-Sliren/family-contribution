@@ -13,3 +13,5 @@ export const CLOUDINARY_APY_KEY = process.env.CLOUDINARY_APY_KEY;
 export const CLOUDINARY_APY_SECRECT = process.env.CLOUDINARY_APY_SECRECT;
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+export const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
+export const GMAIL_USER = process.env.GMAIL_USER;

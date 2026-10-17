@@ -45,6 +45,13 @@ export const Index = () => {
         );
       }
 
+      if (error.code === "EMAIL_NOT_VERIFIED") {
+        // sendOnSignIn: better-auth ya reenvió el enlace de verificación
+        return setErrorName(
+          "Tu correo aún no está verificado. Te enviamos un nuevo enlace, revísalo para activar tu cuenta",
+        );
+      }
+
       setErrorName(
         error.message || "No se pudo hacer el registro, intente nuevamente",
       );
@@ -90,6 +97,13 @@ export const Index = () => {
           registerHook={register}
           error={errors}
         />
+
+        <Info
+          text="¿Olvidaste tu contraseña?"
+          linkName="Recuperarla"
+          url="/auth/forgot-password"
+        />
+
         <ActionsButtons
           buttonName="Iniciar sesion"
           isSubmitting={isSubmitting}

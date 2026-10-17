@@ -7,7 +7,6 @@ import { FormLayout } from "@/components/ui/form/layout/FormLayout";
 import { userFrontedSchema } from "@/schemas/user";
 import React, { useState } from "react";
 import { useHookForm } from "@/hooks/useHookForm";
-import { useRouter } from "next/navigation";
 import { Info } from "@/components/ui/form/info/Info";
 import { authClient } from "@/utils/auth-client";
 
@@ -29,8 +28,8 @@ const userOptions = [
 ];
 
 export const Index = () => {
-  const router = useRouter();
   const [isError, setIsError] = useState("");
+  const [sentTo, setSentTo] = useState("");
   const { handleSubmit, register, errors, isSubmitting, reset } = useHookForm({
     schema: userFrontedSchema,
     defaultValues: DEFAULVALUES,
@@ -41,13 +40,14 @@ export const Index = () => {
     try {
       setIsError("");
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const { data, error } = await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         ...backendData,
+        callbackURL: "/auth/verify-email",
       });
 
       if (!error) {
-        router.replace("/");
-
+        // requireEmailVerification: no hay sesión; toca verificar por correo
+        setSentTo(backendData.email);
         return reset();
       }
 
@@ -65,6 +65,23 @@ export const Index = () => {
     } catch (e) {
       setIsError("No se pudo conectar con el servidor, intente nuevamente");
     }
+  }
+
+  if (sentTo) {
+    return (
+      <FormLayout title="Revisa tu correo">
+        <p className="text-on-surface-variant text-sm font-body leading-relaxed">
+          Te enviamos un enlace de verificación a{" "}
+          <strong className="text-on-surface">{sentTo}</strong>. Haz clic en él
+          para activar tu cuenta; si no lo ves, revisa la carpeta de spam.
+        </p>
+        <Info
+          text="¿Ya verificaste tu correo?"
+          linkName="Iniciar sesion"
+          url="/auth/login"
+        />
+      </FormLayout>
+    );
   }
 
   return (

@@ -1,7 +1,9 @@
+"use client";
 import React from "react";
 import { LuHandHeart } from "react-icons/lu";
-
+import { useMainPatientQuery } from "@/hooks/tanstack/query/useQueryPatient";
 export const InfoContribute = () => {
+  const { data } = useMainPatientQuery();
   return (
     <>
       <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-fixed text-on-primary-fixed rounded-full w-fit animate-fade-in-down">
@@ -14,8 +16,8 @@ export const InfoContribute = () => {
         Formulario de Colaboración
       </h1>
       <p className="text-lg text-on-surface-variant leading-relaxed font-body max-w-sm animate-fade-in-down">
-        Tu apoyo asegura el tratamiento continuo de Aleida. Cada contribución es
-        un paso hacia su bienestar.
+        Tu apoyo asegura el tratamiento continuo de {data.name} {data.lastName}.
+        Cada contribución es un paso hacia su bienestar.
       </p>
     </>
   );

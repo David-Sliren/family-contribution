@@ -20,13 +20,13 @@ const METHODS = [
     description: (name) =>
       `Transfiere directamente desde tu banco o Nequi a los datos de ${name} y apoya el tratamiento.`,
   },
-  {
+  /*{
     id: "pasarela",
     Icon: LuCreditCard,
     title: "Pasarela de pago",
     description: () =>
       "Paga de forma segura con tarjeta, PSE u otros medios mediante Mercado Pago.",
-  },
+  },*/
 ];
 
 export const FormContribute = () => {
@@ -60,7 +60,7 @@ export const FormContribute = () => {
       errorNotification={errorname}
       className="min-w-full shadow-md"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
         {METHODS.map(({ id, Icon, title, description }) => (
           <button
             key={id}

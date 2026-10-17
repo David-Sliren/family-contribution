@@ -2,6 +2,10 @@
 
 Next.js 16 App Router app (package `contribution-aleida`) for a family contribution platform. Plain JavaScript/JSX, no TypeScript; Tailwind v4. UI copy and all repo conventions are in Spanish.
 
+## Documentación
+- Documentación para desarrolladores con el esquema Diátaxis en `docs/` (índice en `docs/README.md`): `tutorials/`, `how-to/`, `reference/` y `explanation/`. No duplicar allí lo que ya cubre este archivo; lo que es "por qué" vive en `docs/explanation/`.
+- `DESIGN.md` documenta el sistema de diseño (paleta M3, tokens) y `skills/README.md` indexa las skills del proyecto.
+
 ## Commands
 - Package manager is **pnpm** (`pnpm-lock.yaml`). Use `pnpm dev` / `pnpm build` / `pnpm start`.
 - `pnpm lint` (= `eslint`, flat config in `eslint.config.mjs`) and `pnpm lint:fix`. There is **no test suite and no typecheck** — lint is the only automated verification.

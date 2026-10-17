@@ -92,6 +92,22 @@ export function UpdatePatientDialog({ patient, dialogRef }) {
             error={errors}
           />
           <FieldType
+            name="Teléfono (Nequi)"
+            inputName="tel"
+            inputPlaceholder="Ej. 3044518133"
+            inputType="text"
+            registerHook={register}
+            error={errors}
+          />
+          <FieldType
+            name="Clave transacional (Bre-B)"
+            inputName="keyT"
+            inputPlaceholder="Ej. clave123"
+            inputType="text"
+            registerHook={register}
+            error={errors}
+          />
+          <FieldType
             name="Meta"
             inputName="goal"
             inputPlaceholder="Ej. 200000"

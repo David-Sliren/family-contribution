@@ -8,7 +8,15 @@ import { DeafultPopover } from "@/components/ui/popovers/DeafultPopover";
 import { useNotification } from "@/store/ui/notifications";
 import { useSetMainPatient } from "@/hooks/tanstack/mutation/useMutationPatient";
 import Image from "next/image";
-import { LuCrown, LuEllipsisVertical, LuImage, LuPencil } from "react-icons/lu";
+import {
+  LuCopy,
+  LuCrown,
+  LuEllipsisVertical,
+  LuImage,
+  LuKeyRound,
+  LuPencil,
+  LuPhone,
+} from "react-icons/lu";
 
 export function PatientCard({ patient, onEdit, onChangeImage }) {
   const setNotification = useNotification((state) => state.setNotification);
@@ -21,6 +29,18 @@ export function PatientCard({ patient, onEdit, onChangeImage }) {
     } catch (error) {
       setNotification({
         message: error || "No se pudo cambiar el paciente principal",
+        type: "error",
+      });
+    }
+  }
+
+  async function copyValue(value, label) {
+    try {
+      await navigator.clipboard.writeText(value);
+      setNotification({ message: "Copiado al portapapeles" });
+    } catch {
+      setNotification({
+        message: `No se pudo copiar ${label.toLowerCase()}`,
         type: "error",
       });
     }
@@ -62,6 +82,49 @@ export function PatientCard({ patient, onEdit, onChangeImage }) {
         >
           <LuEllipsisVertical />
         </button>
+      </div>
+
+      <div className="mt-4 flex flex-col gap-2">
+        <div className="flex items-center justify-between gap-2">
+          <span className="flex items-center gap-2 text-[12px] text-on-surface-variant font-body">
+            <LuPhone className="text-base" />
+            Teléfono (Nequi)
+          </span>
+          <span className="flex items-center gap-1 min-w-0">
+            <span className="text-[12px] text-on-surface font-body truncate">
+              {patient.tel || "—"}
+            </span>
+            {patient.tel && (
+              <button
+                className="cursor-pointer p-1 text-on-surface-variant hover:text-primary"
+                title="Copiar teléfono"
+                onClick={() => copyValue(patient.tel, "Teléfono")}
+              >
+                <LuCopy />
+              </button>
+            )}
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-2">
+          <span className="flex items-center gap-2 text-[12px] text-on-surface-variant font-body">
+            <LuKeyRound className="text-base" />
+            Clave transacional (Bre-B)
+          </span>
+          <span className="flex items-center gap-1 min-w-0">
+            <span className="text-[12px] text-on-surface font-body truncate">
+              {patient.keyT || "—"}
+            </span>
+            {patient.keyT && (
+              <button
+                className="cursor-pointer p-1 text-on-surface-variant hover:text-primary"
+                title="Copiar clave transacional"
+                onClick={() => copyValue(patient.keyT, "Clave transacional")}
+              >
+                <LuCopy />
+              </button>
+            )}
+          </span>
+        </div>
       </div>
 
       <div className="flex items-center justify-between mt-5">

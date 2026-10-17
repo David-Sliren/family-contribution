@@ -19,6 +19,16 @@ export const patientSchema = z.object({
   description: z.string().min(3, "Debe tener minimo 3 caracteres"),
   carerName: z.string().min(3, "Debe tener minimo 3 caracteres").optional(),
   clinicName: z.string().min(3, "Debe tener minimo 3 caracteres").optional(),
+  tel: z
+    .string("El telefono es requerido")
+    .min(10, "El numero debe tener 10 caracteres")
+    .startsWith("3", "El numero debe empezar con 3")
+    .regex(/^\+?[1-9]\d{1,14}$/, "Formato de teléfono inválido")
+    .max(10, "El numero debe tener menos de 10 caracteres"),
+  keyT: z
+    .string("La clave transacional es requerida")
+    .trim()
+    .min(1, "La clave transacional es requerida"),
 });
 
 export const patientSchemaFrontend = patientSchema.omit({ createBy: true });

@@ -27,6 +27,8 @@ const patientSchema = new Schema(
     description: { type: String, required: true },
     carerName: { type: String, default: "" },
     clinicName: { type: String, default: "" },
+    tel: { type: String, default: "" },
+    keyT: { type: String, default: "" },
     isDisabled: { type: Boolean, default: false },
     isMain: { type: Boolean, default: false },
     createBy: { type: Schema.ObjectId, required: true, ref: "User" },

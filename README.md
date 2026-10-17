@@ -45,6 +45,7 @@ La documentación sigue el esquema [Diátaxis](https://diataxis.fr/) y vive en [
 - [`docs/how-to/`](docs/how-to/) — recetas para tareas concretas.
 - [`docs/reference/`](docs/reference/) — descripción técnica exacta (API, modelos, entorno).
 - [`docs/explanation/`](docs/explanation/) — contexto y decisiones de diseño.
+- [`docs/usuarios/`](docs/usuarios/) — guiones de video para la familia (audiencia no técnica).
 
 Otros recursos: convenciones del código en [`AGENTS.md`](AGENTS.md), sistema de diseño en [`DESIGN.md`](DESIGN.md) y skills del proyecto en [`skills/README.md`](skills/README.md).
 

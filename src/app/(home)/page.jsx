@@ -9,6 +9,17 @@ import { contributionQueryOptions } from "@/hooks/tanstack/query/useQueryContrib
 import { userQueryAllOptions } from "@/hooks/tanstack/query/useQueryUser";
 import { mainPatientQueryOptions } from "@/hooks/tanstack/query/useQueryPatient";
 
+export const metadata = {
+  title: {
+    absolute: "Aleida | Aportes familiares",
+  },
+  description:
+    "Aporta al fondo de tu familia, consulta los aportes del mes y revisa en qué se usa cada gasto. Transparente, simple y para todos.",
+  alternates: {
+    canonical: "/",
+  },
+};
+
 export default async function Home({ searchParams }) {
   const query = await searchParams;
   const state = query.state;

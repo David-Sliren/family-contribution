@@ -7,6 +7,15 @@ const titleData = {
     "Actualiza tu información personal, datos de contacto y seguridad.",
 };
 
+export const metadata = {
+  title: titleData.title,
+  description: titleData.description,
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default function ConfigPage() {
   return (
     <Index

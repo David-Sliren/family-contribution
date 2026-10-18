@@ -4,6 +4,10 @@ export const metadata = {
   title: "Restablecer contraseña",
   description:
     "Elige una nueva contraseña para tu cuenta en Aleida | Contribucion",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function ResetPassword({ searchParams }) {

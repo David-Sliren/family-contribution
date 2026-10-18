@@ -4,6 +4,10 @@ export const metadata = {
   title: "Recuperar contraseña",
   description:
     "Solicita un enlace para restablecer tu contraseña en Aleida | Contribucion",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function ForgotPassword() {

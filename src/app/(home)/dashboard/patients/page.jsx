@@ -3,11 +3,20 @@ import { allPatientQueryOptions } from "@/hooks/tanstack/query/useQueryPatient";
 import { getQueryClient } from "@/utils/tanstackQuery-config";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-const metadata = {
+export const metadata = {
   title: "Pacientes",
-  subtitle: "Registro de pacientes",
   description:
     "Registra a los pacientes de tu familia y mantiene actualizada su información clínica y de contacto.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
+const titleData = {
+  title: metadata.title,
+  subtitle: "Registro de pacientes",
+  description: metadata.description,
 };
 
 export default async function PatientsDashboard({ searchParams }) {
@@ -19,9 +28,9 @@ export default async function PatientsDashboard({ searchParams }) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Index
-        title={metadata.title}
-        subtitle={metadata.subtitle}
-        description={metadata.description}
+        title={titleData.title}
+        subtitle={titleData.subtitle}
+        description={titleData.description}
       />
     </HydrationBoundary>
   );

@@ -7,6 +7,15 @@ const titleData = {
     "Revisa la disponibilidad del tratamiento: medicamentos, suplementos y suministros con su estado actual y solicita lo que necesites.",
 };
 
+export const metadata = {
+  title: titleData.title,
+  description: titleData.description,
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default function Inventory() {
   return (
     <Index

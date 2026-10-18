@@ -4,6 +4,10 @@ export const metadata = {
   title: "Verificar correo",
   description:
     "Confirmación del correo electrónico para activar tu cuenta en Aleida | Contribucion",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function VerifyEmail({ searchParams }) {

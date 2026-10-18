@@ -9,7 +9,7 @@ import { createPreference } from "@/services/contribute/contribute";
 import { useMainPatientQuery } from "@/hooks/tanstack/query/useQueryPatient";
 import { useEffect, useState } from "react";
 import { TransferPanel } from "./TransferPanel";
-import { LuArrowLeftRight, LuCreditCard } from "react-icons/lu";
+import { LuArrowLeftRight } from "react-icons/lu";
 import { cn } from "@/utils/cn";
 
 const METHODS = [

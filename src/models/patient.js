@@ -42,6 +42,15 @@ export class Patients {
     };
   }
 
+  static async getMain() {
+    await conectToData();
+
+    const mainPatient = await Patient.findOne({ isMain: true });
+    if (mainPatient) return mainPatient;
+
+    return await Patient.findOne().sort("createdAt");
+  }
+
   static async getById(id) {
     await conectToData();
 

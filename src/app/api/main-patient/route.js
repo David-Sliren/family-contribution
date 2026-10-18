@@ -2,12 +2,11 @@ import { Patients } from "@/models/patient";
 
 export const GET = async (_req) => {
   try {
-    const { data: patients } = await Patients.getAll();
-    const main = patients.find((patient) => patient.isMain) ?? patients[0];
+    const main = await Patients.getMain();
 
     if (!main) return Response.json({});
 
-    const mainpatient = await Patients.getById(main.id);
+    const mainpatient = await Patients.getById(main._id || main.id);
 
     return Response.json(mainpatient.toJSON());
   } catch (error) {

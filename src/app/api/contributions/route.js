@@ -1,4 +1,5 @@
 import { Contribute } from "@/models/contribution";
+import { Patients } from "@/models/patient";
 
 // NOTE: el POST de contribuciones vive en /api/dashboard/contributions
 // (solo admin). Los usuarios aportan a su nombre unicamente por la
@@ -11,6 +12,7 @@ export const GET = async (req) => {
   const status = searchParams.get("status");
   const page = searchParams.get("page");
   const limit = searchParams.get("limit");
+  const patientId = searchParams.get("patientId");
 
   const paginate = { page: 1, limit: 10 };
   const query = {};
@@ -21,6 +23,13 @@ export const GET = async (req) => {
   if (purpose) query.purpose = purpose;
   if (method) query.method = method;
   if (status) query.status = status;
+
+  if (patientId) {
+    if (patientId !== "all") query.patientId = patientId;
+  } else {
+    const main = await Patients.getMain();
+    if (main) query.patientId = main._id;
+  }
 
   try {
     const contributions = await Contribute.getAll(query, paginate);

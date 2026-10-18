@@ -22,8 +22,7 @@ export const POST = async (req) => {
       { status: 400 },
     );
 
-  const { data: patients } = await Patients.getAll();
-  const mainPatient = patients.find((patient) => patient.isMain) ?? patients[0];
+  const mainPatient = await Patients.getMain();
 
   if (!mainPatient)
     return Response.json(

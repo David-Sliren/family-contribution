@@ -1,4 +1,5 @@
 import { Inventories } from "@/models/inventory";
+import { Patients } from "@/models/patient";
 
 export const GET = async (req) => {
   const searchParams = req.nextUrl.searchParams;
@@ -7,6 +8,7 @@ export const GET = async (req) => {
   const search = searchParams.get("search");
   const page = searchParams.get("page");
   const limit = searchParams.get("limit");
+  const patientId = searchParams.get("patientId");
 
   const paginate = {
     page: 1,
@@ -23,6 +25,13 @@ export const GET = async (req) => {
   if (category) query.category = category;
   if (status) query.status = status;
   if (search) query.name = { $regex: search, $options: "i" };
+
+  if (patientId) {
+    if (patientId !== "all") query.patientId = patientId;
+  } else {
+    const main = await Patients.getMain();
+    if (main) query.patientId = main._id;
+  }
 
   try {
     const inventory = await Inventories.getAll(query, paginate);

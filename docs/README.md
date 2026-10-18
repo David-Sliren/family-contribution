@@ -40,4 +40,4 @@ La documentación del proyecto sigue el esquema [Diátaxis](https://diataxis.fr/
 - [`usuarios/`](usuarios/) — guiones de video para la familia (audiencia no técnica; usa `usuarios/PLANTILLA.md` para crear nuevos).
 - [`../AGENTS.md`](../AGENTS.md) — convenciones del código para agentes y colaboradores.
 - [`../DESIGN.md`](../DESIGN.md) — sistema de diseño (paleta M3, tokens y componentes).
-- [`../skills/README.md`](../skills/README.md) — skills del proyecto (commits, paginación, plan empírico).
+- [`../.agents/skills/README.md`](../.agents/skills/README.md) — skills del proyecto (commits, paginación, plan empírico).

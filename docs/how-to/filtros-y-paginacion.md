@@ -1,6 +1,6 @@
 # Cómo agregar filtros y paginación al dashboard
 
-Esta receta resume el patrón de paginación en servidor del proyecto. El detalle paso a paso está en la skill [`skills/dashboard-filters-pagination/SKILL.md`](../../skills/dashboard-filters-pagination/SKILL.md); consúltala antes de implementar.
+Esta receta resume el patrón de paginación en servidor del proyecto. El detalle paso a paso está en la skill [`.agents/skills/dashboard-filters-pagination/SKILL.md`](../../.agents/skills/dashboard-filters-pagination/SKILL.md); consúltala antes de implementar.
 
 ## 1. Modelo: paginación en servidor
 

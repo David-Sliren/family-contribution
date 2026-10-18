@@ -47,7 +47,7 @@ La documentación sigue el esquema [Diátaxis](https://diataxis.fr/) y vive en [
 - [`docs/explanation/`](docs/explanation/) — contexto y decisiones de diseño.
 - [`docs/usuarios/`](docs/usuarios/) — guiones de video para la familia (audiencia no técnica).
 
-Otros recursos: convenciones del código en [`AGENTS.md`](AGENTS.md), sistema de diseño en [`DESIGN.md`](DESIGN.md) y skills del proyecto en [`skills/README.md`](skills/README.md).
+Otros recursos: convenciones del código en [`AGENTS.md`](AGENTS.md), sistema de diseño en [`DESIGN.md`](DESIGN.md) y skills del proyecto en [`.agents/skills/README.md`](.agents/skills/README.md).
 
 ## Estructura
 

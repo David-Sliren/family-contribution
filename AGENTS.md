@@ -4,7 +4,7 @@ Next.js 16 App Router app (package `contribution-aleida`) for a family contribut
 
 ## Documentación
 - Documentación para desarrolladores con el esquema Diátaxis en `docs/` (índice en `docs/README.md`): `tutorials/`, `how-to/`, `reference/` y `explanation/`. No duplicar allí lo que ya cubre este archivo; lo que es "por qué" vive en `docs/explanation/`.
-- `DESIGN.md` documenta el sistema de diseño (paleta M3, tokens) y `skills/README.md` indexa las skills del proyecto.
+- `DESIGN.md` documenta el sistema de diseño (paleta M3, tokens) y `.agents/skills/README.md` indexa las skills del proyecto.
 
 ## Commands
 - Package manager is **pnpm** (`pnpm-lock.yaml`). Use `pnpm dev` / `pnpm build` / `pnpm start`.
@@ -85,4 +85,4 @@ Next.js 16 App Router app (package `contribution-aleida`) for a family contribut
 
 ## Commits
 - Follow the repo's commit convention: load the `git-commit-convention` skill before making/splitting/proposing commits. Key rules: lowercase Spanish, `tipo(scope): descripcion`, types `feat`/`fix`/`refactor`/`style`/`chore`/`docs` (use `feat`, not the historical `feact` typo), work on branch `feat`, no `console.log` in committed code, stage only intended files.
-- Las skills compartidas del proyecto están en `skills/`; consulta `skills/README.md` para verlas y abrir sus instrucciones.
+- Las skills compartidas del proyecto están en `.agents/skills/`; consulta `.agents/skills/README.md` para verlas y abrir sus instrucciones.

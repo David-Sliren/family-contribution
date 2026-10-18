@@ -1,6 +1,6 @@
 # Cómo preparar commits
 
-Los commits del proyecto siguen una convención propia. Antes de preparar ninguno, **lee la skill [`skills/git-commit-convention/SKILL.md`](../../skills/git-commit-convention/SKILL.md)** (en OpenCode: skill `git-commit-convention`); este how-to es solo su resumen operativo.
+Los commits del proyecto siguen una convención propia. Antes de preparar ninguno, **lee la skill [`.agents/skills/git-commit-convention/SKILL.md`](../../.agents/skills/git-commit-convention/SKILL.md)** (en OpenCode: skill `git-commit-convention`); este how-to es solo su resumen operativo.
 
 ## 1. Formato del mensaje
 

@@ -16,9 +16,9 @@ const StatCard = ({ icon: IconName, title, text }) => {
         {IconName}
       </span>
       <div>
-        <h3 className="text-on-surface-variant capitalize font-medium text-sm tracking-wide">
+        <h2 className="text-on-surface-variant capitalize font-medium text-sm tracking-wide">
           {title}
-        </h3>
+        </h2>
         <p className="text-2xl capitalize text-gray-950 font-bold">{text}</p>
       </div>
     </div>

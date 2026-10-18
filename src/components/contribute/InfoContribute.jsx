@@ -13,10 +13,15 @@ export const InfoContribute = () => {
         </span>
       </div>
       <h1 className="text-4xl md:text-5xl font-extrabold text-on-surface leading-tight tracking-tight font-headline animate-fade-in-down">
-        Formulario de Colaboración
+        Contribuye al fondo de tratamiento de{" "}
+        <span className="text-primary italic capitalize">
+          {data.name ? data.name : "tu familia"}
+        </span>
+        .
       </h1>
       <p className="text-lg text-on-surface-variant leading-relaxed font-body max-w-sm animate-fade-in-down">
-        Tu apoyo asegura el tratamiento continuo de {data.name} {data.lastName}.
+        Tu apoyo asegura el tratamiento continuo de{" "}
+        {data.name ? `${data.name} ${data.lastName ?? ""}`.trim() : "tu familia"}.
         Cada contribución es un paso hacia su bienestar.
       </p>
     </>

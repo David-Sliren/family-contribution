@@ -1,14 +1,31 @@
 import "@/database/contribution";
 import { User } from "@/database/user";
+import { Patients } from "@/models/patient";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
+// resuelve el paciente sobre el que se filtran las contribuciones:
+// "all" => sin filtro; sin patientId => paciente principal activo
+const resolvePatientFilter = async (patientId) => {
+  if (patientId) return patientId === "all" ? undefined : patientId;
+
+  const main = await Patients.getMain();
+
+  return main?._id;
+};
+
 export class Users {
-  static async getAll(querys, paginate) {
+  static async getAll(querys, paginate, patientId) {
     await conectToData();
+
+    const matchPatient = await resolvePatientFilter(patientId);
 
     const [user, totalItems] = await Promise.all([
       User.find(querys)
-        .populate("contributions", { amount: 1 })
+        .populate({
+          path: "contributions",
+          select: { amount: 1 },
+          match: matchPatient ? { patientId: matchPatient } : undefined,
+        })
         .sort("-createdAt")
         .skip((paginate.page - 1) * paginate.limit)
         .limit(paginate.limit),
@@ -41,14 +58,16 @@ export class Users {
     };
   }
 
-  static async getById(id) {
+  static async getById(id, patientId) {
     await conectToData();
 
     try {
-      const user = await User.findById(id).populate("contributions", {
-        amount: 1,
-        date: 1,
-        purpose: 1,
+      const matchPatient = await resolvePatientFilter(patientId);
+
+      const user = await User.findById(id).populate({
+        path: "contributions",
+        select: { amount: 1, date: 1, purpose: 1 },
+        match: matchPatient ? { patientId: matchPatient } : undefined,
       });
 
       if (!user) {

@@ -7,6 +7,7 @@ export const GET = async (req) => {
   const relationship = searchParams.get("relationship");
   const page = searchParams.get("page");
   const limit = searchParams.get("limit");
+  const patientId = searchParams.get("patientId");
 
   const paginate = { page: 1, limit: 10 };
   const query = {};
@@ -24,7 +25,7 @@ export const GET = async (req) => {
   if (relationship) query.relationship = relationship;
 
   try {
-    const users = await Users.getAll(query, paginate);
+    const users = await Users.getAll(query, paginate, patientId);
 
     return Response.json(users);
   } catch (error) {

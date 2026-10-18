@@ -1,10 +1,11 @@
 import { Users } from "@/models/user";
 
-export const GET = async (_req, { params }) => {
+export const GET = async (req, { params }) => {
   const { id } = await params;
+  const { patientId } = req.nextUrl.searchParams;
 
   try {
-    const user = await Users.getById(id);
+    const user = await Users.getById(id, patientId);
 
     return Response.json(user);
   } catch (error) {

@@ -1,14 +1,16 @@
 import { Users } from "@/models/user";
 import { getSession } from "@/utils/getUserData";
 
-export const GET = async () => {
+export const GET = async (req) => {
   const session = await getSession();
 
   if (!session)
     return Response.json({ error: "Token invalid" }, { status: 401 });
 
+  const { patientId } = req.nextUrl.searchParams;
+
   try {
-    const user = await Users.getById(session.user.id);
+    const user = await Users.getById(session.user.id, patientId);
 
     return Response.json(user);
   } catch (error) {

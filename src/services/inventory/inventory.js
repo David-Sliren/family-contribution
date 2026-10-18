@@ -9,6 +9,7 @@ export const getAllInventory = async (queryParams) => {
   if (queryParams.category) queries.category = queryParams.category;
   if (queryParams.page) queries.page = queryParams.page;
   if (queryParams.limit) queries.limit = queryParams.limit;
+  if (queryParams.patientId) queries.patientId = queryParams.patientId;
 
   const querys = new URLSearchParams(queries).toString();
   const enpoint = querys.length ? `/?${querys}` : "/";

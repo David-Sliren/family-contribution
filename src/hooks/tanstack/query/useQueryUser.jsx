@@ -10,6 +10,7 @@ export const userQueryAllOptions = ({
   search,
   role,
   relationship,
+  patientId,
   page = 1,
   limit = 10,
 }) => {
@@ -19,6 +20,7 @@ export const userQueryAllOptions = ({
     search: search ?? "",
     role: role ?? "",
     relationship: relationship ?? "",
+    patientId: patientId ?? "",
   };
 
   return queryOptions({
@@ -32,11 +34,11 @@ export const userQueryAllOptions = ({
 export const useUserQueryAll = (queryParams) =>
   useSuspenseQuery(userQueryAllOptions(queryParams));
 
-export const userQueryByIdOptions = (id) =>
+export const userQueryByIdOptions = (id, patientId) =>
   queryOptions({
-    queryKey: ["user", id],
-    queryFn: () => getById(id),
+    queryKey: ["user", { id, patientId: patientId ?? "" }],
+    queryFn: () => getById(id, patientId),
   });
 
-export const useUserQueryById = (id) =>
-  useSuspenseQuery(userQueryByIdOptions(id));
+export const useUserQueryById = (id, patientId) =>
+  useSuspenseQuery(userQueryByIdOptions(id, patientId));

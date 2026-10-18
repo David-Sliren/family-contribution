@@ -10,6 +10,7 @@ export const contributionQueryOptions = ({
   purpose,
   method,
   status,
+  patientId,
   page = 1,
   limit = 10,
 }) => {
@@ -19,6 +20,7 @@ export const contributionQueryOptions = ({
     purpose: purpose ?? "",
     method: method ?? "",
     status: status ?? "",
+    patientId: patientId ?? "",
   };
 
   return queryOptions({

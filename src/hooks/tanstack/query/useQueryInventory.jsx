@@ -9,6 +9,7 @@ export const inventoryQueryOptions = ({
   status,
   search,
   category,
+  patientId,
   page = 1,
   limit = 10,
 }) => {
@@ -18,6 +19,7 @@ export const inventoryQueryOptions = ({
     category: category ?? "",
     status: status ?? "",
     search: search ?? "",
+    patientId: patientId ?? "",
   };
 
   return queryOptions({

@@ -16,6 +16,23 @@ const useInvalidatePatient = () => {
   };
 };
 
+// cambiar el paciente principal cambia tambien inventarios, gastos,
+// contribuciones, eventos y metricas de usuario: se limpia toda la cache
+const useInvalidateAllByPatient = () => {
+  const queryClient = useQueryClient();
+
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ["main-patient"] });
+    queryClient.invalidateQueries({ queryKey: ["patients"] });
+    queryClient.invalidateQueries({ queryKey: ["inventory"] });
+    queryClient.invalidateQueries({ queryKey: ["expenses"] });
+    queryClient.invalidateQueries({ queryKey: ["contributions"] });
+    queryClient.invalidateQueries({ queryKey: ["users"] });
+    queryClient.invalidateQueries({ queryKey: ["user"] });
+    queryClient.invalidateQueries({ queryKey: ["events"] });
+  };
+};
+
 export const useCreatePatient = () => {
   const invalidate = useInvalidatePatient();
   return useMutation({ mutationFn: createPatient, onSuccess: invalidate });
@@ -30,7 +47,7 @@ export const useUpdatePatient = (id) => {
 };
 
 export const useSetMainPatient = () => {
-  const invalidate = useInvalidatePatient();
+  const invalidate = useInvalidateAllByPatient();
   return useMutation({
     mutationFn: (id) => setMainPatient(id),
     onSuccess: invalidate,

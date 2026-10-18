@@ -7,6 +7,7 @@ export const getAllEvents = async (queryParams) => {
   if (queryParams.page) queries.page = queryParams.page;
   if (queryParams.limit) queries.limit = queryParams.limit;
   if (queryParams.type) queries.type = queryParams.type;
+  if (queryParams.patientId) queries.patientId = queryParams.patientId;
 
   const querys = new URLSearchParams(queries).toString();
   const endpoint = querys.length ? `/?${querys}` : "/";

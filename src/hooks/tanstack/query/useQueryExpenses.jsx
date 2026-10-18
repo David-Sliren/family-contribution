@@ -8,6 +8,7 @@ import {
 export const expensesQueryOptions = ({
   category,
   search,
+  patientId,
   page = 1,
   limit = 10,
 }) => {
@@ -16,6 +17,7 @@ export const expensesQueryOptions = ({
     limit,
     category: category ?? "",
     search: search ?? "",
+    patientId: patientId ?? "",
   };
 
   return queryOptions({

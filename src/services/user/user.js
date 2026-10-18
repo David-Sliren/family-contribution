@@ -9,6 +9,7 @@ export const getAllUsers = async (queryParams) => {
   if (queryParams.relationship) queries.relationship = queryParams.relationship;
   if (queryParams.page) queries.page = queryParams.page;
   if (queryParams.limit) queries.limit = queryParams.limit;
+  if (queryParams.patientId) queries.patientId = queryParams.patientId;
 
   const querys = new URLSearchParams(queries).toString();
   const enpoint = querys.length ? `/?${querys}` : "/";
@@ -21,9 +22,13 @@ export const getAllUsers = async (queryParams) => {
   }
 };
 
-export const getById = async (id) => {
+export const getById = async (id, patientId) => {
   try {
-    const { data } = await baseUrlUser.get(`/${id}`);
+    const queries = patientId ? { patientId } : {};
+    const querys = new URLSearchParams(queries).toString();
+    const endpoint = querys.length ? `/${id}?${querys}` : `/${id}`;
+
+    const { data } = await baseUrlUser.get(endpoint);
     return data;
   } catch (error) {
     throw getServiceError(error);

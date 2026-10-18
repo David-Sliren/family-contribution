@@ -8,6 +8,7 @@ export const getAllExpenses = async (queryParams) => {
   if (queryParams.search) queries.search = queryParams.search;
   if (queryParams.page) queries.page = queryParams.page;
   if (queryParams.limit) queries.limit = queryParams.limit;
+  if (queryParams.patientId) queries.patientId = queryParams.patientId;
 
   const querys = new URLSearchParams(queries).toString();
   const enpoint = querys.length ? `/?${querys}` : "/";

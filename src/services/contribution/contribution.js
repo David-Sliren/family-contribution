@@ -9,6 +9,7 @@ export const getAllContribution = async (queryParams) => {
   if (queryParams.status) queries.status = queryParams.status;
   if (queryParams.page) queries.page = queryParams.page;
   if (queryParams.limit) queries.limit = queryParams.limit;
+  if (queryParams.patientId) queries.patientId = queryParams.patientId;
 
   const querys = new URLSearchParams(queries).toString();
   const enpoint = querys.length ? `/?${querys}` : "/";

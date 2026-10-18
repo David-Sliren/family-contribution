@@ -7,6 +7,8 @@ import "@/database/user";
 import { PREFIXTOKEN } from "@/constants/config";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "@/constants/env";
 import { sendEmail } from "@/utils/email";
+// import { User } from "@/database/user";
+import { beforeRegisterHook } from "./hooksAuth";
 
 await conectToData();
 
@@ -71,5 +73,14 @@ export const auth = betterAuth({
       clientSecret: GOOGLE_CLIENT_SECRET,
     },
   },
+
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => await beforeRegisterHook(user),
+      },
+    },
+  },
+
   plugins: [username()],
 });

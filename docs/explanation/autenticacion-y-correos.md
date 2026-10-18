@@ -28,6 +28,10 @@ Se usa **Nodemailer con SMTP de Gmail** (puerto 465, `secure: true`) en lugar de
 
 `TemplateEmail` usa estilos inline a propósito: Gmail recorta selectores de `<style>` y Outlook los elimina. Es una plantilla reutilizable (verificación, recuperación y futuros avisos) que sigue la paleta M3 de `DESIGN.md` en hex. Ver [`../how-to/enviar-un-correo-transaccional.md`](../how-to/enviar-un-correo-transaccional.md).
 
+## Username autogenerado en el registro (hook de Better Auth)
+
+El plugin `username()` exige un `username` único al crear el usuario, pero el registro social con Google no trae ese dato: sin más, el alta fallaba. La solución es `databaseHooks.user.create.before` → `beforeRegisterHook` (`src/utils/hooksAuth.js`): si el usuario ya trae `username` (registro por correo) lo deja pasar; si no, genera un slug del nombre o del parte local del correo (sin acentos ni símbolos, máximo 20 caracteres, mínimo 3), y si ya existe le agrega un sufijo aleatorio de 4 dígitos (hasta 5 intentos) antes de devolver `{ data: ... }` con `username` y `displayUsername`. Better Auth aplica el hook antes de persistir, así que el registro social nace con un nombre de usuario válido y único sin tocar el formulario.
+
 ## Dos factores de "quién toca qué"
 
 - `role` (`user` \| `carer` \| `admin`) se controla **solo en servidor** (`input: false` en Better Auth): nadie puede autoasignarse admin. Solo un admin cambia roles, y nadie cambia el suyo propio (`PUT /api/dashboard/users/[id]` → `403`).

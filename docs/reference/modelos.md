@@ -15,7 +15,7 @@ Colecciones mongoose definidas en `src/database/*.js`. Todas usan `timestamps` y
 | `tel`          | String   | default `""` (opcional: el login con Google no trae teléfono)     |
 | `isDisabled`   | Boolean  | default `false`                                                   |
 
-Virtuales: `contributions` (ref Contribution, `foreignField: "createBy"`), `totalContributed` y `monthMoreActive` (helpers en `src/utils/mongoose-helper/virtualFuntions.js`). El schema usa el plugin `cleanUser`.
+Virtuales: `contributions` (ref Contribution, `foreignField: "createBy"`), `totalContributed` y `monthMoreActive` (helpers en `src/utils/mongoose-helper/virtualFuntions.js`). El schema usa el plugin `cleanUser`. `username`, `email` y `password` los gestiona Better Auth: el plugin `username()` exige `username` único y, si el registro no lo trae (alta vía Google), `beforeRegisterHook` (`src/utils/hooksAuth.js`) lo autogenera desde el nombre o el correo.
 
 ## patients
 

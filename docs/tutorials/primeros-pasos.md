@@ -59,7 +59,7 @@ Entra a `/auth/register` y completa: nombre, username (mínimo 4 caracteres, sin
 
 ## 6. Verifica el correo
 
-Busca en tu bandeja de entrada un correo de "Aleida | Contribucion" y pulsa el botón **Verificar correo**. Tu cuenta queda activa.
+Busca en tu bandeja de entrada un correo de "Aleida | Contribucion" y pulsa el botón **Verificar correo**. Tu cuenta queda activa y **entras directo a la plataforma**: la sesión se crea al verificar, sin volver a escribir usuario ni contraseña.
 
 Si el correo no llega:
 
@@ -69,7 +69,7 @@ Si el correo no llega:
 
 ## 7. Inicia sesión
 
-En `/auth/login`, entra con tu username y contraseña.
+Solo hace falta si más tarde cierras sesión o abriste el enlace de verificación en otro navegador: en `/auth/login`, entra con tu username y contraseña.
 
 ## 8. Crea tu primer paciente
 

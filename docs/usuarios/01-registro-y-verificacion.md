@@ -50,9 +50,10 @@
 
 ### Escena 7 — Activar la cuenta
 
-- **Pasa**: se abre el correo y se pulsa el botón de verificación; abre la plataforma con la confirmación.
-- **Narración**: "Abres el correo de Aleida | Contribucion y pulsas **Verificar correo**. Ya está: cuenta activada."
-- **En pantalla**: correo con botón **"Verificar correo"** → pantalla **"Correo verificado"** y enlace **"¿Listo para entrar?"**.
+- **Pasa**: se abre el correo y se pulsa el botón de verificación; la plataforma abre ya con la sesión iniciada.
+- **Narración**: "Abres el correo de Aleida | Contribucion y pulsas **Verificar correo**. Ya está: cuenta activada y entras directo, sin escribir nada más."
+- **En pantalla**: correo con botón **"Verificar correo"** → la plataforma abre en la pantalla de inicio, ya dentro de la cuenta.
+- **Nota**: el enlace también funciona desde el celular; si lo abres en otro navegador, ese navegador queda con la sesión.
 
 ### Escena 8 — Si algo sale mal
 

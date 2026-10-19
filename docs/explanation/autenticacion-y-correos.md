@@ -12,7 +12,15 @@ La sesión en servidor se lee con `getSession()` (`src/utils/getUserData.js`), q
 
 `requireEmailVerification: true` con `sendOnSignUp`/`sendOnSignIn`. La decisión: la plataforma maneja aportes reales y datos familiares; una cuenta sin verificar permite suplantación trivial con el correo de otro. El costo —el registro ya no crea sesión— se asume explícitamente en la UI ("Revisa tu correo") y Better Auth reenvía el enlace con cada intento de login.
 
+`autoSignInAfterVerification: true` recupera ese costo al final del flujo: cuando el usuario pulsa el enlace de verificación, Better Auth crea la sesión en ese momento y redirige al `callbackURL` (`/auth/verify-email`); como el proxy manda toda ruta `/auth/*` con sesión a `/`, el usuario aterriza dentro de la plataforma sin volver a escribir usuario ni contraseña. En la práctica la pantalla de éxito de `VerifyEmail` solo queda para los errores de verificación (token inválido/expirado, cuenta no encontrada), que redirigen sin sesión.
+
 **Migración**: usuarios existentes necesitan `emailVerified: true` (un `updateMany` en producción); sin eso no pueden entrar.
+
+## Aviso de correo ya registrado en el registro
+
+Con `requireEmailVerification`, Better Auth responde **genérico** ante un sign-up con un correo que ya existe: devuelve `200` con un usuario sintético y no envía ningún correo, para no revelar qué correos están registrados (anti-enumeración). Para el usuario de la plataforma eso significaba tocar "Revisa tu correo" y quedarse esperando un enlace que nunca llega.
+
+El proyecto prefiere el mensaje claro: `hooks.before` (middleware global `createAuthMiddleware(beforeExistEmail)` en `src/utils/auth.js`) intercepta solo `/sign-up/email`, busca el correo en `User` y lanza un `APIError` (`BAD_REQUEST`, código `USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL`) **antes** de que Better Auth aplique su respuesta genérica. `Register.jsx` ya manejaba ese código y muestra "El correo electrónico ya existe", evitando que alguien se quede esperando un correo que no llegará. El costo asumido a propósito: el endpoint de registro revela si un correo existe, intercambio aceptable en una plataforma familiar donde el error explícito evita más confusiones de las que causa.
 
 ## Recuperación de contraseña
 

@@ -10,7 +10,7 @@ Descripción técnica de los endpoints de `src/app/api/**/route.js`. Convencione
 
 ## Auth (Better Auth)
 
-`/api/auth/[...all]` — catch-all gestionado por Better Auth (GET/POST): registro (`sign-up/email`), inicio y cierre de sesión (`sign-in/email`, `sign-out`), verificación de correo (`verify-email`), recuperación de contraseña (`request-password-reset`, `reset-password`) y login social con Google (`sign-in/social`). Público; la sesión vive en cookie con prefijo `family-contribution`.
+`/api/auth/[...all]` — catch-all gestionado por Better Auth (GET/POST): registro (`sign-up/email`), inicio y cierre de sesión (`sign-in/email`, `sign-out`), verificación de correo (`verify-email`), recuperación de contraseña (`request-password-reset`, `reset-password`) y login social con Google (`sign-in/social`). Público; la sesión vive en cookie con prefijo `family-contribution`. Notas: registrar un correo ya existente devuelve `400` con `code: "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"` (hook `beforeExistEmail`, en lugar de la respuesta genérica de Better Auth) y verificar el correo crea sesión automáticamente (`autoSignInAfterVerification`) y redirige al `callbackURL`.
 
 ## Endpoints públicos (sin sesión)
 

@@ -8,7 +8,8 @@ import { PREFIXTOKEN } from "@/constants/config";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "@/constants/env";
 import { sendEmail } from "@/utils/email";
 // import { User } from "@/database/user";
-import { beforeRegisterHook } from "./hooksAuth";
+import { beforeExistEmail, beforeRegisterHook } from "./hooksAuth";
+import { createAuthMiddleware } from "better-auth/api";
 
 await conectToData();
 
@@ -45,6 +46,7 @@ export const auth = betterAuth({
     },
   },
   emailVerification: {
+    autoSignInAfterVerification: true,
     sendOnSignUp: true,
     sendOnSignIn: true,
     sendVerificationEmail: async ({ user, url }) => {
@@ -80,6 +82,10 @@ export const auth = betterAuth({
         before: async (user) => await beforeRegisterHook(user),
       },
     },
+  },
+
+  hooks: {
+    before: createAuthMiddleware(beforeExistEmail),
   },
 
   plugins: [username()],

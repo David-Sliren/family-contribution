@@ -1,4 +1,5 @@
 import { User } from "@/database/user";
+import { APIError } from "better-auth";
 
 const slugify = (s) =>
   s
@@ -22,4 +23,17 @@ export const beforeRegisterHook = async (user) => {
   return {
     data: { ...user, username: candidate, displayUsername: user.name },
   };
+};
+
+export const beforeExistEmail = async (ctx) => {
+  if (ctx.path !== "/sign-up/email") return;
+
+  const exists = await User.exists({ email: ctx.body.email });
+
+  if (exists) {
+    throw new APIError("BAD_REQUEST", {
+      message: "user already exist use another email",
+      code: "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL",
+    });
+  }
 };

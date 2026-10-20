@@ -11,7 +11,7 @@ Content-Type: application/json
     "createBy": "6a868c840d22f35f4e37904a",
     "amount": 10000,
     "status": "confirmado",
-    "purpose": "medicinas",
+    "purpose": "inventario",
     "method": "transferencia"
 
 }

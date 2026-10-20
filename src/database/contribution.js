@@ -14,7 +14,7 @@ const contributionSchema = new Schema(
     purpose: {
       type: String,
       required: true,
-      enum: ["medicinas", "facturas", "cuidador"],
+      enum: ["inventario", "gastos", "cuidador"],
     },
     date: { type: Date, default: Date.now },
     patientId: { type: Schema.ObjectId, required: true, ref: "Patient" },

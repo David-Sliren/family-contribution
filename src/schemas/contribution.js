@@ -4,8 +4,8 @@ import { z } from "zod";
 const status = z.enum(["confirmado", "pendiente"], {
   error: "el estado no es admitido, usar 'confirmado' o 'pendiente'",
 });
-const purpose = z.enum(["medicinas", "facturas", "cuidador"], {
-  error: 'proposito no admitido, usar "medicinas", "facturas", "cuidador"',
+const purpose = z.enum(["inventario", "gastos", "cuidador"], {
+  error: 'proposito no admitido, usar "inventario", "gastos", "cuidador"',
 });
 
 const method = z.enum(["pasarela", "efectivo", "transferencia"], {

@@ -3,10 +3,7 @@ import z from "zod";
 export const inventorySchema = z.object({
   name: z.string().min(3, "Debe tener minimo 3 caracteres"),
   totalUnit: z.coerce.number().min(1, "Debe tener como minimo 1 unidad"),
-  price: z.coerce
-    .number()
-    .positive("Debe ser un número positivo")
-    .min(1000, "No debe ser inferior a 1000"),
+  price: z.coerce.number().min(0, "no debe ser menor a 0").default(0),
   date: z.iso.datetime("Formato de fecha invalido").optional(),
   status: z.enum(["en orden", "agotado", "bajo"]),
   concentration: z

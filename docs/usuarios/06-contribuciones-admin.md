@@ -20,7 +20,7 @@
 
 - **Pasa**: se aplica un filtro por propósito, método o estado.
 - **Narración**: "Arriba tienes tres filtros: para qué fue el aporte, cómo llegó y si está confirmado o pendiente. Combínalos como quieras."
-- **En pantalla**: tres menús con las opciones *-proposito* → *medicinas, facturas, cuidador*; *-metodo* → *pasarela, efectivo, transferencia*; *-estado* → *confirmado, pendiente*.
+- **En pantalla**: tres menús con las opciones *-proposito* → *inventario, gastos, cuidador*; *-metodo* → *pasarela, efectivo, transferencia*; *-estado* → *confirmado, pendiente*.
 
 ### Escena 3 — Registrar un aporte manual
 

@@ -47,7 +47,7 @@ Virtuales de colección (eficientes con **un solo populate** en `Patients.getByI
 | `method`    | enum     | `pasarela` \| `efectivo` \| `transferencia`       |
 | `amount`    | Number   | requerido; mínimo 6000 COP en los schemas        |
 | `status`    | enum     | `confirmado` \| `pendiente`                       |
-| `purpose`   | enum     | `medicinas` \| `facturas` \| `cuidador`           |
+| `purpose`   | enum     | `inventario` \| `gastos` \| `cuidador`              |
 | `date`      | Date     | default `Date.now`                                |
 | `patientId` | ObjectId ref Patient | requerido                             |
 | `createBy`  | ObjectId ref User | requerido (quien aporta)                 |

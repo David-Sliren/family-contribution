@@ -32,8 +32,8 @@
 ### Escena 4 — Pasarela: llenar y pagar
 
 - **Pasa**: elegida la pasarela, aparece el formulario; se completa y se paga.
-- **Narración**: "Si eliges pasarela, escribes la cantidad —ojo, el mínimo son seis mil pesos—, escoges para qué es: medicinas, facturas o cuidador, y pulsas **Pagar**. Te lleva a Mercado Pago, eliges cómo pagar y confirmas."
-- **En pantalla**: formulario con **"Cantidad"** (ejemplo: *20000*), **"Proposito"** con opciones *medicinas, facturas, cuidador* y botón **"Pagar"** → pantalla de Mercado Pago.
+- **Narración**: "Si eliges pasarela, escribes la cantidad —ojo, el mínimo son seis mil pesos—, escoges para qué es: inventario, gastos o cuidador, y pulsas **Pagar**. Te lleva a Mercado Pago, eliges cómo pagar y confirmas."
+- **En pantalla**: formulario con **"Cantidad"** (ejemplo: *20000*), **"Proposito"** con opciones *inventario, gastos, cuidador* y botón **"Pagar"** → pantalla de Mercado Pago.
 - **Nota**: si pones menos de seis mil aparece *"El Monto minimo es de $6000"*.
 
 ### Escena 5 — El pago quedó registrado

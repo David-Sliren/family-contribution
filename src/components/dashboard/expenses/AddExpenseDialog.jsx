@@ -99,7 +99,7 @@ export function AddExpenseDialog() {
           />
 
           <FieldType
-            name="Cantidad"
+            name="Precio"
             inputName="amount"
             inputPlaceholder="Ej. 200000"
             inputType="number"

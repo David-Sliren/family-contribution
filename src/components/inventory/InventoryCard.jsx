@@ -63,28 +63,19 @@ export const InventoryCard = ({
           {activePrinciple && ` • ${activePrinciple} `}
         </>
       }
-      chip={
-        ChipIcon && (
-          <>
-            <span className="text-sm">
-              <ChipIcon />
-            </span>
-            {status}
-          </>
-        )
-      }
       chipClassName={chip?.classes}
-      dateLabel="Ultima compra"
+      dateLabel="Fecha"
       dateValue={defaultDate(lastUpdate)}
       action={
         <button
           onClick={handler}
           disabled={status === "en orden"}
           className={cn(
-            "px-8 py-3.5 rounded-full font-bold text-sm transition-all active:scale-95 shadow-lg shadow-primary/20 cursor-pointer",
+            "px-8 py-3.5 rounded-full font-bold text-sm transition-all active:scale-95 shadow-lg shadow-primary/20 cursor-pointer flex gap-2 justify-center items-center",
             STATUS_BUTTON[status],
           )}
         >
+          <span>{ChipIcon && <ChipIcon />}</span>
           {status === "en orden" ? "En orden" : "Comprar"}
         </button>
       }

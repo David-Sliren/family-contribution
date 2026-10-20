@@ -9,7 +9,7 @@ export default async function Dashboard({ children }) {
   await queryClient.prefetchQuery(mainPatientQueryOptions());
 
   return (
-    <div className="max-h-[90vh] min-h-[90vh] flex overflow-hidden">
+    <div className="max-h-[90dvh] min-h-[90dvh] flex overflow-hidden">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Sidebar />
         {children}

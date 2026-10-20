@@ -37,7 +37,7 @@ export function Toolbar({
   }, [search, searchValue, handleSearch]);
 
   return (
-    <div className="flex shrink-0 gap-2.5 items-center w-fit z-8">
+    <div className="flex flex-col sm:flex-row shrink-0 gap-2.5 items-start w-full sm:w-fit z-8 mb-4 sm:mb-0">
       <SearchInput
         className="text-xs sm:text-md"
         placeholder={searchName}
@@ -45,7 +45,7 @@ export function Toolbar({
         onChange={(e) => setText(e.target.value)}
         aria-label={searchName}
       />
-      {children}
+      <div className="flex gap-2.5">{children}</div>
     </div>
   );
 }

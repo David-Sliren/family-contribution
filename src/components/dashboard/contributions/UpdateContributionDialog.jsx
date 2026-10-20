@@ -99,7 +99,7 @@ export function UpdateContributionDialog({ contribution, dialogRef }) {
           <FieldSelect
             name="Proposito"
             inputName="purpose"
-            fieldValues={["medicinas", "facturas", "cuidador"]}
+            fieldValues={["inventario", "gastos", "cuidador"]}
             registerHook={register}
           />
 

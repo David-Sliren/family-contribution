@@ -77,7 +77,7 @@ export function AddContributionDialog({ user, dialogRef }) {
           <FieldSelect
             name="Proposito"
             inputName="purpose"
-            fieldValues={["medicinas", "facturas", "cuidador"]}
+            fieldValues={["inventario", "gastos", "cuidador"]}
             registerHook={register}
           />
 

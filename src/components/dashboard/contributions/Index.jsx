@@ -10,7 +10,7 @@ export const Index = ({ title, subtitle, description }) => {
       <div className="flex flex-wrap gap-2 items-center py-2 z-10">
         <SelectFilter
           selectFilter="purpose"
-          fieldValues={["-proposito", "medicinas", "facturas", "cuidador"]}
+          fieldValues={["-proposito", "inventario", "gastos", "cuidador"]}
         />
         <SelectFilter
           selectFilter="method"

@@ -104,7 +104,7 @@ export const FormContribute = () => {
             name="Proposito"
             inputName="purpose"
             registerHook={register}
-            fieldValues={["medicinas", "facturas", "cuidador"]}
+            fieldValues={["inventario", "gastos", "cuidador"]}
           />
           <ActionsButtons isSubmitting={isSubmitting} buttonName="Pagar" />
         </form>

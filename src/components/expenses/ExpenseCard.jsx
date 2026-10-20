@@ -1,6 +1,6 @@
 "use client";
 import { formatMoney } from "@/config/money";
-import clsx from "clsx";
+import { cn } from "@/utils/cn";
 import {
   LuCar,
   LuClipboardPlus,
@@ -11,6 +11,7 @@ import {
   LuWheat,
 } from "react-icons/lu";
 import { defaultDate } from "@/config/dates";
+import { ItemCard } from "@/components/ui/cards/ItemCard";
 
 const CATEGORY_STYLE = {
   transporte: { icon: LuCar, classes: "bg-sky-500/10 text-sky-600" },
@@ -31,49 +32,25 @@ export const ExpenseCard = ({ name, price, lastUpdate, category }) => {
   const Icon = style.icon;
 
   return (
-    <div className="bg-surface-container-lowest p-6 rounded-3xl editorial-shadow flex flex-col md:flex-row md:items-center justify-between gap-6">
-      <div className="flex items-start gap-5 ">
-        <div
-          className={clsx(
-            "w-14 h-14 rounded-2xl flex items-center justify-center shrink-0",
-            style.classes,
-          )}
-        >
-          <span className="text-3xl">
+    <ItemCard
+      icon={Icon}
+      iconClassName={style.classes}
+      title={name}
+      meta={formatMoney(price)}
+      chip={
+        <>
+          <span className="text-sm">
             <Icon />
           </span>
-        </div>
-        <div>
-          <h3 className="text-xl font-bold font-headline text-on-surface uppercase">
-            {name}
-          </h3>
-          <p className="text-sm font-medium text-on-surface-variant">
-            {formatMoney(price)}
-          </p>
-          <div
-            className={clsx(
-              "hidden mt-3 lg:inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase",
-              style.classes,
-            )}
-          >
-            <span className="text-sm">
-              <Icon />
-            </span>
-            {category}
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col xl:flex-row gap-6">
-        <div className="flex flex-col md:items-end justify-center">
-          <span className="text-xs font-semibold text-outline uppercase tracking-widest mb-1">
-            Fecha
-          </span>
-          <span className="text-on-surface font-medium">
-            {defaultDate(lastUpdate)}
-          </span>
-        </div>
+          {category}
+        </>
+      }
+      chipClassName={cn("hidden lg:inline-flex", style.classes)}
+      dateLabel="Fecha"
+      dateValue={defaultDate(lastUpdate)}
+      action={
         <div
-          className={clsx(
+          className={cn(
             "flex justify-center items-center gap-2 lg:hidden px-8 py-3.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20",
             style.classes,
           )}
@@ -81,7 +58,7 @@ export const ExpenseCard = ({ name, price, lastUpdate, category }) => {
           <Icon />
           {category}
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 };

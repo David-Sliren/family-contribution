@@ -6,12 +6,13 @@ import { defaultDate } from "@/config/dates";
 import { formatMoney } from "@/config/money";
 import Image from "next/image";
 import { LuEllipsisVertical, LuPencil } from "react-icons/lu";
+import { ButtonPop } from "@/components/ui/buttons/ButtonPop";
 
 export const ContributionCard = ({ contribution, handdler = () => "" }) => {
   return (
     <article className="relative flex items-center justify-between w-full p-4 rounded-2xl text-sm hover:bg-surface-container-low transition-all duration-200">
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold font-headline-md overflow-hidden">
+        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-primary font-semibold font-headline-md overflow-hidden">
           {contribution?.createBy.image ? (
             <Image
               src={contribution?.createBy.image}
@@ -20,6 +21,7 @@ export const ContributionCard = ({ contribution, handdler = () => "" }) => {
               placeholder="blur"
               blurDataURL={blurColors.purple}
               alt="imagen de usuario"
+              className="size-full"
             />
           ) : (
             <span className="capitalize">
@@ -29,7 +31,7 @@ export const ContributionCard = ({ contribution, handdler = () => "" }) => {
         </div>
         <div>
           <h3 className="font-semibold text-on-surface text-[10px] sm:text-xs">
-            {contribution?.createBy.name} salazar andulce
+            {contribution?.createBy.name}
           </h3>
           <p className="text-[10px] text-on-surface-variant">
             {defaultDate(contribution?.date)}
@@ -45,6 +47,9 @@ export const ContributionCard = ({ contribution, handdler = () => "" }) => {
           <p className="text-[10px] text-on-surface-variant text-right">
             {contribution?.method}
           </p>
+          <p className="text-[10px] text-on-surface-variant text-right">
+            {contribution?.status}
+          </p>
         </span>
         <button
           popoverTarget={`popover-basic-${contribution.id}`}
@@ -54,15 +59,11 @@ export const ContributionCard = ({ contribution, handdler = () => "" }) => {
         </button>
       </div>
       <DeafultPopover id={contribution.id}>
-        <button
-          className="w-full flex items-center gap-3 px-4 py-2 hover:bg-surface-container-low transition-colors text-primary text-wrap cursor-pointer"
-          onClick={() => handdler(contribution)}
-        >
-          <span className="hidden sm:block capitalize">
-            editar contribucion
-          </span>
-          <LuPencil />
-        </button>
+        <ButtonPop
+          name="editar"
+          handle={() => handdler(contribution)}
+          icon={LuPencil}
+        />
       </DeafultPopover>
     </article>
   );

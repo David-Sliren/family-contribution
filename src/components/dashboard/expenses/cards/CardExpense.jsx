@@ -1,22 +1,16 @@
+import { ButtonPop } from "@/components/ui/buttons/ButtonPop";
 import { CardDefaultList } from "@/components/ui/cards/Card";
 import { DeafultPopover } from "@/components/ui/popovers/DeafultPopover";
 import { defaultDate } from "@/config/dates";
 import { formatMoney } from "@/config/money";
 import { useDeleteExpense } from "@/hooks/tanstack/mutation/useMutationExpense";
 import { useNotification } from "@/store/ui/notifications";
-import { LuBanknote, LuEllipsisVertical, LuPencil } from "react-icons/lu";
-
-export const ButtonPop = ({ name, handle, icon: Icon }) => {
-  return (
-    <button
-      className="w-full flex items-center gap-3 px-4 py-2 hover:bg-surface-container-low transition-colors text-primary text-wrap cursor-pointer"
-      onClick={handle}
-    >
-      <span className="hidden sm:block capitalize">{name}</span>
-      <Icon />
-    </button>
-  );
-};
+import {
+  LuBanknote,
+  LuEllipsisVertical,
+  LuPencil,
+  LuTrash2,
+} from "react-icons/lu";
 
 export const CardExpense = ({ expense, handdler = () => "" }) => {
   const { mutateAsync } = useDeleteExpense(expense?.id);
@@ -77,7 +71,7 @@ export const CardExpense = ({ expense, handdler = () => "" }) => {
         <ButtonPop
           name="eliminar"
           handle={handleDeleteExpense}
-          icon={LuBanknote}
+          icon={LuTrash2}
         />
       </DeafultPopover>
     </CardDefaultList>

@@ -17,6 +17,7 @@ import {
   LuPencil,
   LuPhone,
 } from "react-icons/lu";
+import { ButtonPop } from "@/components/ui/buttons/ButtonPop";
 
 export function PatientCard({ patient, onEdit, onChangeImage }) {
   const setNotification = useNotification((state) => state.setNotification);
@@ -137,28 +138,25 @@ export function PatientCard({ patient, onEdit, onChangeImage }) {
       </div>
 
       <DeafultPopover id={patient.id}>
-        <button
-          className="flex w-full items-center gap-3 px-4 py-2 text-primary hover:bg-surface-container-low cursor-pointer"
-          onClick={() => onEdit(patient)}
-        >
-          <LuPencil />
-          Editar
-        </button>
-        <button
-          className="flex w-full items-center gap-3 px-4 py-2 text-primary hover:bg-surface-container-low cursor-pointer"
-          onClick={() => onChangeImage(patient)}
+        <ButtonPop
+          name="editar"
+          icon={LuPencil}
+          handle={() => onEdit(patient)}
+        />
+        <ButtonPop
+          name="cambiar foto"
+          icon={LuImage}
+          handle={() => onChangeImage(patient)}
         >
           <LuImage />
           Cambiar foto
-        </button>
+        </ButtonPop>
         {!patient.isMain && (
-          <button
-            className="flex w-full items-center gap-3 px-4 py-2 text-primary hover:bg-surface-container-low cursor-pointer"
-            onClick={handleSetMain}
-          >
-            <LuCrown />
-            Hacer principal
-          </button>
+          <ButtonPop
+            name="Hacer principal"
+            icon={LuCrown}
+            handle={handleSetMain}
+          />
         )}
       </DeafultPopover>
     </Card>

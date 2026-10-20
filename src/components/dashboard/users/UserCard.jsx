@@ -1,12 +1,18 @@
 "use client";
 
+import { ButtonPop } from "@/components/ui/buttons/ButtonPop";
 import { DeafultPopover } from "@/components/ui/popovers/DeafultPopover";
 import { formatMoney } from "@/config/money";
 import { blurColors } from "@/constants/bgBase64";
 import Image from "next/image";
-import { LuEllipsisVertical, LuHandCoins } from "react-icons/lu";
+import { LuEllipsisVertical, LuHandCoins, LuUserCog } from "react-icons/lu";
 
-export const UserCard = ({ user, handdler, changeRoleHandler, isCurrentUser }) => {
+export const UserCard = ({
+  user,
+  handdler,
+  changeRoleHandler,
+  isCurrentUser,
+}) => {
   return (
     <article className="relative flex items-center justify-between w-full p-4 rounded-2xl text-sm hover:bg-surface-container-low transition-all duration-200">
       <div className="flex items-center gap-4">
@@ -44,24 +50,17 @@ export const UserCard = ({ user, handdler, changeRoleHandler, isCurrentUser }) =
         </button>
       </div>
       <DeafultPopover id={user.id}>
-        <button
-          popoverTarget={`popover-basic-${user.id}`}
-          popoverTargetAction="hide"
-          className="w-full flex items-center gap-3 px-4 py-2 hover:bg-surface-container-low transition-colors text-primary text-wrap cursor-pointer"
-          onClick={() => handdler(user)}
-        >
-          <span className="hidden sm:block">añadir contribucion</span>
-          <LuHandCoins />
-        </button>
+        <ButtonPop
+          name="contribucion"
+          icon={LuHandCoins}
+          handle={() => handdler(user)}
+        />
         {!isCurrentUser && (
-          <button
-            popoverTarget={`popover-basic-${user.id}`}
-            popoverTargetAction="hide"
-            className="w-full flex items-center gap-3 px-4 py-2 hover:bg-surface-container-low transition-colors text-primary text-wrap cursor-pointer"
-            onClick={() => changeRoleHandler(user)}
-          >
-            <span>Cambiar rol</span>
-          </button>
+          <ButtonPop
+            name="cambiar rol"
+            handle={() => changeRoleHandler(user)}
+            icon={LuUserCog}
+          />
         )}
       </DeafultPopover>
     </article>

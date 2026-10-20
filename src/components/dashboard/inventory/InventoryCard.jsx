@@ -4,6 +4,7 @@ import { DeafultPopover } from "@/components/ui/popovers/DeafultPopover";
 import { useDeleteInventory } from "@/hooks/tanstack/mutation/useMutationInventory";
 import { useNotification } from "@/store/ui/notifications";
 import { LuEllipsisVertical, LuPencil, LuTrash2 } from "react-icons/lu";
+import { ButtonPop } from "@/components/ui/buttons/ButtonPop";
 
 const statusTone = { "en orden": "success", bajo: "alert", agotado: "alert" };
 
@@ -63,20 +64,12 @@ export function InventoryCard({ inventory, onEdit }) {
         </p>
       )}
       <DeafultPopover id={inventory.id}>
-        <button
-          className="flex w-full items-center gap-3 px-4 py-2 text-primary hover:bg-surface-container-low cursor-pointer"
-          onClick={() => onEdit(inventory)}
-        >
-          <LuPencil />
-          Editar
-        </button>
-        <button
-          className="flex w-full items-center gap-3 px-4 py-2 text-error hover:bg-surface-container-low cursor-pointer"
-          onClick={handleDelete}
-        >
-          <LuTrash2 />
-          Eliminar
-        </button>
+        <ButtonPop
+          name="editar"
+          icon={LuPencil}
+          handle={() => onEdit(inventory)}
+        />
+        <ButtonPop name="eliminar" icon={LuTrash2} handle={handleDelete} />
       </DeafultPopover>
     </Card>
   );

@@ -1,17 +1,17 @@
-@baseUrl=http://localhost:3000/api/contributions
+@baseUrl=http://localhost:3000/api/dashboard/contributions
 
 @idUser=6a868c840d22f35f4e37904a
 @access-token=access-token=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjZhODY4YzM5MGQyMmYzNWY0ZTM3OTA0OSIsInVzZXJuYW1lIjoic2xpcmVuIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzg3MjAyNzA1LCJleHAiOjE3ODcyMDk5MDV9.vGYASh81Fj3c2oG1QfKjK5XIUg8h-JFiziK_3wdwr_M
 
-### set contribution
+### set contribution (admin registra un aporte a nombre de OTRO usuario)
 POST  {{baseUrl}}
 Content-Type: application/json
 
 {
-    "userId": "6a868c840d22f35f4e37904a",
+    "createBy": "6a868c840d22f35f4e37904a",
     "amount": 10000,
     "status": "confirmado",
-    "purpose": "medicinas",
+    "purpose": "inventario",
     "method": "transferencia"
-    
+
 }

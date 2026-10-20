@@ -7,26 +7,32 @@ import { FormLayout } from "@/components/ui/form/layout/FormLayout";
 import { userFrontedSchema } from "@/schemas/user";
 import React, { useState } from "react";
 import { useHookForm } from "@/hooks/useHookForm";
-import { useRouter } from "next/navigation";
 import { Info } from "@/components/ui/form/info/Info";
-import { createUser } from "@/services/user/auth";
+import { authClient } from "@/utils/auth-client";
 
-// const DEFAULVALUES = {
-// name: "Jhojan",
-// username: "juanperez01",
-// tel: "3044518133",
-// email: "correo@correo.com",
-// password: "Noseqponer12",
-// confirmPassword: "Noseqponer12",
-// };
-const userOptions = ["externo", "hijo", "esposo", "sobrino", "hermano"];
+const DEFAULVALUES = {
+  name: "Jhojan",
+  username: "juanperez01",
+  tel: "3044518133",
+  // email: "correo@correo.com",
+  password: "Noseqponer12",
+  confirmPassword: "Noseqponer12",
+};
+const userOptions = [
+  "externo",
+  "hijo",
+  "esposo",
+  "sobrino",
+  "hermano",
+  "nieto",
+];
 
 export const Index = () => {
-  const router = useRouter();
   const [isError, setIsError] = useState("");
+  const [sentTo, setSentTo] = useState("");
   const { handleSubmit, register, errors, isSubmitting, reset } = useHookForm({
     schema: userFrontedSchema,
-    // defaultValues: DEFAULVALUES,
+    defaultValues: DEFAULVALUES,
   });
 
   async function handleSubmitForm(data) {
@@ -34,12 +40,48 @@ export const Index = () => {
     try {
       setIsError("");
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      await createUser(backendData);
-      router.replace("/auth/login");
-      reset();
-    } catch (error) {
-      setIsError(error);
+      const { error } = await authClient.signUp.email({
+        ...backendData,
+        callbackURL: "/auth/verify-email",
+      });
+
+      if (!error) {
+        // requireEmailVerification: no hay sesión; toca verificar por correo
+        setSentTo(backendData.email);
+        return reset();
+      }
+
+      if (error.code === "USERNAME_IS_ALREADY_TAKEN") {
+        return setIsError("El nombre de usuario ya existe");
+      }
+
+      if (error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
+        return setIsError("El correo electrónico ya existe");
+      }
+
+      return setIsError(
+        error.message || "No se pudo hacer el registro, intente nuevamente",
+      );
+    } catch (e) {
+      setIsError("No se pudo conectar con el servidor, intente nuevamente");
     }
+  }
+
+  if (sentTo) {
+    return (
+      <FormLayout title="Revisa tu correo">
+        <p className="text-on-surface-variant text-sm font-body leading-relaxed">
+          Te enviamos un enlace de verificación a{" "}
+          <strong className="text-on-surface">{sentTo}</strong>. Haz clic en él
+          para activar tu cuenta; si no lo ves, revisa la carpeta de spam.
+        </p>
+        <Info
+          text="¿Ya verificaste tu correo?"
+          linkName="Iniciar sesion"
+          url="/auth/login"
+        />
+      </FormLayout>
+    );
   }
 
   return (
@@ -70,14 +112,14 @@ export const Index = () => {
           <FieldSelect registerHook={register} fieldValues={userOptions} />
         </div>
 
-        {/* <FieldType
+        <FieldType
           name="email"
           inputName="email"
           inputPlaceholder="Ej. correo@correo.com"
           inputType="email"
           registerHook={register}
           error={errors}
-        /> */}
+        />
 
         <FieldType
           name="Contraseña"

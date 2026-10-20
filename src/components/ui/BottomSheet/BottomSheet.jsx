@@ -1,16 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 import { useMedicineStorage } from "@/store/medicineStore";
 import clsx from "clsx";
 
+const subscribeNoop = () => () => {};
+
 export const BottomSheet = ({ children }) => {
   const { setIsOpenCart, isOpenCart } = useMedicineStorage();
-  const [hasMounted, setHasMounted] = useState(false);
 
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  // detecta hidratación sin setState dentro de un effect (react-hooks/set-state-in-effect)
+  const hasMounted = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
 
   if (!hasMounted) return null;
 

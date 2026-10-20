@@ -1,7 +1,7 @@
 import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
-import { ACCESSTOKEN } from "./env";
+import { ACCESSTOKEN_MP } from "./env";
 
-export const client = new MercadoPagoConfig({ accessToken: ACCESSTOKEN });
+export const client = new MercadoPagoConfig({ accessToken: ACCESSTOKEN_MP });
 
 export const preference = new Preference(client);
 

@@ -1,28 +1,24 @@
-import { TOKEN } from "@/constants/config";
-import { SECRET } from "@/constants/env";
 import { Inventories } from "@/models/inventory";
-import { inventorySchema } from "@/schemas/inventory";
-import { jwtVerify } from "jose";
+import { inventoryUpdateSchema } from "@/schemas/inventory";
+import { getSession } from "@/utils/getUserData";
 
-export const DELETE = async (req, { params }) => {
+export const DELETE = async (_req, { params }) => {
+  const session = await getSession();
+
+  if (!session)
+    return Response.json({ error: "Token invalid" }, { status: 401 });
+
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
   const { id } = await params;
-  const token = req.cookies.get(TOKEN);
-
-  if (!token) return Response.json({ error: "Token invalid" }, { status: 401 });
-
-  let userId;
 
   try {
-    const { payload } = await jwtVerify(token.value, SECRET);
-
-    userId = payload.id;
-  } catch (error) {
-    return Response.json({ error: "user unauthorized" }, { status: 401 });
-  }
-
-  try {
-    const medicine = await Inventories.delete({ id, userId });
-    return Response.json(medicine);
+    const inventory = await Inventories.delete({
+      id,
+      userId: session.user.id,
+    });
+    return Response.json(inventory);
   } catch (error) {
     if (error.code === "INVALID_ID") {
       return Response.json({ error: error.message }, { status: 400 });
@@ -32,7 +28,7 @@ export const DELETE = async (req, { params }) => {
       return Response.json({ error: error.message }, { status: 401 });
     }
 
-    if (error.code === "NOT_FOUND_MEDICINE") {
+    if (error.code === "NOT_FOUND_INVENTORY") {
       return Response.json(error.message, { status: 404 });
     }
 
@@ -42,25 +38,20 @@ export const DELETE = async (req, { params }) => {
 };
 
 export const PUT = async (req, { params }) => {
+  const session = await getSession();
+
+  if (!session)
+    return Response.json({ error: "Token invalid" }, { status: 401 });
+
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
   const body = await req.json();
   const { id } = await params;
-  const token = req.cookies.get(TOKEN);
 
-  if (!token) return Response.json({ error: "Token invalid" }, { status: 401 });
+  const fullData = { ...body, updateBy: session.user.id };
 
-  let userId;
-
-  try {
-    const { payload } = await jwtVerify(token.value, SECRET);
-
-    userId = payload.id;
-  } catch (error) {
-    return Response.json({ error: "user unauthorized" }, { status: 401 });
-  }
-
-  const fullData = { updateBy: userId, ...body };
-
-  const result = inventorySchema.safeParse(fullData);
+  const result = inventoryUpdateSchema.safeParse(fullData);
 
   if (!result.success)
     return Response.json(
@@ -72,10 +63,10 @@ export const PUT = async (req, { params }) => {
     );
 
   try {
-    const medicine = await Inventories.update(id, result.data);
-    return Response.json(medicine);
+    const inventory = await Inventories.update(id, result.data);
+    return Response.json(inventory);
   } catch (error) {
-    if (error.code === "INVALID_ID" || error.code === "CANT_UPDATE_MEDICINE") {
+    if (error.code === "INVALID_ID" || error.code === "CANT_UPDATE_INVENTORY") {
       return Response.json({ error: error.message }, { status: 400 });
     }
 
@@ -83,7 +74,7 @@ export const PUT = async (req, { params }) => {
       return Response.json({ error: error.message }, { status: 401 });
     }
 
-    if (error.code === "NOT_FOUND_MEDICINE") {
+    if (error.code === "NOT_FOUND_INVENTORY") {
       return Response.json(error.message, { status: 404 });
     }
 

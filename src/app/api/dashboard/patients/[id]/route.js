@@ -1,10 +1,15 @@
-import { TOKEN } from "@/constants/config";
-import { SECRET } from "@/constants/env";
 import { Patients } from "@/models/patient";
-import { patientSchema } from "@/schemas/patient";
-import { jwtVerify } from "jose";
+import { patientUpdateSchema } from "@/schemas/patient";
+import { getSession } from "@/utils/getUserData";
 
 export const GET = async (_req, { params }) => {
+  const session = await getSession();
+
+  if (!session) return Response.json({ error: "Token invalid" }, { status: 401 });
+
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
   const { id } = await params;
   try {
     const patient = await Patients.getById(id);
@@ -26,22 +31,17 @@ export const GET = async (_req, { params }) => {
 };
 
 export const PUT = async (req, { params }) => {
+  const session = await getSession();
+
+  if (!session) return Response.json({ error: "Token invalid" }, { status: 401 });
+
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
   const body = await req.json();
   const { id } = await params;
-  const token = req.cookies.get(TOKEN);
-  if (!token) return Response.json({ error: "Token invalid" }, { status: 401 });
 
-  let userId;
-
-  try {
-    const { payload } = await jwtVerify(token.value, SECRET);
-    userId = payload.id;
-  } catch (error) {
-    return Response.json({ error: "user unauthorized" }, { status: 401 });
-  }
-  const fullData = { userId, ...body };
-
-  const result = patientSchema.safeParse(fullData);
+  const result = patientUpdateSchema.safeParse(body);
 
   if (!result.success)
     return Response.json(
@@ -53,7 +53,10 @@ export const PUT = async (req, { params }) => {
     );
 
   try {
-    const updatePatient = await Patients.update(id, result.data, { new: true });
+    const updatePatient = await Patients.update(id, {
+      ...result.data,
+      updateBy: session.user.id,
+    });
 
     return Response.json(updatePatient, { status: 201 });
   } catch (error) {
@@ -72,10 +75,17 @@ export const PUT = async (req, { params }) => {
 };
 
 export const DELETE = async (_req, { params }) => {
+  const session = await getSession();
+
+  if (!session) return Response.json({ error: "Token invalid" }, { status: 401 });
+
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
   const { id } = await params;
 
   try {
-    const deletePatient = await Patients.delete(id);
+    const deletePatient = await Patients.delete({ id, userId: session.user.id });
     return Response.json(deletePatient);
   } catch (error) {
     if (error.code === "USER_UNAUTHORIZED") {

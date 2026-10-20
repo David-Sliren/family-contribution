@@ -1,5 +1,15 @@
+"use client";
+
+import { useMainPatientQuery } from "@/hooks/tanstack/query/useQueryPatient";
 import React from "react";
 import { LuHeart } from "react-icons/lu";
+
+const DEFAULT_DATA = {
+  reason: "Unidos por el bienestar de",
+  name: "nombre",
+  description:
+    "Gestionemos juntos el tratamiento médico de nuestra familia con transparencia y amor. Cada contribución asegura que la atención de calidad nunca se detenga.",
+};
 
 const Slogan = () => {
   return (
@@ -11,17 +21,23 @@ const Slogan = () => {
 };
 
 export const CallToAction = () => {
+  const { data } = useMainPatientQuery();
+
+  // Object.keys(data).length !== 0 Verifica que el objecto no este vacio
+  const dataTotal = Object.keys(data).length !== 0 ? data : DEFAULT_DATA;
+
   return (
     <>
       <Slogan />
-      <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight text-on-background leading-[1.1] animate-fade-in-down">
-        Unidos por el bienestar de{" "}
-        <span className="text-primary italic">Aleida</span>.
+      <h1 className="lowercase [&::first-letter]:uppercase text-5xl lg:text-7xl font-extrabold tracking-tight text-on-background leading-[1.1] animate-fade-in-down">
+        {dataTotal.reason}{" "}
+        <span className="text-primary italic capitalize">
+          {dataTotal.name ?? "Aninimo"}
+        </span>
+        .
       </h1>
-      <p className="text-xl text-on-surface-variant max-w-2xl font-body leading-relaxed animate-fade-in-right">
-        Gestionemos juntos el tratamiento médico de nuestra familia con
-        transparencia y amor. Cada contribución asegura que la atención de
-        calidad nunca se detenga.
+      <p className="lowercase [&::first-letter]:uppercase text-xl text-on-surface-variant max-w-2xl font-body leading-relaxed animate-fade-in-right">
+        {dataTotal.description}
       </p>
     </>
   );

@@ -1,13 +1,21 @@
+import { formatMoney } from "@/config/money";
 import { Expense } from "@/database/expense";
 import { Patient } from "@/database/patient";
 import { User } from "@/database/user";
+import { Events } from "@/models/event";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Expenses {
-  static async getAll() {
+  static async getAll(querys, paginate) {
     await conectToData();
 
-    const expense = await Expense.find({});
+    const [expense, totalItems] = await Promise.all([
+      Expense.find(querys)
+        .sort("-createdAt")
+        .skip((paginate.page - 1) * paginate.limit)
+        .limit(paginate.limit),
+      Expense.countDocuments(querys),
+    ]);
 
     if (!expense) {
       const customError = new Error("not found expenses");
@@ -15,7 +23,22 @@ export class Expenses {
       throw customError;
     }
 
-    return expense;
+    const totalPages =
+      totalItems === 1 ? 1 : Math.ceil(totalItems / paginate.limit);
+    const hasNextPage = paginate.page < totalPages;
+    const hasPrevPage = paginate.page > 1;
+
+    return {
+      data: expense,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: paginate.page,
+        limit: paginate.limit,
+        hasNextPage,
+        hasPrevPage,
+      },
+    };
   }
 
   static async getById(id) {
@@ -53,11 +76,23 @@ export class Expenses {
         throw customError;
       }
 
-      const patient = await Patient.findById(data.patientId);
+      const patient = await Patient.findById(data.patientId)
+        .populate("funds")
+        .populate("expenses");
 
       if (!patient) {
         const customError = new Error("patient not found");
         customError.code = "PATIENT_NOT_FOUND";
+        throw customError;
+      }
+
+      const available = patient.totalFunds - patient.totalExpenses;
+
+      if (data.amount > available) {
+        const customError = new Error(
+          `insufficient funds, only ${formatMoney(available)} available`,
+        );
+        customError.code = "INSUFFICIENT_FUNDS";
         throw customError;
       }
 
@@ -69,6 +104,13 @@ export class Expenses {
         customError.code = "CANT_CREATE_EXPENSE";
         throw customError;
       }
+
+      await Events.register({
+        type: "expense",
+        action: "creado",
+        entity: newExpense,
+        actor: data.createBy,
+      });
 
       return newExpense;
     } catch (error) {
@@ -97,6 +139,13 @@ export class Expenses {
 
       await expense.deleteOne();
 
+      await Events.register({
+        type: "expense",
+        action: "eliminado",
+        entity: expense,
+        actor: data.userId,
+      });
+
       return expense;
     } catch (error) {
       if (error.name == "CastError") {
@@ -120,6 +169,37 @@ export class Expenses {
         throw customError;
       }
 
+      const currentExpense = await Expense.findById(id);
+
+      if (!currentExpense) {
+        const customError = new Error("cant update expense");
+        customError.code = "CANT_UPDATE_EXPENSE";
+        throw customError;
+      }
+
+      if (currentExpense.patientId) {
+        const patient = await Patient.findById(currentExpense.patientId)
+          .populate("funds")
+          .populate("expenses");
+
+        if (!patient) {
+          const customError = new Error("patient not found");
+          customError.code = "PATIENT_NOT_FOUND";
+          throw customError;
+        }
+
+        const available =
+          patient.totalFunds - patient.totalExpenses + currentExpense.amount;
+
+        if (data.amount > available) {
+          const customError = new Error(
+            `insufficient funds, only ${formatMoney(available)} available`,
+          );
+          customError.code = "INSUFFICIENT_FUNDS";
+          throw customError;
+        }
+      }
+
       const updateExpense = await Expense.findByIdAndUpdate(id, data, {
         new: true,
       });
@@ -129,6 +209,13 @@ export class Expenses {
         customError.code = "CANT_UPDATE_EXPENSE";
         throw customError;
       }
+
+      await Events.register({
+        type: "expense",
+        action: "actualizado",
+        entity: updateExpense,
+        actor: data.updateBy,
+      });
 
       return updateExpense;
     } catch (error) {

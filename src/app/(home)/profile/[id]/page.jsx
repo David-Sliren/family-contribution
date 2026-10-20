@@ -5,6 +5,16 @@ import { userQueryByIdOptions } from "@/hooks/tanstack/query/useQueryUser";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getQueryClient } from "@/utils/tanstackQuery-config";
 
+export const metadata = {
+  title: "Perfil",
+  description:
+    "Perfil del miembro de la familia: impacto, contribuciones e historial de aportes.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default async function ProfilePage({ params }) {
   const { id } = await params;
   const queryClient = getQueryClient();

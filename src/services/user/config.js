@@ -7,6 +7,9 @@ export const baseUrlAuth = axios.create({
 export const baseUrlUser = axios.create({
   baseURL: `${getBaseUrl()}/api/users`,
 });
+export const baseUrlUserDashboard = axios.create({
+  baseURL: `${getBaseUrl()}/api/dashboard/users`,
+});
 
 // baseUrlAuth.interceptors.response.use(
 //   (response) => response,

@@ -1,27 +1,20 @@
-import { TOKEN } from "@/constants/config";
-import { SECRET } from "@/constants/env";
 import { Expenses } from "@/models/expense";
-import { expenseSchema } from "@/schemas/expense";
-import { jwtVerify } from "jose";
+import { expenseUpdateSchema } from "@/schemas/expense";
+import { getSession } from "@/utils/getUserData";
 
-export const DELETE = async (req, { params }) => {
+export const DELETE = async (_req, { params }) => {
+  const session = await getSession();
+
+  if (!session)
+    return Response.json({ error: "Token invalid" }, { status: 401 });
+
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
   const { id } = await params;
-  const token = req.cookies.get(TOKEN);
-
-  if (!token) return Response.json({ error: "Token invalid" }, { status: 401 });
-
-  let userId;
 
   try {
-    const { payload } = await jwtVerify(token.value, SECRET);
-
-    userId = payload.id;
-  } catch (error) {
-    return Response.json({ error: "user unauthorized" }, { status: 401 });
-  }
-
-  try {
-    const expense = await Expenses.delete({ id, userId });
+    const expense = await Expenses.delete({ id, userId: session.user.id });
     return Response.json(expense);
   } catch (error) {
     if (error.code === "INVALID_ID") {
@@ -42,25 +35,20 @@ export const DELETE = async (req, { params }) => {
 };
 
 export const PUT = async (req, { params }) => {
+  const session = await getSession();
+
+  if (!session)
+    return Response.json({ error: "Token invalid" }, { status: 401 });
+
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
   const body = await req.json();
   const { id } = await params;
-  const token = req.cookies.get(TOKEN);
 
-  if (!token) return Response.json({ error: "Token invalid" }, { status: 401 });
+  const fullData = { ...body, updateBy: session.user.id };
 
-  let userId;
-
-  try {
-    const { payload } = await jwtVerify(token.value, SECRET);
-
-    userId = payload.id;
-  } catch (error) {
-    return Response.json({ error: "user unauthorized" }, { status: 401 });
-  }
-
-  const fullData = { updateBy: userId, ...body };
-
-  const result = expenseSchema.safeParse(fullData);
+  const result = expenseUpdateSchema.safeParse(fullData);
 
   if (!result.success)
     return Response.json(
@@ -77,6 +65,14 @@ export const PUT = async (req, { params }) => {
   } catch (error) {
     if (error.code === "INVALID_ID" || error.code === "CANT_UPDATE_EXPENSE") {
       return Response.json({ error: error.message }, { status: 400 });
+    }
+
+    if (error.code === "INSUFFICIENT_FUNDS") {
+      return Response.json({ error: error.message }, { status: 400 });
+    }
+
+    if (error.code === "PATIENT_NOT_FOUND") {
+      return Response.json({ error: error.message }, { status: 404 });
     }
 
     if (error.code === "USER_UNAUTHORIZED") {

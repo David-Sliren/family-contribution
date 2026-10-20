@@ -6,6 +6,6 @@ Content-Type: application/json
 Cookie: {{accessToken}}
 
 {
-    "purpose": "medicinas",
+    "purpose": "inventario",
     "amount": 8000
 }

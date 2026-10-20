@@ -1,7 +1,13 @@
 "use client";
 import { formatMoney } from "@/config/money";
+import { useMainPatientQuery } from "@/hooks/tanstack/query/useQueryPatient";
 import { useUserQueryAll } from "@/hooks/tanstack/query/useQueryUser";
-import { LuBriefcaseMedical, LuUsersRound, LuWallet } from "react-icons/lu";
+import {
+  LuBriefcaseMedical,
+  LuHospital,
+  LuUsersRound,
+  LuWallet,
+} from "react-icons/lu";
 
 const StatCard = ({ icon: IconName, title, text }) => {
   return (
@@ -10,9 +16,9 @@ const StatCard = ({ icon: IconName, title, text }) => {
         {IconName}
       </span>
       <div>
-        <h3 className="text-on-surface-variant capitalize font-medium text-sm tracking-wide">
+        <h2 className="text-on-surface-variant capitalize font-medium text-sm tracking-wide">
           {title}
-        </h3>
+        </h2>
         <p className="text-2xl capitalize text-gray-950 font-bold">{text}</p>
       </div>
     </div>
@@ -20,20 +26,24 @@ const StatCard = ({ icon: IconName, title, text }) => {
 };
 
 export const Stats = () => {
-  const { data } = useUserQueryAll();
+  const user = useUserQueryAll({ page: 1, limit: 20 });
+  const mainPatient = useMainPatientQuery();
 
-  const wallet =
-    data?.reduce((acc, item) => acc + item?.totalContributed, 0) ?? 0;
+  const totalFunds = mainPatient?.data?.totalFunds ?? 0;
+  const totalExpenses = mainPatient?.data?.totalExpenses ?? 0;
+  const availableFunds = Math.max(totalFunds - totalExpenses, 0);
 
   const countUsersActive =
-    data?.filter((item) => item?.contributions.length > 0).length ?? 0;
+    user.data?.data?.filter((item) => item?.contributions.length > 0).length ??
+    0;
 
   const STAT_CARD = [
     {
-      iconName: <LuBriefcaseMedical />,
-      title: "Persona al cuidado",
-      more: "santa barbara",
+      iconName: <LuWallet />,
+      title: "Fondo Disponible",
+      more: `${formatMoney(availableFunds)}`,
     },
+
     {
       iconName: <LuUsersRound />,
       title: "Colaboradores Activos",
@@ -44,15 +54,21 @@ export const Stats = () => {
     },
 
     {
-      iconName: <LuWallet />,
-      title: "Fondo Disponible",
-      more: `${formatMoney(wallet)}`,
+      iconName: <LuBriefcaseMedical />,
+      title: "Persona al cuidado",
+      more: mainPatient?.data.carerName || "indefinida",
+    },
+
+    {
+      iconName: <LuHospital />,
+      title: "Clinica/Hospital responsable",
+      more: mainPatient?.data.clinicName || "indefinida",
     },
   ];
 
   return (
     <section className="py-12 px-6 bg-surface-container-low">
-      <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
         {STAT_CARD.map((item, i) => (
           <StatCard
             key={item.title}

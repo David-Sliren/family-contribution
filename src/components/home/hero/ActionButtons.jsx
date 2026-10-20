@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 export const ActionButtons = () => {
-  const isAuth = useUserStore((state) => state.isAuth);
+  const { isAuth } = useUserStore((state) => state.isAuth);
   return (
     <article className="flex flex-wrap gap-4 pt-4">
       <Link
@@ -14,7 +14,7 @@ export const ActionButtons = () => {
         Hacer una Colaboración
       </Link>
       <Link
-        href={isAuth ? "/medicine" : "/auth/login"}
+        href={isAuth ? "/inventory" : "/auth/login"}
         className="px-8 py-4 bg-surface-container-highest text-on-secondary-container rounded-full font-bold text-lg hover:bg-violet-200
       active:scale-[0.98] transition-all cursor-pointer animate-fade-in-up"
       >

@@ -1,21 +1,25 @@
 import { useUserStore } from "@/components/provaider/AuthProvider";
-import { logoutUser } from "@/services/user/auth";
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { LuLogOut, LuUser } from "react-icons/lu";
+import {
+  LuLayoutDashboard,
+  LuLogOut,
+  LuSettings,
+  LuUser,
+} from "react-icons/lu";
 
 export const DropDown = ({ id, username = "", email = "", handleDropdown }) => {
-  const logout = useUserStore((state) => state.logout);
+  const { logout } = useUserStore((state) => state.logout);
+  const { user } = useUserStore((state) => state.user);
 
   async function handleLogout() {
     try {
-      handleDropdown;
-      await logoutUser();
+      handleDropdown();
       logout();
       window.location.href = "/";
-    } catch (error) {
-      console.log(error);
+    } catch {
+      // el cierre de sesion no deberia fallar
     }
   }
 
@@ -44,6 +48,25 @@ export const DropDown = ({ id, username = "", email = "", handleDropdown }) => {
           <LuUser size={16} />
           Mi Perfil
         </Link>
+
+        <Link
+          href={`/profile/config`}
+          onClick={handleDropdown}
+          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer"
+        >
+          <LuSettings size={16} />
+          Ajustes
+        </Link>
+        {user && user?.role == "admin" && (
+          <Link
+            href={`/dashboard`}
+            onClick={handleDropdown}
+            className="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer"
+          >
+            <LuLayoutDashboard size={16} />
+            Dashboard
+          </Link>
+        )}
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 px-3 py-2 text-sm text-primary hover:bg-red-50 rounded-lg transition-colors cursor-pointer"

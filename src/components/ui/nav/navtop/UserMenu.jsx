@@ -9,7 +9,7 @@ import { useUserStore } from "@/components/provaider/AuthProvider";
 import { blurColors } from "@/constants/bgBase64";
 
 export const UserMenu = () => {
-  const user = useUserStore((state) => state.user);
+  const { user } = useUserStore((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const firstName = user?.name?.split(" ")[0] || "default";
 
@@ -35,7 +35,7 @@ export const UserMenu = () => {
         <Image
           alt="User profile avatar"
           className="w-9 h-9 rounded-full object-cover cursor-pointer"
-          src={user?.img || "/family-img/Default.png"}
+          src={user?.image || "/family-img/Default.png"}
           height={500}
           width={500}
           placeholder="blur"
@@ -52,7 +52,7 @@ export const UserMenu = () => {
         {isOpen && (
           <DropDown
             id={user?.id}
-            username={user?.username}
+            username={user?.username || user?.name || user?.email}
             email={user?.email}
             handleDropdown={handleDropdown}
           />

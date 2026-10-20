@@ -5,10 +5,14 @@ import {
 } from "@/utils/mongoose-helper/virtualFuntions";
 import { Schema, model, models } from "mongoose";
 
-const userSchema = new Schema(
+/*
+  se paso a usar better auth para la autenticación y registro de usuarios.
+  se hizo uso de la librería better-auth-mongoose para poder usar el modelo de usuario existente y extenderlo con campos adicionales.
+  los campos username, email y password ya no se definen en el modelo de usuario, ya que better auth los maneja internamente.
+*/
+export const userSchema = new Schema(
   {
     name: { type: String, required: true },
-    username: { type: String, required: true, unique: true, sparse: true },
     role: {
       type: String,
       enum: ["user", "carer", "admin"],
@@ -17,13 +21,13 @@ const userSchema = new Schema(
     },
     relationship: {
       type: String,
-      enum: ["hijo", "sobrino", "esposo", "hermano", "externo"],
+      enum: ["hijo", "sobrino", "esposo", "hermano", "externo", "nieto"],
       required: true,
     },
-    img: { type: String, default: "" },
-    tel: { type: String, required: true },
-    email: { type: String, default: "" },
-    password: { type: String, required: true },
+    image: { type: String, default: "" },
+    // opcional: el login social (Google) no trae telefono; el registro
+    // manual lo sigue exigiendo via zod frontend.
+    tel: { type: String, default: "" },
     isDisabled: { type: Boolean, default: false },
   },
   {
@@ -36,7 +40,7 @@ const userSchema = new Schema(
 userSchema.virtual("contributions", {
   ref: "Contribution",
   localField: "_id",
-  foreignField: "userId",
+  foreignField: "createBy",
 });
 
 userSchema.virtual("totalContributed").get(totalContributed);

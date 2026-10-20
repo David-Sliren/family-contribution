@@ -14,15 +14,16 @@ export const userBackendSchema = z.object({
     .trim(),
 
   relationship: z.enum(
-    ["hijo", "sobrino", "esposo", "hermano", "externo"],
-    'Opcion invalida se requiere uno de estos campos "hijo", "sobrino", "esposo", "hermano" "externo"',
+    ["hijo", "sobrino", "esposo", "hermano", "externo", "nieto"],
+    'Opcion invalida se requiere uno de estos campos "hijo", "sobrino", "esposo", "hermano" "externo" "nieto"',
   ),
   tel: z
     .string("El telefono es requerido")
     .min(10, "El numero debe tener 10 caracteres")
     .startsWith("3", "El numero debe empezar con 3")
     .regex(/^\+?[1-9]\d{1,14}$/, "Formato de teléfono inválido")
-    .max(10, "El numero debe tener menos de 10 caracteres"),
+    .max(10, "El numero debe tener menos de 10 caracteres")
+    .default(""),
 
   email: z.email("Formato de correo electrónico inválido").optional(),
 
@@ -33,8 +34,31 @@ export const userBackendSchema = z.object({
     .regex(/[1-9]\d{1,4}/, "La contraseña debe tener minimo 2 numeros"),
 });
 
+export const userRoleBackendSchema = z.object({
+  role: z.enum(["user", "carer", "admin"]),
+});
+
 export const userFrontedSchema = userBackendSchema
   .extend({
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "La contraseña no coincide",
+    path: ["confirmPassword"],
+  });
+
+export const profileFrontedSchema = userBackendSchema.pick({
+  name: true,
+  username: true,
+  relationship: true,
+});
+
+export const passwordFrontedSchema = userBackendSchema
+  .pick({ password: true })
+  .extend({
+    currentPassword: z
+      .string("Se requiere la contraseña actual")
+      .min(1, "Escribe tu contraseña actual"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

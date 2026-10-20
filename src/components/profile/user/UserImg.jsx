@@ -17,7 +17,7 @@ export const UserImg = ({ profiledata }) => {
           width={160}
           height={160}
           loading="eager"
-          src={user?.img || "/family-img/Default.png"}
+          src={user?.image || "/family-img/Default.png"}
         />
       </div>
       <button className="hidden absolute bottom-2 right-2 bg-primary text-white p-2.5 rounded-full shadow-lg hover:scale-105 transition-transform">

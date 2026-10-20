@@ -1,19 +1,24 @@
 import { Contribution } from "@/database/contribution";
 import { User } from "@/database/user";
+import { Events } from "@/models/event";
 import { conectToData } from "@/utils/mongoose-helper/db";
 
 export class Contribute {
-  static async getAll() {
+  static async getAll(querys, paginate) {
     await conectToData();
 
-    const contributions = await Contribution.find(
-      {},
-      { updatedAt: 0 },
-    ).populate("userId", {
-      name: 1,
-      relationship: 1,
-      img: 1,
-    });
+    const [contributions, totalItems] = await Promise.all([
+      Contribution.find(querys, { updatedAt: 0 })
+        .populate("createBy", {
+          name: 1,
+          relationship: 1,
+          image: 1,
+        })
+        .sort("-createdAt")
+        .skip((paginate.page - 1) * paginate.limit)
+        .limit(paginate.limit),
+      Contribution.countDocuments(querys),
+    ]);
 
     if (!contributions) {
       const error = new Error("not found countributions");
@@ -21,7 +26,22 @@ export class Contribute {
       throw error;
     }
 
-    return contributions;
+    const totalPages =
+      totalItems === 1 ? 1 : Math.ceil(totalItems / paginate.limit);
+    const hasNextPage = paginate.page < totalPages;
+    const hasPrevPage = paginate.page > 1;
+
+    return {
+      data: contributions,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: paginate.page,
+        limit: paginate.limit,
+        hasNextPage,
+        hasPrevPage,
+      },
+    };
   }
 
   static async getById(id) {
@@ -52,7 +72,7 @@ export class Contribute {
     await conectToData();
 
     try {
-      const user = await User.findById(data.userId);
+      const user = await User.findById(data.createBy);
       if (!user) {
         const customError = new Error("user unathorized");
         customError.code = "USER_UNAUTHORIZED";
@@ -68,9 +88,55 @@ export class Contribute {
         throw customError;
       }
 
+      await Events.register({
+        type: "contribution",
+        action: "creado",
+        entity: newContribution,
+        actor: data.createBy,
+      });
+
       return newContribution;
     } catch (error) {
-      // console.log("error: ", error);
+      throw error;
+    }
+  }
+
+  static async update(id, data) {
+    await conectToData();
+    const user = await User.findById(data.updateBy);
+
+    if (!user || (user && user.role !== "admin")) {
+      const customError = new Error("user unauthorized");
+      customError.code = "USER_UNAUTHORIZED";
+      throw customError;
+    }
+
+    try {
+      const contribution = await Contribution.findByIdAndUpdate(id, data, {
+        new: true,
+      });
+
+      if (!contribution) {
+        const customError = new Error("not found contribution");
+        customError.code = "NOT_FOUND_CONTRIBUTION";
+        throw customError;
+      }
+
+      await Events.register({
+        type: "contribution",
+        action: "actualizado",
+        entity: contribution,
+        actor: data.updateBy,
+      });
+
+      return contribution;
+    } catch (error) {
+      if (error.name == "CastError") {
+        const customError = new Error("invalid id");
+        customError.code = "INVALID_ID";
+        throw customError;
+      }
+
       throw error;
     }
   }

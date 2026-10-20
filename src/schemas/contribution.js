@@ -4,8 +4,8 @@ import { z } from "zod";
 const status = z.enum(["confirmado", "pendiente"], {
   error: "el estado no es admitido, usar 'confirmado' o 'pendiente'",
 });
-const purpose = z.enum(["medicinas", "facturas", "cuidador"], {
-  error: 'proposito no admitido, usar "medicinas", "facturas", "cuidador"',
+const purpose = z.enum(["inventario", "gastos", "cuidador"], {
+  error: 'proposito no admitido, usar "inventario", "gastos", "cuidador"',
 });
 
 const method = z.enum(["pasarela", "efectivo", "transferencia"], {
@@ -15,7 +15,10 @@ const method = z.enum(["pasarela", "efectivo", "transferencia"], {
 export const contributionSchemaBanckend = z.object({
   paymentId: z.string().optional(),
   method: method,
-  userId: z.refine((val) => Types.ObjectId.isValid(val), {
+  patientId: z.refine((val) => Types.ObjectId.isValid(val), {
+    error: "el id no es valido",
+  }),
+  createBy: z.refine((val) => Types.ObjectId.isValid(val), {
     error: "el id no es valido",
   }),
   amount: z.coerce
@@ -25,4 +28,13 @@ export const contributionSchemaBanckend = z.object({
   status: status,
   purpose: purpose,
   date: z.iso.datetime("elija una fecha correcta").optional(),
+  updateBy: z.refine((val) => Types.ObjectId.isValid(val), {
+    error: "el id no es valido",
+  }),
+});
+
+export const contributionUpdateSchema = contributionSchemaBanckend.omit({
+  paymentId: true,
+  patientId: true,
+  createBy: true,
 });

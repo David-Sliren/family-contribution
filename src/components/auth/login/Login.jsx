@@ -7,8 +7,11 @@ import { useHookForm } from "@/hooks/useHookForm";
 import { useRouter } from "next/navigation";
 import { loginSchema } from "@/schemas/login";
 import { Info } from "@/components/ui/form/info/Info";
-import { loginUser } from "@/services/user/auth";
 import { useNotification } from "@/store/ui/notifications";
+import { authClient } from "@/utils/auth-client";
+import { FcGoogle } from "react-icons/fc";
+import { ProvaiderSingInButton } from "@/components/ui/form/buttons/ProvaiderButton";
+import { handleSingInProvaider } from "@/utils/handlers";
 
 const DEFAULVALUES = {
   // username: "juanperez01",
@@ -27,11 +30,49 @@ export const Index = () => {
   async function handleSubmitForm(data) {
     const { confirmPassword, ...backendData } = data;
     try {
-      await loginUser(backendData);
-      setNotification({ message: "Disfrute su sesion" });
-      router.refresh();
-    } catch (error) {
-      setErrorName(error);
+      const { data, error } = await authClient.signIn.username({
+        ...backendData,
+      });
+
+      if (!error) {
+        setNotification({ message: "Disfrute su sesion" });
+        return router.replace("/");
+      }
+
+      if (error.code === "INVALID_USERNAME_OR_PASSWORD") {
+        return setErrorName(
+          "Es incorrecto el nombre de usuario o la contraseña ",
+        );
+      }
+
+      if (error.code === "EMAIL_NOT_VERIFIED") {
+        // sendOnSignIn: better-auth ya reenvió el enlace de verificación
+        return setErrorName(
+          "Tu correo aún no está verificado. Te enviamos un nuevo enlace, revísalo para activar tu cuenta",
+        );
+      }
+
+      setErrorName(
+        error.message || "No se pudo hacer el registro, intente nuevamente",
+      );
+    } catch (e) {
+      setErrorName("No se pudo conectar con el servidor, intente nuevamente");
+    }
+  }
+
+  async function handleGoogle() {
+    try {
+      setErrorName("");
+      const error = await handleSingInProvaider("google", "/");
+
+      if (error) {
+        setErrorName(
+          error.message ||
+            "No se pudo iniciar sesion con Google, intente nuevamente",
+        );
+      }
+    } catch (e) {
+      setErrorName("No se pudo conectar con el servidor, intente nuevamente");
     }
   }
 
@@ -56,11 +97,33 @@ export const Index = () => {
           registerHook={register}
           error={errors}
         />
+
+        <Info
+          text="¿Olvidaste tu contraseña?"
+          linkName="Recuperarla"
+          url="/auth/forgot-password"
+        />
+
         <ActionsButtons
           buttonName="Iniciar sesion"
           isSubmitting={isSubmitting}
         />
       </form>
+
+      <div className="flex items-center gap-3 my-5">
+        <span className="h-px flex-1 bg-outline-variant/25" />
+        <span className="text-on-surface-variant text-xs font-body">
+          o continúa con
+        </span>
+        <span className="h-px flex-1 bg-outline-variant/25" />
+      </div>
+
+      <ProvaiderSingInButton
+        icon={FcGoogle}
+        name="Google"
+        handle={handleGoogle}
+      />
+
       <Info
         text="¿No tienes cuenta?"
         linkName="Registrarse"

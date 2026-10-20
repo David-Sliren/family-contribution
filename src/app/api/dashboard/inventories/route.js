@@ -1,23 +1,23 @@
-import { TOKEN } from "@/constants/config";
-import { SECRET } from "@/constants/env";
 import { Inventories } from "@/models/inventory";
 import { inventorySchema } from "@/schemas/inventory";
-import { jwtVerify } from "jose";
+import { getSession } from "@/utils/getUserData";
 
 export const POST = async (req) => {
+  const session = await getSession();
+
+  if (!session)
+    return Response.json({ error: "Token invalid" }, { status: 401 });
+
+  if (session.user.role !== "admin")
+    return Response.json({ error: "user unauthorized" }, { status: 403 });
+
   const body = await req.json();
-  const token = req.cookies.get(TOKEN);
-  if (!token) return Response.json({ error: "Token invalid" }, { status: 401 });
 
-  let userId;
-
-  try {
-    const { payload } = await jwtVerify(token.value, SECRET);
-    userId = payload.id;
-  } catch (error) {
-    return Response.json({ error: "user unauthorized" }, { status: 401 });
-  }
-  const fullData = { createBy: userId, updateBy: userId, ...body };
+  const fullData = {
+    ...body,
+    createBy: session.user.id,
+    updateBy: session.user.id,
+  };
 
   const result = inventorySchema.safeParse(fullData);
 
@@ -34,7 +34,7 @@ export const POST = async (req) => {
     const medicine = await Inventories.create(result.data);
     return Response.json(medicine, { status: 201 });
   } catch (error) {
-    if (error.code === "CANT_CREATE_MEDICINE") {
+    if (error.code === "CANT_CREATE_INVENTORY") {
       return Response.json({ error: error.message }, { status: 400 });
     }
 

@@ -11,12 +11,12 @@ import { Info } from "@/components/ui/form/info/Info";
 import { authClient } from "@/utils/auth-client";
 
 const DEFAULVALUES = {
-  name: "Jhojan",
-  username: "juanperez01",
-  tel: "3044518133",
+  //name: "Jhojan",
+  //username: "juanperez01",
+  //tel: "3044518133",
   // email: "correo@correo.com",
-  password: "Noseqponer12",
-  confirmPassword: "Noseqponer12",
+  //password: "Noseqponer12",
+  //confirmPassword: "Noseqponer12",
 };
 const userOptions = [
   "externo",
